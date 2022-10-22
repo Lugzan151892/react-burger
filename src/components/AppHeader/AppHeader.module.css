@@ -1,0 +1,21 @@
+.header {
+    margin: 40px;
+    display: flex;
+    background: #1C1C21;
+}
+
+.link {
+    text-decoration: none;
+    color: #F2F2F3;
+    display: flex;
+    padding: 16px 20px;
+    justify-content: space-between;
+}
+
+.navigation {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 320px;
+}
