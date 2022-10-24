@@ -1,0 +1,41 @@
+.burgerConstructor {
+    margin: 40px 0 0 40px;
+}
+
+.burgerElements {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: auto;
+    margin-bottom: 40px;
+    max-height: 600px;
+    padding-right: 8px;
+}
+
+.burgerElements::-webkit-scrollbar {
+    background: #2f2f37;
+    width: 8px;
+}
+
+.burgerElements::-webkit-scrollbar-thumb{
+    background: #8585AD;
+    border: 3px solid #8585AD;
+}
+
+.element {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.burgerOrder {
+    display: flex;
+    max-width: 568px;
+    justify-content: flex-end;
+}
+
+.priceContainer {
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+}
