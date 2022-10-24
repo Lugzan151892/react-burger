@@ -1,6 +1,11 @@
 import styles from './AppHeader.module.css'
 import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 
+
+// To do list:
+// 1. Поправить стили в шапке.
+
+
 function AppHeader() {
     return (
         <header className={styles.header} >

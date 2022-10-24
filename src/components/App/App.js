@@ -9,7 +9,7 @@ function App() {
       <AppHeader />
       <main style={{display: 'flex', justifyContent: 'center'}}>
         <BurgerIngredients />
-        <BurgerConstructor />   
+        {/* <BurgerConstructor />    */}
       </main>
     </>
   );
