@@ -4,6 +4,14 @@
     background: #1C1C21;
 }
 
+.menu {
+    display: flex;
+}
+
+.list {
+    list-style-type: none;
+}
+
 .link {
     text-decoration: none;
     color: #F2F2F3;
@@ -12,10 +20,20 @@
     justify-content: space-between;
 }
 
-.navigation {
+.nav {
+    position: relative;
+    max-width: 1280px;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 320px;
+    margin: 0 auto;
+}
+
+.logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -145px;
+    margin-top: -25px;
 }
