@@ -24,12 +24,6 @@
     border: 3px solid #8585AD;
 }
 
-.element {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
 .burgerOrder {
     display: flex;
     max-width: 568px;

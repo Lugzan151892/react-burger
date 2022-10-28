@@ -3,10 +3,6 @@
     max-height: 912px;    
 }
 
-.anchor {
-    text-decoration: none;
-}
-
 .container {
     max-height: 600px; 
     overflow: auto;
@@ -20,48 +16,4 @@
 .container::-webkit-scrollbar-thumb{
     background: #8585AD;
     border: 3px solid #8585AD;
-}
-
-.typesContainer {
-    display: flex;
-    flex-wrap: wrap;    
-}
-
-.title {
-    width: 100%;
-    padding: 0;
-}
-
-.burgerElement {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-height: 208px;
-    width: 272px;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-.burgerElement:hover {
-    cursor: pointer;
-}
-
-.image {
-    max-width: 240px;
-}
-
-.priceContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.price {
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.name {
-    margin: 0;
 }
