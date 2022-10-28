@@ -2,7 +2,7 @@ import React from "react";
 import { data } from '../utils/data';
 import styles from './DefaultBurgerIngredient.module.css'
 import BurgerElement from "../BurgerElement/BurgerElement";
-
+import PropTypes from 'prop-types';
 
 const DefaultBurgerIngredient = ({type, title, addItem, arr}) => {
 
@@ -17,5 +17,12 @@ const DefaultBurgerIngredient = ({type, title, addItem, arr}) => {
         </div>
     )
 }
+
+DefaultBurgerIngredient.propTypes = {   
+    type: PropTypes.string,
+    title: PropTypes.string,
+    arr: PropTypes.array,
+    addItem: PropTypes.func
+}; 
 
 export default DefaultBurgerIngredient;

@@ -2,11 +2,51 @@ import React from "react";
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css'
 import SelectedElement from "../SelectedElement/SelectedElement";
+import PropTypes from 'prop-types';
 
 const BurgerConstructor = ({data, remove}) =>{
 
-    let sortElements = data;
-    sortElements.sort((a, b) => b.id - a.id);
+    const sectionRef = React.useRef();
+
+    const sortElements = (a, b) => {
+        if (a.id > b.id) {
+            return 1
+        } else {
+            return -1
+        }
+    };
+    const [elementList, setElementList] = React.useState([]);
+
+    React.useEffect(() => {
+        setElementList(data)
+    }, [data])
+
+    const [currentElement, setCurrentElement] = React.useState(null);
+
+    function dragStartHandler(e, card) {
+        e.stopPropagation();
+        setCurrentElement(card)
+    }
+    
+    function dragOverHandler(e) {
+        e.preventDefault();
+    }
+
+    function dropHandler(e, card) {
+        e.preventDefault();
+        console.log(e.target);
+        console.log(e.currentTarget);
+        
+        setElementList(elementList.map(elem => {
+            if(elem.id === card.id) {
+                return {...elem, id: currentElement.id }
+            }
+            if(elem.id === currentElement.id) {
+                return {...elem, id: card.id }
+            }
+            return elem;
+        }))
+    }
 
     const price = 0;
 
@@ -15,10 +55,17 @@ const BurgerConstructor = ({data, remove}) =>{
     }, price);
 
     return (
-        <section className={styles.burgerConstructor}>
+        <section ref={sectionRef} className={styles.burgerConstructor}>
             <div className={styles.burgerElements}>
-                {data && sortElements.map((element, number) => (
-                <SelectedElement remove={remove} key={number} element={element}>
+                {data && elementList.sort(sortElements).map((element, number) => (
+                <SelectedElement 
+                    remove={remove} 
+                    key={number} 
+                    element={element}
+                    dragStartHandler={dragStartHandler}
+                    dragOverHandler={dragOverHandler}
+                    dropHandler={dropHandler}
+                    >
                 </SelectedElement>)
                 )}
             </div>
@@ -34,5 +81,10 @@ const BurgerConstructor = ({data, remove}) =>{
         </section>
       )
 }
+
+BurgerConstructor.propTypes = {
+    data: PropTypes.array,
+    remove: PropTypes.func
+}; 
 
 export default BurgerConstructor;

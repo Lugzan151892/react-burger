@@ -1,6 +1,7 @@
 import React from "react";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerElement.module.css'
+import PropTypes from 'prop-types';
 
 const BurgerElement = ({element, data, addItem}) => {
     
@@ -18,5 +19,11 @@ const BurgerElement = ({element, data, addItem}) => {
         </div>
     );
 };
+
+BurgerElement.propTypes = {
+    element: PropTypes.object,
+    data: PropTypes.array,
+    addItem: PropTypes.func
+}; 
 
 export default BurgerElement;
