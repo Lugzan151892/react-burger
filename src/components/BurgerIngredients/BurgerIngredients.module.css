@@ -1,0 +1,19 @@
+.createSection {
+    max-width: 600px;
+    max-height: 912px;    
+}
+
+.container {
+    max-height: 600px; 
+    overflow: auto;
+}
+
+.container::-webkit-scrollbar {
+    background: #2f2f37;
+    width: 8px;
+}
+
+.container::-webkit-scrollbar-thumb{
+    background: #8585AD;
+    border: 3px solid #8585AD;
+}
