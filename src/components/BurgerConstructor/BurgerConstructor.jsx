@@ -4,67 +4,59 @@ import styles from './BurgerConstructor.module.css'
 import SelectedElement from "../SelectedElement/SelectedElement";
 import PropTypes from 'prop-types';
 
-const BurgerConstructor = ({data, remove}) =>{
+const BurgerConstructor = ({data, remove, openIngridientModal, openOrderModal}) =>{
 
-    const sectionRef = React.useRef();
+    const sortElements = (a, b) => a.id > b.id ? 1 : -1;
 
-    const sortElements = (a, b) => {
-        if (a.id > b.id) {
-            return 1
-        } else {
-            return -1
-        }
-    };
     const [elementList, setElementList] = React.useState([]);
 
     React.useEffect(() => {
         setElementList(data)
-    }, [data])
+    }, [data]);
 
-    const [currentElement, setCurrentElement] = React.useState(null);
+    // const [currentElement, setCurrentElement] = React.useState(null);
 
-    function dragStartHandler(e, card) {
-        e.stopPropagation();
-        setCurrentElement(card)
-    }
+    // function dragStartHandler(e, card) {
+    //     e.stopPropagation();
+    //     setCurrentElement(card)
+    // }
     
-    function dragOverHandler(e) {
-        e.preventDefault();
-    }
+    // function dragOverHandler(e) {
+    //     e.preventDefault();
+    // }
 
-    function dropHandler(e, card) {
-        e.preventDefault();
-        console.log(e.target);
-        console.log(e.currentTarget);
-        
-        setElementList(elementList.map(elem => {
-            if(elem.id === card.id) {
-                return {...elem, id: currentElement.id }
-            }
-            if(elem.id === currentElement.id) {
-                return {...elem, id: card.id }
-            }
-            return elem;
-        }))
-    }
+    // function dropHandler(e, card) {
+    //     e.preventDefault();
+            
+    //     setElementList(elementList.map(elem => {
+    //         if(elem.id === card.id) {
+    //             return {...elem, id: currentElement.id }
+    //         }
+    //         if(elem.id === currentElement.id) {
+    //             return {...elem, id: card.id }
+    //         }
+    //         return elem;
+    //     }))
+    // }
 
     const price = 0;
 
-    let summ = data.reduce((prev, current) => {
+    const summ = data.reduce((prev, current) => {
         return prev + current.price
     }, price);
 
     return (
-        <section ref={sectionRef} className={styles.burgerConstructor}>
+        <section className={styles.burgerConstructor}>
             <div className={styles.burgerElements}>
                 {data && elementList.sort(sortElements).map((element, number) => (
                 <SelectedElement 
                     remove={remove} 
                     key={number} 
                     element={element}
-                    dragStartHandler={dragStartHandler}
-                    dragOverHandler={dragOverHandler}
-                    dropHandler={dropHandler}
+                    openModal={openIngridientModal}
+                    // dragStartHandler={dragStartHandler}
+                    // dragOverHandler={dragOverHandler}
+                    // dropHandler={dropHandler}
                     >
                 </SelectedElement>)
                 )}
@@ -74,7 +66,7 @@ const BurgerConstructor = ({data, remove}) =>{
                     <p className={`mr-2 mt-3 mb-3 text text_type_digits-medium`}>{summ}</p>
                     <CurrencyIcon type="primary" />
                 </div>
-                <Button htmlType={'button'} type="primary" size="large">
+                <Button htmlType={'button'} onClick={openOrderModal} type="primary" size="large">
                     Оформить заказ
                 </Button>
             </div>
@@ -83,8 +75,23 @@ const BurgerConstructor = ({data, remove}) =>{
 }
 
 BurgerConstructor.propTypes = {
-    data: PropTypes.array,
-    remove: PropTypes.func
+    data: PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string,
+        name: PropTypes.string,
+        type: PropTypes.string,
+        proteins: PropTypes.number,
+        fat: PropTypes.number,
+        carbohydrates: PropTypes.number,
+        calories: PropTypes.number,
+        price: PropTypes.number,
+        image: PropTypes.string,
+        image_mobile: PropTypes.string,
+        image_large: PropTypes.string,
+        __v: PropTypes.number
+      })).isRequired,
+    remove: PropTypes.func.isRequired,
+    openIngridientModal: PropTypes.func.isRequired,
+    openOrderModal: PropTypes.func.isRequired
 }; 
 
 export default BurgerConstructor;

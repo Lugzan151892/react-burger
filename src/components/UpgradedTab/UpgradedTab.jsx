@@ -14,11 +14,11 @@ const UpgradedTab = ({type, title, current, setCurrent, setTab}) => {
 }
 
 UpgradedTab.propTypes = {
-    type: PropTypes.string,    
-    title: PropTypes.string,
-    current: PropTypes.string,    
-    setCurrent: PropTypes.func,
-    setTab: PropTypes.func
+    type: PropTypes.string.isRequired,    
+    title: PropTypes.string.isRequired,
+    current: PropTypes.string.isRequired,    
+    setCurrent: PropTypes.func.isRequired,
+    setTab: PropTypes.func.isRequired
 }
 
 export default UpgradedTab;

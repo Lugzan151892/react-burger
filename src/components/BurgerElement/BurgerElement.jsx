@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 
 const BurgerElement = ({element, data, addItem}) => {
     
+    const chosenElements = data.filter(item => element._id === item._id);
+
     return (
-        <div className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={()=>addItem(element)}>
+        <div className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={()=>addItem(element)}>            
             {
-                data.filter(arrItem => element._id === arrItem._id).length ? <Counter count={data.filter(arrItem => element._id === arrItem._id).length} size="default" /> : null
+                chosenElements.length ? <Counter count={chosenElements.length} size="default" /> : null
             }
             <img className={styles.image} alt={element.name} src={element.image} />
             <div className={styles.priceContainer}>
@@ -21,9 +23,35 @@ const BurgerElement = ({element, data, addItem}) => {
 };
 
 BurgerElement.propTypes = {
-    element: PropTypes.object,
-    data: PropTypes.array,
-    addItem: PropTypes.func
+    element: PropTypes.shape({
+        _id: PropTypes.string,
+        name: PropTypes.string,
+        type: PropTypes.string,
+        proteins: PropTypes.number,
+        fat: PropTypes.number,
+        carbohydrates: PropTypes.number,
+        calories: PropTypes.number,
+        price: PropTypes.number,
+        image: PropTypes.string,
+        image_mobile: PropTypes.string,
+        image_large: PropTypes.string,
+        __v: PropTypes.number
+      }).isRequired,
+    data: PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string,
+        name: PropTypes.string,
+        type: PropTypes.string,
+        proteins: PropTypes.number,
+        fat: PropTypes.number,
+        carbohydrates: PropTypes.number,
+        calories: PropTypes.number,
+        price: PropTypes.number,
+        image: PropTypes.string,
+        image_mobile: PropTypes.string,
+        image_large: PropTypes.string,
+        __v: PropTypes.number
+      })).isRequired,
+    addItem: PropTypes.func.isRequired
 }; 
 
 export default BurgerElement;

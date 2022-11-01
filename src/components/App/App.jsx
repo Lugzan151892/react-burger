@@ -2,20 +2,63 @@ import React from 'react';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
+import ModalOverlay from '../ModalOverlay/ModalOverlay';
+import OrderDetails from '../OrderDetails/OrderDetails';
+import IngridientDetails from '../IngredientDetails/IngredientDetails';
 import styles from "./App.module.css";
 
-function App() { 
+const apiUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
-  const [arr, setArr] = React.useState([]);   
+function App() {
+
+  const [loadedElements, setLoadedElements] = React.useState([]);
+  React.useEffect(() => {
+    return async function getBurgerElements() {
+      const response = await fetch(apiUrl)
+        .then((res)=> res.json())
+        .then((res)=> res.data)
+        .catch(err => console.log(err));
+      setLoadedElements(response);
+    }
+  }, []);
+
+  const [arr, setArr] = React.useState([]); 
+  const [visible, setVisible] = React.useState(false);
+  const [currentModal, setCurrentModal] = React.useState('order');
+  const [elementInModal, setElementInModal] = React.useState(null);
+
+  function openIngridientDetails(item) {
+    setElementInModal(item);
+    setVisible(true);
+    setCurrentModal('ingridient');
+  }
+
+  function openOrderDetails() {
+    setVisible(true);
+    setCurrentModal('order');
+  }
+
+  function closeModal() {
+    setVisible(false);
+  }
 
   function addItem(item) {
-    const isBunInArr = (element) => element.type === 'bun';
-    // const isBunInArr = arr.find(item => item.type === 'bun');
+    const bunInArr = arr.find((element) => element.type === 'bun');
+      
     let date = new Date();
     
-    if (item.type === 'bun') {
-      arr.some(isBunInArr) ? 
-      alert('Вы можете выбрать только один тип булки') : 
+    if (bunInArr) { 
+      item.type === 'bun' ?     
+      alert('Вы можете выбрать только один тип булки'):
+      setArr([
+        ...arr,
+        {
+          ...item,
+          'id' : date.getTime()
+        }        
+      ]);
+    } else {
+      item.type === 'bun' ?
       setArr([
         {
           ...item,
@@ -28,16 +71,15 @@ function App() {
           'name' : item.name + ' низ',
           'id' : date.getTime() * 11
         }
-      ])
-    } else if (item.type !== 'bun') {
+      ]) :
       setArr([
         ...arr,
         {
           ...item,
           'id' : date.getTime()
         }        
-      ])
-    }       
+      ]);
+    }            
   }
 
   function removeItem (element) {
@@ -47,9 +89,15 @@ function App() {
   return (
     <>
       <AppHeader />
-      <main className={styles.app}>
-        <BurgerIngredients addItem={addItem} data={arr}/>
-        <BurgerConstructor remove={removeItem} data={arr}></BurgerConstructor>
+      <ModalOverlay closeModal={closeModal} visible={visible}>
+        {currentModal === 'order' ? 
+          <OrderDetails closeModal={closeModal}/> :
+          <IngridientDetails closeModal={closeModal} item={elementInModal}/>
+        }        
+      </ModalOverlay>
+      <main className={styles.app}>        
+        <BurgerIngredients defaultElements={loadedElements} addItem={addItem} data={arr}/>
+        <BurgerConstructor openOrderModal={openOrderDetails} openIngridientModal={openIngridientDetails} remove={removeItem} data={arr} />
       </main>
     </>
   );
