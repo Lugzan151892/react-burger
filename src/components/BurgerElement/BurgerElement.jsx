@@ -2,13 +2,14 @@ import React from "react";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerElement.module.css'
 import PropTypes from 'prop-types';
+const { elementPropTypes } = require('../../utils/data.js');
 
-const BurgerElement = ({element, data, addItem}) => {
+const BurgerElement = ({element, data, openIngridientModal}) => {
     
     const chosenElements = data.filter(item => element._id === item._id);
 
     return (
-        <div className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={()=>addItem(element)}>            
+        <div className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={() => openIngridientModal(element)}>            
             {
                 chosenElements.length ? <Counter count={chosenElements.length} size="default" /> : null
             }
@@ -23,35 +24,9 @@ const BurgerElement = ({element, data, addItem}) => {
 };
 
 BurgerElement.propTypes = {
-    element: PropTypes.shape({
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        type: PropTypes.string,
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number,
-        image: PropTypes.string,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number
-      }).isRequired,
-    data: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        type: PropTypes.string,
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number,
-        image: PropTypes.string,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number
-      })).isRequired,
-    addItem: PropTypes.func.isRequired
+    element: PropTypes.shape(elementPropTypes).isRequired,
+    data: PropTypes.arrayOf(PropTypes.shape(elementPropTypes)).isRequired,
+    openIngridientModal: PropTypes.func
 }; 
 
 export default BurgerElement;

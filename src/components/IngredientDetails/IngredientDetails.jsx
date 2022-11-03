@@ -1,14 +1,13 @@
 import React from "react";
 import styles from './IngredientDetails.module.css';
-import close from '../../images/close.png';
 import PropTypes from "prop-types";
+const { elementPropTypes } = require('../../utils/data.js');
 
-function IngredientDetails({item, closeModal}) {
+function IngredientDetails({item}) {
     return (
         <div className={styles.ingridient} onClick={(e) => e.stopPropagation()}>
             <div className={styles.title}>
                 <h2 className='text text_type_main-large'>Детали ингредиента</h2>
-                <button onClick={closeModal} className={styles.button}><img src={close} alt="Кнопка закрытия окна" /></button>
             </div>
             <img src={item.image_large} alt={item.name} />
             <p className="text text_type_main-medium mt-4 mb-8">{item.name}</p>
@@ -35,21 +34,7 @@ function IngredientDetails({item, closeModal}) {
 };
 
 IngredientDetails.propTypes = {
-    item: PropTypes.shape({
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        type: PropTypes.string,
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number,
-        image: PropTypes.string,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number
-    }).isRequired, 
-    closeModal: PropTypes.func.isRequired,
+    item: PropTypes.shape(elementPropTypes).isRequired
 };
 
 export default IngredientDetails;

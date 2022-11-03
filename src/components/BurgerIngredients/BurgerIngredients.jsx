@@ -3,15 +3,38 @@ import styles from './BurgerIngredients.module.css'
 import DefaultBurgerIngredient from "../DefaultBurgerIngredient/DefaultBurgerIngredient";
 import UpgradedTab from "../UpgradedTab/UpgradedTab";
 import PropTypes from 'prop-types';
+import IngredientDetails from "../IngredientDetails/IngredientDetails";
+import Modal from "../Modal/Modal";
+import ModalOverlay from "../ModalOverlay/ModalOverlay";
+
+const { elementPropTypes } = require('../../utils/data.js');
 
 const tabs = {
     BUN: 'bun',
     SAUCE: 'sauce',
     MAIN: 'main'
 }
-function BurgerIngredients({defaultElements, addItem, data}) { 
+function BurgerIngredients({defaultElements}) { 
 
     const [current, setCurrent] = React.useState(tabs.BUN);
+    const [visible, setVisible] = React.useState(false);
+    const [elementInModal, setElementInModal] = React.useState(null);
+    
+    const openModalEscape = (e) => {
+        if(e.key === 'Escape') {
+            setVisible(false);
+        } 
+    }
+
+    function openModal(item) {
+        setVisible(true);
+        setElementInModal(item);
+        document.addEventListener('keydown', openModalEscape);
+    }
+
+    function closeModal() {
+        setVisible(false);
+    }
 
     const setTab = (tab) => {
         setCurrent(tab);
@@ -21,6 +44,10 @@ function BurgerIngredients({defaultElements, addItem, data}) {
 
     return (    
         <section className={styles.createSection}>
+            <ModalOverlay closeModal={closeModal} visible={visible}/>
+            <Modal openModalEscape={openModalEscape} closeModal={closeModal} visible={visible}>
+                {elementInModal ? <IngredientDetails item={elementInModal}/> : null}
+            </Modal>            
             <h2 className={`${styles.title} text text_type_main-large mb-5`}>
                 Соберите бургер
             </h2>
@@ -30,44 +57,16 @@ function BurgerIngredients({defaultElements, addItem, data}) {
                 <UpgradedTab type={tabs.MAIN} title={'Начинки'} setTab={setTab} current={current} setCurrent={setCurrent} />                    
             </div>
             <div className={styles.container}>    
-                <DefaultBurgerIngredient defaultElements={defaultElements} type={tabs.BUN} title={'Булки'} arr={data} addItem={addItem} />
-                <DefaultBurgerIngredient defaultElements={defaultElements} type={tabs.SAUCE} title={'Соусы'} arr={data} addItem={addItem} />
-                <DefaultBurgerIngredient defaultElements={defaultElements} type={tabs.MAIN} title={'Начинки'} arr={data} addItem={addItem} />
+                <DefaultBurgerIngredient defaultElements={defaultElements} type={tabs.BUN} title={'Булки'} openIngridientModal={openModal}/>
+                <DefaultBurgerIngredient defaultElements={defaultElements} type={tabs.SAUCE} title={'Соусы'} openIngridientModal={openModal}/>
+                <DefaultBurgerIngredient defaultElements={defaultElements} type={tabs.MAIN} title={'Начинки'} openIngridientModal={openModal}/>
             </div>
         </section>
     );
 }
 
-BurgerIngredients.propTypes = {    
-    data: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        type: PropTypes.string,
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number,
-        image: PropTypes.string,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number
-      })).isRequired,
-    addItem: PropTypes.func.isRequired,
-    defaultElements: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        type: PropTypes.string,
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number,
-        image: PropTypes.string,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number
-      })).isRequired,
+BurgerIngredients.propTypes = {
+    defaultElements: PropTypes.arrayOf(PropTypes.shape(elementPropTypes)).isRequired,
 }; 
 
 export default BurgerIngredients;

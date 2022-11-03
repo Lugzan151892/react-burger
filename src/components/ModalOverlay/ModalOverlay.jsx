@@ -2,16 +2,15 @@ import React from 'react';
 import styles from "./ModalOverlay.module.css";
 import PropTypes from 'prop-types'
 
-function ModalOverlay({children, visible, closeModal}) {
+function ModalOverlay({visible, closeModal}) {
     return (
         <div onClick={closeModal} className={visible ? [styles.modalOverlay, styles.active].join(' ') : styles.modalOverlay}>        
-            {children}      
+               
         </div>
     )
 }
 
-ModalOverlay.propTypes = {
-    children: PropTypes.node,
+ModalOverlay.propTypes = {    
     closeModal: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
 };
