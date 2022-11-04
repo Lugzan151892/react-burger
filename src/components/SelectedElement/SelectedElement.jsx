@@ -4,7 +4,7 @@ import styles from './SelectedElement.module.css'
 import PropTypes from 'prop-types';
 const { elementPropTypes } = require('../../utils/data.js');
 
-const SelectedElement = ({element}) => {
+const SelectedElement = ({element, type}) => {
 
     return (
         <div 
@@ -15,9 +15,9 @@ const SelectedElement = ({element}) => {
             (<div className='mr-2'>
                 <DragIcon type="primary" />
             </div>)
-            }                  
+            }
             <ConstructorElement
-                type={element.type}
+                type={type}
                 isLocked={element.type === 'bun'}
                 text={element.name}                
                 price={element.price}
@@ -29,6 +29,7 @@ const SelectedElement = ({element}) => {
 
 SelectedElement.propTypes = {
     element: PropTypes.shape(elementPropTypes).isRequired,
+    type: PropTypes.string
 }
 
 export default SelectedElement;

@@ -4,17 +4,35 @@ import ReactDOM from 'react-dom'
 import styles from "./Modal.module.css";
 import PropTypes from 'prop-types';
 import close from '../../images/close.png';
+import ModalOverlay from '../ModalOverlay/ModalOverlay';
 
 const modalRoot = document.getElementById('modal');
 
-function Modal({children, closeModal, visible, openModalEscape}) {
-        
+function Modal({children, closeModal, visible, setVisible}) {
+    
+    const openModalEscape = (e) => {
+        if(e.key === 'Escape') {
+            setVisible(false);
+        } 
+    };
+
+    React.useEffect(() => {
+        document.addEventListener('keydown', openModalEscape);
+        return () => {
+            document.removeEventListener('keydown', openModalEscape);
+        }
+    })
+
     return ReactDOM.createPortal(
-            (
-                <div onKeyDown={(e) => openModalEscape(e)} tabIndex='0' className={visible ? [styles.modal, styles.active].join(' ') : styles.modal}>
-                    <button onClick={closeModal} className={styles.button}><img alt={'Кнопка закрытия окна'} src={close}/></button>
-                    {children}
-                </div>
+            (   <>                    
+                    <div onKeyDown={(e) => openModalEscape(e)} tabIndex='0' className={visible ? [styles.modal, styles.active].join(' ') : styles.modal}>
+                        <ModalOverlay closeModal={closeModal} visible={visible}/>
+                        <div className={styles.container}>
+                            <button onClick={closeModal} className={styles.button}><img alt={'Кнопка закрытия окна'} src={close}/></button>
+                            {children}
+                        </div>
+                    </div>
+                </>
             ), 
             modalRoot
         );
@@ -23,7 +41,8 @@ function Modal({children, closeModal, visible, openModalEscape}) {
 Modal.propTypes = {
     children: PropTypes.node,
     closeModal: PropTypes.func.isRequired,
-    visible: PropTypes.bool.isRequired
+    visible: PropTypes.bool.isRequired,
+    setVisible: PropTypes.func
 };
 
 export default Modal;

@@ -5,7 +5,6 @@ import UpgradedTab from "../UpgradedTab/UpgradedTab";
 import PropTypes from 'prop-types';
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import Modal from "../Modal/Modal";
-import ModalOverlay from "../ModalOverlay/ModalOverlay";
 
 const { elementPropTypes } = require('../../utils/data.js');
 
@@ -19,17 +18,10 @@ function BurgerIngredients({defaultElements}) {
     const [current, setCurrent] = React.useState(tabs.BUN);
     const [visible, setVisible] = React.useState(false);
     const [elementInModal, setElementInModal] = React.useState(null);
-    
-    const openModalEscape = (e) => {
-        if(e.key === 'Escape') {
-            setVisible(false);
-        } 
-    }
 
     function openModal(item) {
         setVisible(true);
         setElementInModal(item);
-        document.addEventListener('keydown', openModalEscape);
     }
 
     function closeModal() {
@@ -44,8 +36,7 @@ function BurgerIngredients({defaultElements}) {
 
     return (    
         <section className={styles.createSection}>
-            <ModalOverlay closeModal={closeModal} visible={visible}/>
-            <Modal openModalEscape={openModalEscape} closeModal={closeModal} visible={visible}>
+            <Modal closeModal={closeModal} setVisible={setVisible} visible={visible}>
                 {elementInModal ? <IngredientDetails item={elementInModal}/> : null}
             </Modal>            
             <h2 className={`${styles.title} text text_type_main-large mb-5`}>

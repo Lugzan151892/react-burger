@@ -5,18 +5,11 @@ import SelectedElement from "../SelectedElement/SelectedElement";
 import PropTypes from 'prop-types';
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import ModalOverlay from "../ModalOverlay/ModalOverlay";
 const { elementPropTypes } = require('../../utils/data.js');
 
 const BurgerConstructor = ({data}) =>{
 
-    const [visible, setVisible] = React.useState(false);
-
-    const openModalEscape = (e) => {
-        if(e.key === 'Escape') {
-            setVisible(false);
-        } 
-    }
+    const [visible, setVisible] = React.useState(false);    
 
     function closeModal() {
         setVisible(false);
@@ -24,7 +17,6 @@ const BurgerConstructor = ({data}) =>{
 
     function openModal(e) {
         setVisible(true);
-        document.addEventListener('keydown', openModalEscape);
     }
 
     const bunList = data.filter((item) => item.type === 'bun');
@@ -37,26 +29,30 @@ const BurgerConstructor = ({data}) =>{
 
     return (
         <section className={styles.burgerConstructor}>
-            <ModalOverlay closeModal={closeModal} visible={visible}/>
-            <Modal openModalEscape={openModalEscape} closeModal={closeModal} visible={visible}>
+            <Modal setVisible={setVisible} closeModal={closeModal} visible={visible}>
+                {visible && 
                 <OrderDetails/>
+                }
             </Modal>
             <div className={styles.burgerElements}>
                 {bunList[0] && 
                 <SelectedElement                      
                     element={bunList[0]}
+                    type={'top'}
                     >
                 </SelectedElement>}
                 {data && nonBunList.map((element, number) => (
                 <SelectedElement 
                     key={number} 
                     element={element}
+                    type={element.type}
                     >
                 </SelectedElement>)
                 )}
                 {bunList[0] && 
                 <SelectedElement                      
                     element={bunList[0]}
+                    type={'bottom'}
                     >
                 </SelectedElement>}
             </div>
