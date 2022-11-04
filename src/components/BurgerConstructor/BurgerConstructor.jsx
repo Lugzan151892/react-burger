@@ -29,11 +29,11 @@ const BurgerConstructor = ({data}) =>{
 
     return (
         <section className={styles.burgerConstructor}>
-            <Modal setVisible={setVisible} closeModal={closeModal} visible={visible}>
-                {visible && 
-                <OrderDetails/>
-                }
-            </Modal>
+            {visible &&
+                <Modal setVisible={setVisible} closeModal={closeModal} visible={visible}>                 
+                    <OrderDetails/>                
+                </Modal>
+            }
             <div className={styles.burgerElements}>
                 {bunList[0] && 
                 <SelectedElement                      

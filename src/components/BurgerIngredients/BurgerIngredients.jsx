@@ -20,8 +20,8 @@ function BurgerIngredients({defaultElements}) {
     const [elementInModal, setElementInModal] = React.useState(null);
 
     function openModal(item) {
-        setVisible(true);
         setElementInModal(item);
+        setVisible(true);
     }
 
     function closeModal() {
@@ -36,9 +36,11 @@ function BurgerIngredients({defaultElements}) {
 
     return (    
         <section className={styles.createSection}>
-            <Modal closeModal={closeModal} setVisible={setVisible} visible={visible}>
-                {elementInModal ? <IngredientDetails item={elementInModal}/> : null}
-            </Modal>            
+            {elementInModal &&
+                <Modal closeModal={closeModal} setVisible={setVisible} visible={visible}>
+                    <IngredientDetails item={elementInModal}/>
+                </Modal> 
+            }            
             <h2 className={`${styles.title} text text_type_main-large mb-5`}>
                 Соберите бургер
             </h2>

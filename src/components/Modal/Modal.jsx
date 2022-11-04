@@ -13,7 +13,7 @@ function Modal({children, closeModal, visible, setVisible}) {
     const openModalEscape = (e) => {
         if(e.key === 'Escape') {
             setVisible(false);
-        } 
+        }
     };
 
     React.useEffect(() => {
@@ -21,12 +21,13 @@ function Modal({children, closeModal, visible, setVisible}) {
         return () => {
             document.removeEventListener('keydown', openModalEscape);
         }
-    })
+    }, []);
 
     return ReactDOM.createPortal(
-            (   <>                    
+            (   
+                <>                    
                     <div onKeyDown={(e) => openModalEscape(e)} tabIndex='0' className={visible ? [styles.modal, styles.active].join(' ') : styles.modal}>
-                        <ModalOverlay closeModal={closeModal} visible={visible}/>
+                        <ModalOverlay closeModal={closeModal}/>
                         <div className={styles.container}>
                             <button onClick={closeModal} className={styles.button}><img alt={'Кнопка закрытия окна'} src={close}/></button>
                             {children}
