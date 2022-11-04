@@ -36,8 +36,8 @@ function BurgerIngredients({defaultElements}) {
 
     return (    
         <section className={styles.createSection}>
-            {elementInModal &&
-                <Modal closeModal={closeModal} setVisible={setVisible} visible={visible}>
+            {elementInModal && visible &&
+                <Modal closeModal={closeModal}>
                     <IngredientDetails item={elementInModal}/>
                 </Modal> 
             }            

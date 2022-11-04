@@ -8,11 +8,11 @@ import ModalOverlay from '../ModalOverlay/ModalOverlay';
 
 const modalRoot = document.getElementById('modal');
 
-function Modal({children, closeModal, visible, setVisible}) {
-    
+function Modal({children, closeModal}) {  
+
     const openModalEscape = (e) => {
         if(e.key === 'Escape') {
-            setVisible(false);
+            closeModal();
         }
     };
 
@@ -26,7 +26,7 @@ function Modal({children, closeModal, visible, setVisible}) {
     return ReactDOM.createPortal(
             (   
                 <>                    
-                    <div onKeyDown={(e) => openModalEscape(e)} tabIndex='0' className={visible ? [styles.modal, styles.active].join(' ') : styles.modal}>
+                    <div onKeyDown={(e) => openModalEscape(e)} tabIndex='0' className={[styles.modal, styles.active].join(' ')}>
                         <ModalOverlay closeModal={closeModal}/>
                         <div className={styles.container}>
                             <button onClick={closeModal} className={styles.button}><img alt={'Кнопка закрытия окна'} src={close}/></button>
@@ -42,8 +42,6 @@ function Modal({children, closeModal, visible, setVisible}) {
 Modal.propTypes = {
     children: PropTypes.node,
     closeModal: PropTypes.func.isRequired,
-    visible: PropTypes.bool.isRequired,
-    setVisible: PropTypes.func
 };
 
 export default Modal;

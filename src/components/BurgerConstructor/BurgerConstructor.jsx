@@ -15,7 +15,7 @@ const BurgerConstructor = ({data}) =>{
         setVisible(false);
     }
 
-    function openModal(e) {
+    function openModal() {
         setVisible(true);
     }
 
@@ -30,7 +30,7 @@ const BurgerConstructor = ({data}) =>{
     return (
         <section className={styles.burgerConstructor}>
             {visible &&
-                <Modal setVisible={setVisible} closeModal={closeModal} visible={visible}>                 
+                <Modal closeModal={closeModal}>                 
                     <OrderDetails/>                
                 </Modal>
             }
