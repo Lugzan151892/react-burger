@@ -8,6 +8,10 @@
     overflow: auto;
 }
 
+.tabsContainer {
+    display: flex;
+}
+
 .container::-webkit-scrollbar {
     background: #2f2f37;
     width: 8px;

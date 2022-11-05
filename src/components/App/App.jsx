@@ -3,53 +3,24 @@ import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import styles from "./App.module.css";
+import { getIngredients } from '../../utils/burger-api.js';
 
-function App() { 
+const API_URL = 'https://norma.nomoreparties.space/api';
 
-  const [arr, setArr] = React.useState([]);   
+function App() {
 
-  function addItem(item) {
-    const isBunInArr = (element) => element.type === 'bun';
-    // const isBunInArr = arr.find(item => item.type === 'bun');
-    let date = new Date();
-    
-    if (item.type === 'bun') {
-      arr.some(isBunInArr) ? 
-      alert('Вы можете выбрать только один тип булки') : 
-      setArr([
-        {
-          ...item,
-          'name' : item.name + ' верх',
-          'id' : date.getMilliseconds(), 
-        },
-        ...arr,
-        {
-          ...item,
-          'name' : item.name + ' низ',
-          'id' : date.getTime() * 11
-        }
-      ])
-    } else if (item.type !== 'bun') {
-      setArr([
-        ...arr,
-        {
-          ...item,
-          'id' : date.getTime()
-        }        
-      ])
-    }       
-  }
-
-  function removeItem (element) {
-    setArr(arr.filter(arrItem => arrItem.id !== element.id))
-  }
+  const [loadedElements, setLoadedElements] = React.useState([]);
+  React.useEffect(() => {
+    getIngredients(`${API_URL}/ingredients`)
+      .then(res => setLoadedElements(res.data))  
+  }, []);
 
   return (
     <>
-      <AppHeader />
-      <main className={styles.app}>
-        <BurgerIngredients addItem={addItem} data={arr}/>
-        <BurgerConstructor remove={removeItem} data={arr}></BurgerConstructor>
+      <AppHeader />      
+      <main className={styles.app}>          
+        <BurgerIngredients defaultElements={loadedElements} data={loadedElements}/>
+        <BurgerConstructor data={loadedElements} />
       </main>
     </>
   );

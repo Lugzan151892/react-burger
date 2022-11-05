@@ -3,78 +3,65 @@ import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-comp
 import styles from './BurgerConstructor.module.css'
 import SelectedElement from "../SelectedElement/SelectedElement";
 import PropTypes from 'prop-types';
+import Modal from "../Modal/Modal";
+import OrderDetails from "../OrderDetails/OrderDetails";
+const { elementPropTypes } = require('../../utils/data.js');
 
-const BurgerConstructor = ({data, remove}) =>{
+const BurgerConstructor = ({data}) =>{
 
-    const sectionRef = React.useRef();
+    const [visible, setVisible] = React.useState(false);    
 
-    const sortElements = (a, b) => {
-        if (a.id > b.id) {
-            return 1
-        } else {
-            return -1
-        }
-    };
-    const [elementList, setElementList] = React.useState([]);
-
-    React.useEffect(() => {
-        setElementList(data)
-    }, [data])
-
-    const [currentElement, setCurrentElement] = React.useState(null);
-
-    function dragStartHandler(e, card) {
-        e.stopPropagation();
-        setCurrentElement(card)
-    }
-    
-    function dragOverHandler(e) {
-        e.preventDefault();
+    function closeModal() {
+        setVisible(false);
     }
 
-    function dropHandler(e, card) {
-        e.preventDefault();
-        console.log(e.target);
-        console.log(e.currentTarget);
-        
-        setElementList(elementList.map(elem => {
-            if(elem.id === card.id) {
-                return {...elem, id: currentElement.id }
-            }
-            if(elem.id === currentElement.id) {
-                return {...elem, id: card.id }
-            }
-            return elem;
-        }))
+    function openModal() {
+        setVisible(true);
     }
 
+    const bunList = data.filter((item) => item.type === 'bun');
+    const nonBunList = data.filter((item) => item.type !== 'bun');
     const price = 0;
 
-    let summ = data.reduce((prev, current) => {
+    const summ = data.reduce((prev, current) => {
         return prev + current.price
     }, price);
 
     return (
-        <section ref={sectionRef} className={styles.burgerConstructor}>
+        <section className={styles.burgerConstructor}>
+            {visible &&
+                <Modal closeModal={closeModal}>                 
+                    <OrderDetails/>                
+                </Modal>
+            }
             <div className={styles.burgerElements}>
-                {data && elementList.sort(sortElements).map((element, number) => (
+                {bunList[0] && 
+                <SelectedElement                      
+                    element={bunList[0]}
+                    type={'top'}
+                    >
+                </SelectedElement>}
+                {data && nonBunList.map((element, number) => (
                 <SelectedElement 
-                    remove={remove} 
                     key={number} 
                     element={element}
-                    dragStartHandler={dragStartHandler}
-                    dragOverHandler={dragOverHandler}
-                    dropHandler={dropHandler}
+                    type={element.type}
                     >
                 </SelectedElement>)
                 )}
+                {bunList[0] && 
+                <SelectedElement                      
+                    element={bunList[0]}
+                    type={'bottom'}
+                    >
+                </SelectedElement>}
             </div>
             <div className={`${styles.burgerOrder} mt-5`}>
                 <div className={styles.priceContainer}>
                     <p className={`mr-2 mt-3 mb-3 text text_type_digits-medium`}>{summ}</p>
                     <CurrencyIcon type="primary" />
                 </div>
-                <Button htmlType={'button'} type="primary" size="large">
+                <Button htmlType={'button'} onClick={(e) => openModal(e)} type="primary" size="large">
                     Оформить заказ
                 </Button>
             </div>
@@ -83,8 +70,7 @@ const BurgerConstructor = ({data, remove}) =>{
 }
 
 BurgerConstructor.propTypes = {
-    data: PropTypes.array,
-    remove: PropTypes.func
+    data: PropTypes.arrayOf(PropTypes.shape(elementPropTypes)).isRequired,
 }; 
 
 export default BurgerConstructor;

@@ -2,13 +2,16 @@ import React from "react";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerElement.module.css'
 import PropTypes from 'prop-types';
+const { elementPropTypes } = require('../../utils/data.js');
 
-const BurgerElement = ({element, data, addItem}) => {
+const BurgerElement = ({element, data, openIngridientModal}) => {
     
+    const chosenElements = data.filter(item => element._id === item._id);
+
     return (
-        <div className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={()=>addItem(element)}>
+        <div className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={() => openIngridientModal(element)}>            
             {
-                data.filter(arrItem => element._id === arrItem._id).length ? <Counter count={data.filter(arrItem => element._id === arrItem._id).length} size="default" /> : null
+                chosenElements.length ? <Counter count={chosenElements.length} size="default" /> : null
             }
             <img className={styles.image} alt={element.name} src={element.image} />
             <div className={styles.priceContainer}>
@@ -21,9 +24,9 @@ const BurgerElement = ({element, data, addItem}) => {
 };
 
 BurgerElement.propTypes = {
-    element: PropTypes.object,
-    data: PropTypes.array,
-    addItem: PropTypes.func
+    element: PropTypes.shape(elementPropTypes).isRequired,
+    data: PropTypes.arrayOf(PropTypes.shape(elementPropTypes)).isRequired,
+    openIngridientModal: PropTypes.func
 }; 
 
 export default BurgerElement;
