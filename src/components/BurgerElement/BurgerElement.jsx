@@ -2,11 +2,14 @@ import React from "react";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerElement.module.css'
 import PropTypes from 'prop-types';
+import { IngredientsContext } from "../../services/IngredientsContext";
 const { elementPropTypes } = require('../../utils/data.js');
 
-const BurgerElement = ({element, data, openIngridientModal}) => {
+
+const BurgerElement = ({element, openIngridientModal}) => {
     
-    const chosenElements = data.filter(item => element._id === item._id);
+    const {loadedElements} = React.useContext(IngredientsContext);
+    const chosenElements = loadedElements.filter(item => element._id === item._id);
 
     return (
         <div className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={() => openIngridientModal(element)}>            
@@ -25,7 +28,6 @@ const BurgerElement = ({element, data, openIngridientModal}) => {
 
 BurgerElement.propTypes = {
     element: PropTypes.shape(elementPropTypes).isRequired,
-    data: PropTypes.arrayOf(PropTypes.shape(elementPropTypes)).isRequired,
     openIngridientModal: PropTypes.func
 }; 
 

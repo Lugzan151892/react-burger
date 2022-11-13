@@ -6,6 +6,17 @@ const { elementPropTypes } = require('../../utils/data.js');
 
 const SelectedElement = ({element, type}) => {
 
+    function checkName(type, element){
+        switch (type) {
+            case 'bottom':
+                return `${element.name} низ`;
+            case 'top': 
+                return `${element.name} верх`;
+            default:
+                return element.name;
+        }
+    }
+
     return (
         <div 
             className={styles.element}
@@ -19,7 +30,7 @@ const SelectedElement = ({element, type}) => {
             <ConstructorElement
                 type={type}
                 isLocked={element.type === 'bun'}
-                text={element.name}                
+                text={checkName(type, element)}               
                 price={element.price}
                 thumbnail={element.image}
             />

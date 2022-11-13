@@ -2,19 +2,16 @@ import React from "react";
 import styles from './BurgerIngredients.module.css'
 import DefaultBurgerIngredient from "../DefaultBurgerIngredient/DefaultBurgerIngredient";
 import UpgradedTab from "../UpgradedTab/UpgradedTab";
-import PropTypes from 'prop-types';
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import Modal from "../Modal/Modal";
-
-const { elementPropTypes } = require('../../utils/data.js');
 
 const tabs = {
     BUN: 'bun',
     SAUCE: 'sauce',
     MAIN: 'main'
 }
-function BurgerIngredients({defaultElements}) { 
-
+function BurgerIngredients() {
+    
     const [current, setCurrent] = React.useState(tabs.BUN);
     const [visible, setVisible] = React.useState(false);
     const [elementInModal, setElementInModal] = React.useState(null);
@@ -50,17 +47,13 @@ function BurgerIngredients({defaultElements}) {
                 <UpgradedTab type={tabs.MAIN} title={'Начинки'} setTab={setTab} current={current} setCurrent={setCurrent} />                    
             </div>
             <div className={styles.container}>    
-                <DefaultBurgerIngredient defaultElements={defaultElements} type={tabs.BUN} title={'Булки'} openIngridientModal={openModal}/>
-                <DefaultBurgerIngredient defaultElements={defaultElements} type={tabs.SAUCE} title={'Соусы'} openIngridientModal={openModal}/>
-                <DefaultBurgerIngredient defaultElements={defaultElements} type={tabs.MAIN} title={'Начинки'} openIngridientModal={openModal}/>
+                <DefaultBurgerIngredient type={tabs.BUN} title={'Булки'} openIngridientModal={openModal}/>
+                <DefaultBurgerIngredient type={tabs.SAUCE} title={'Соусы'} openIngridientModal={openModal}/>
+                <DefaultBurgerIngredient type={tabs.MAIN} title={'Начинки'} openIngridientModal={openModal}/>
             </div>
         </section>
     );
 }
-
-BurgerIngredients.propTypes = {
-    defaultElements: PropTypes.arrayOf(PropTypes.shape(elementPropTypes)).isRequired,
-}; 
 
 export default BurgerIngredients;
 

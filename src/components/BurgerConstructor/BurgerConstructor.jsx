@@ -2,14 +2,15 @@ import React from "react";
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css'
 import SelectedElement from "../SelectedElement/SelectedElement";
-import PropTypes from 'prop-types';
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-const { elementPropTypes } = require('../../utils/data.js');
+import { IngredientsContext } from "../../services/IngredientsContext";
+import { getOrderDetails, API_URL } from "../../utils/burger-api";
 
-const BurgerConstructor = ({data}) =>{
-
-    const [visible, setVisible] = React.useState(false);    
+const BurgerConstructor = () =>{
+    const {loadedElements} = React.useContext(IngredientsContext);
+    const [visible, setVisible] = React.useState(false);
+    const [order, setOrder] = React.useState(null);
 
     function closeModal() {
         setVisible(false);
@@ -19,29 +20,45 @@ const BurgerConstructor = ({data}) =>{
         setVisible(true);
     }
 
-    const bunList = data.filter((item) => item.type === 'bun');
-    const nonBunList = data.filter((item) => item.type !== 'bun');
+    let orderList = [];
+    loadedElements.forEach(element => {
+        orderList.push(element._id);
+    });
+
+    const bunList = loadedElements.filter((item) => item.type === 'bun')[0];
+    const nonBunList = loadedElements.filter((item) => item.type !== 'bun');
+    
     const price = 0;
 
-    const summ = data.reduce((prev, current) => {
+    const summ = loadedElements.reduce((prev, current) => {
         return prev + current.price
     }, price);
+
+    function getOrderNumber() {
+        getOrderDetails(`${API_URL}/orders`, orderList)
+            .then(res => {
+                setOrder(res.order.number);
+            })
+            .then(() => {
+                openModal()
+            })
+    }
 
     return (
         <section className={styles.burgerConstructor}>
             {visible &&
                 <Modal closeModal={closeModal}>                 
-                    <OrderDetails/>                
+                    <OrderDetails orderInfo={order} />                
                 </Modal>
             }
             <div className={styles.burgerElements}>
-                {bunList[0] && 
+                {bunList && 
                 <SelectedElement                      
-                    element={bunList[0]}
+                    element={bunList}
                     type={'top'}
                     >
                 </SelectedElement>}
-                {data && nonBunList.map((element, number) => (
+                {loadedElements && nonBunList.map((element, number) => (
                 <SelectedElement 
                     key={number} 
                     element={element}
@@ -49,9 +66,9 @@ const BurgerConstructor = ({data}) =>{
                     >
                 </SelectedElement>)
                 )}
-                {bunList[0] && 
+                {bunList && 
                 <SelectedElement                      
-                    element={bunList[0]}
+                    element={bunList}
                     type={'bottom'}
                     >
                 </SelectedElement>}
@@ -61,16 +78,12 @@ const BurgerConstructor = ({data}) =>{
                     <p className={`mr-2 mt-3 mb-3 text text_type_digits-medium`}>{summ}</p>
                     <CurrencyIcon type="primary" />
                 </div>
-                <Button htmlType={'button'} onClick={(e) => openModal(e)} type="primary" size="large">
+                <Button htmlType={'button'} onClick={getOrderNumber} type="primary" size="large">
                     Оформить заказ
                 </Button>
             </div>
         </section>
       )
 }
-
-BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.shape(elementPropTypes)).isRequired,
-}; 
 
 export default BurgerConstructor;
