@@ -1,29 +1,30 @@
-import React, {useContext, useState} from "react";
+import React from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css'
 import SelectedElement from "../SelectedElement/SelectedElement";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { IngredientsContext } from "../../services/IngredientsContext";
-import { getOrderDetails, API_URL } from "../../utils/burger-api";
+import { CLOSE_ORDER_MODAL } from "../../services/actions/ingridients";
+import { getOrderNumber } from "../../services/actions/ingridients";
 
 const BurgerConstructor = () =>{
-    const {loadedElements} = useContext(IngredientsContext);
-    const [visible, setVisible] = useState(false);
-    const [order, setOrder] = useState(null);
+    const loadedElements = useSelector(store => store.ingridients.defaultIngridients);
+    const visible = useSelector(store => store.ingridients.orderModalVisible);
+    const dispatch = useDispatch();
 
     function closeModal() {
-        setVisible(false);
-    }
-
-    function openModal() {
-        setVisible(true);
+        dispatch({type: CLOSE_ORDER_MODAL})
     }
 
     let orderList = [];
     loadedElements.forEach(element => {
         orderList.push(element._id);
     });
+
+    function openModal() {
+        dispatch(getOrderNumber('orders', orderList))
+    }
 
     const bunList = loadedElements.filter((item) => item.type === 'bun')[0];
     const nonBunList = loadedElements.filter((item) => item.type !== 'bun');
@@ -34,21 +35,11 @@ const BurgerConstructor = () =>{
         return prev + current.price
     }, price);
 
-    function getOrderNumber() {
-        getOrderDetails(`${API_URL}/orders`, orderList)
-            .then(res => {
-                setOrder(res.order.number);
-            })
-            .then(() => {
-                openModal()
-            })
-    }
-
     return (
         <section className={styles.burgerConstructor}>
             {visible &&
                 <Modal closeModal={closeModal}>                 
-                    <OrderDetails orderInfo={order} />                
+                    <OrderDetails />                
                 </Modal>
             }
             <div className={styles.burgerElements}>
@@ -78,7 +69,7 @@ const BurgerConstructor = () =>{
                     <p className={`mr-2 mt-3 mb-3 text text_type_digits-medium`}>{summ}</p>
                     <CurrencyIcon type="primary" />
                 </div>
-                <Button htmlType={'button'} onClick={getOrderNumber} type="primary" size="large">
+                <Button htmlType={'button'} onClick={openModal} type="primary" size="large">
                     Оформить заказ
                 </Button>
             </div>

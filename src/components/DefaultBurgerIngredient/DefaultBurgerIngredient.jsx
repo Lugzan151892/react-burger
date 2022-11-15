@@ -1,20 +1,40 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styles from './DefaultBurgerIngredient.module.css'
 import BurgerElement from "../BurgerElement/BurgerElement";
 import PropTypes from 'prop-types';
-import { IngredientsContext } from "../../services/IngredientsContext";
+import { useSelector, useDispatch } from 'react-redux';
+import { SET_CURRENT_TAB } from "../../services/actions/ingridients";
 
-const DefaultBurgerIngredient = ({type, title, openIngridientModal}) => {
+const DefaultBurgerIngredient = ({type, title}) => {
+    const dispatch = useDispatch();
+    const loadedElements = useSelector(store => store.ingridients.defaultIngridients);
 
-    const {loadedElements} = React.useContext(IngredientsContext);
     const filtredElements = loadedElements.filter((item) => item.type === type);
 
+    const options = {
+        root: document.querySelector('#burgertabs'),
+        rootMargin: '0px',
+        threshold:  1
+    }
+
+    function callback() {
+       dispatch({type: SET_CURRENT_TAB, tab: type});
+       console.log(type);
+    }
+
+    const observer = new IntersectionObserver(callback, options);
+    
+    useEffect(()=>{
+        const target = document.querySelector(`#${type}`);
+        observer.observe(target);
+    }, [observer]);
+
     return (
-        <div id={type} className={styles.typesContainer}>
-            <h2 className={`${styles.title} text text_type_main-medium mt-5 mb-2`}>{title}</h2>       
-            {filtredElements.map(item => ( 
-                <BurgerElement data={loadedElements} element={item} key={item._id} openIngridientModal={openIngridientModal}/>                                                  
-            ))}            
+        <div className={styles.typesContainer}>
+            <h2 id={type} className={`${styles.title} text text_type_main-medium mt-5 mb-2`}>{title}</h2> 
+                {filtredElements.map(item => ( 
+                    <BurgerElement element={item} key={item._id}/>                                                  
+                ))}    
         </div>
     )
 }
@@ -22,7 +42,6 @@ const DefaultBurgerIngredient = ({type, title, openIngridientModal}) => {
 DefaultBurgerIngredient.propTypes = {   
     type: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    openIngridientModal: PropTypes.func
 }; 
 
 export default DefaultBurgerIngredient;

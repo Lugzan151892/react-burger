@@ -1,7 +1,7 @@
 const API_URL = 'https://norma.nomoreparties.space/api';
 
 async function getIngredients(url) {
-    return fetch(url)
+    return await fetch(`${API_URL}/${url}`)
         .then((res) => {
             if (res.ok) {
                 return res.json();
@@ -10,8 +10,8 @@ async function getIngredients(url) {
         })
 }
 
-const getOrderDetails = (url, orderList) => {
-    return fetch(url, {
+const getOrderDetails = async (url, orderList) => {
+    return await fetch(`${API_URL}/${url}`, {
         method: 'POST',        
         headers: {
             'Content-Type': 'application/json'
