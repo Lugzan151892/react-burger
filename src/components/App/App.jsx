@@ -3,9 +3,8 @@ import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import styles from "./App.module.css";
-import { getIngredients } from '../../utils/burger-api.js';
-
-const API_URL = 'https://norma.nomoreparties.space/api';
+import { getIngredients, API_URL } from '../../utils/burger-api.js';
+import { IngredientsContext } from '../../services/IngredientsContext';
 
 function App() {
 
@@ -18,9 +17,11 @@ function App() {
   return (
     <>
       <AppHeader />      
-      <main className={styles.app}>          
-        <BurgerIngredients defaultElements={loadedElements} data={loadedElements}/>
-        <BurgerConstructor data={loadedElements} />
+      <main className={styles.app}>
+        <IngredientsContext.Provider value={{loadedElements, setLoadedElements}}>          
+          <BurgerIngredients />
+          <BurgerConstructor data={loadedElements} />
+        </IngredientsContext.Provider>
       </main>
     </>
   );
