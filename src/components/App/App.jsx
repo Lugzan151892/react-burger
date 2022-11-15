@@ -20,7 +20,7 @@ function App() {
       <main className={styles.app}>
         <IngredientsContext.Provider value={{loadedElements, setLoadedElements}}>          
           <BurgerIngredients />
-          <BurgerConstructor data={loadedElements} />
+          <BurgerConstructor />
         </IngredientsContext.Provider>
       </main>
     </>

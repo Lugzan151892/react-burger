@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext, useState} from "react";
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css'
 import SelectedElement from "../SelectedElement/SelectedElement";
@@ -8,9 +8,9 @@ import { IngredientsContext } from "../../services/IngredientsContext";
 import { getOrderDetails, API_URL } from "../../utils/burger-api";
 
 const BurgerConstructor = () =>{
-    const {loadedElements} = React.useContext(IngredientsContext);
-    const [visible, setVisible] = React.useState(false);
-    const [order, setOrder] = React.useState(null);
+    const {loadedElements} = useContext(IngredientsContext);
+    const [visible, setVisible] = useState(false);
+    const [order, setOrder] = useState(null);
 
     function closeModal() {
         setVisible(false);
