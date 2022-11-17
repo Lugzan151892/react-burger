@@ -1,13 +1,16 @@
 const API_URL = 'https://norma.nomoreparties.space/api';
 
+function checkResponse(res) {
+    if (res.ok) {
+        return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+}
+
 async function getIngredients(url) {
     return await fetch(`${API_URL}/${url}`)
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
+        .then(checkResponse)
+        .catch(err => console.log(err))
 }
 
 const getOrderDetails = async (url, orderList) => {
@@ -20,12 +23,8 @@ const getOrderDetails = async (url, orderList) => {
             ingredients: orderList
         })        
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
+        .then(checkResponse)
+        .catch(err => console.log(err))
 }
 
 

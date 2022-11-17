@@ -1,11 +1,11 @@
-import React, { useEffect} from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './BurgerIngredients.module.css'
 import DefaultBurgerIngredient from "../DefaultBurgerIngredient/DefaultBurgerIngredient";
 import UpgradedTab from "../UpgradedTab/UpgradedTab";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import Modal from "../Modal/Modal";
-import { getDefaultIngridients, CLOSE_INGRIDIENT_MODAL, SET_CURRENT_TAB } from "../../services/actions/ingridients";
+import { getDefaultIngridients, closeIngridientModal, setCurrentTab } from "../../services/actions/ingridients";
 
 
 const tabs = {
@@ -20,15 +20,26 @@ function BurgerIngredients() {
 
     useEffect(() => {
         dispatch(getDefaultIngridients('ingredients'));
-        dispatch({type: SET_CURRENT_TAB, tab: 'bun'});
+        dispatch(setCurrentTab('bun'));
     }, []);
 
     const visible = useSelector(store => store.ingridients.ingridientModalVisible);
     const elementInModal = useSelector(store => store.ingridients.currentIngridient);
 
     function closeModal() {
-        dispatch({type: CLOSE_INGRIDIENT_MODAL});
+        dispatch(closeIngridientModal());
     }
+
+    const bunRef = useRef(null);
+    const sauceRef = useRef(null);
+    const mainRef = useRef(null);
+
+    const setTab = (type) => {
+        dispatch(setCurrentTab(type));
+        type === 'bun' && bunRef.current.scrollIntoView({behavior: "smooth"});
+        type === 'sauce' && sauceRef.current.scrollIntoView({behavior: "smooth"});
+        type === 'main' && mainRef.current.scrollIntoView({behavior: "smooth"});
+    };
 
     return (    
         <section className={styles.createSection}>
@@ -41,18 +52,20 @@ function BurgerIngredients() {
                 Соберите бургер
             </h2>
             <div className={styles.tabsContainer}>
-                <UpgradedTab type={tabs.BUN} title={'Булки'} />                    
-                <UpgradedTab type={tabs.SAUCE} title={'Соусы'} />                    
-                <UpgradedTab type={tabs.MAIN} title={'Начинки'} />                    
+                <UpgradedTab setTab={setTab} type={tabs.BUN} title={'Булки'} />                    
+                <UpgradedTab setTab={setTab} type={tabs.SAUCE} title={'Соусы'} />                    
+                <UpgradedTab setTab={setTab} type={tabs.MAIN} title={'Начинки'} />                    
             </div>
             <div id={'burgertabs'} className={styles.container}>    
-                <DefaultBurgerIngredient type={tabs.BUN} title={'Булки'} />
-                <DefaultBurgerIngredient type={tabs.SAUCE} title={'Соусы'} />
-                <DefaultBurgerIngredient type={tabs.MAIN} title={'Начинки'} />
+                <DefaultBurgerIngredient refType={bunRef} type={tabs.BUN} title={'Булки'} />
+                <DefaultBurgerIngredient refType={sauceRef} type={tabs.SAUCE} title={'Соусы'} />
+                <DefaultBurgerIngredient refType={mainRef} type={tabs.MAIN} title={'Начинки'} />
             </div>
         </section>
     );
 }
 
 export default BurgerIngredients;
+
+
 

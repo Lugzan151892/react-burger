@@ -4,7 +4,7 @@ import styles from './BurgerElement.module.css'
 import PropTypes from 'prop-types';
 import { useDrag } from "react-dnd";
 import { useSelector, useDispatch } from 'react-redux';
-import { OPEN_INGRIDIENT_MODAL } from "../../services/actions/ingridients";
+import { openIngridientModal } from "../../services/actions/ingridients";
 const { elementPropTypes } = require('../../utils/data.js');
 
 
@@ -12,10 +12,10 @@ const BurgerElement = ({element}) => {
     
     const dispatch = useDispatch();
     const bunInBurger = useSelector(store => store.ingridients.bunInConstructor);
-    const chosenElements = useSelector(store => store.ingridients.constructorIngridients).filter(item => element._id === item._id); 
-
+    const chosenElements = useSelector(store => store.ingridients.constructorIngridients).filter(item => element._id === item._id);
+    
     function openModal(item) {
-        dispatch({type: OPEN_INGRIDIENT_MODAL, item});
+        dispatch(openIngridientModal(item));
     }
 
     function getCounter(){
@@ -46,8 +46,8 @@ const BurgerElement = ({element}) => {
 };
 
 BurgerElement.propTypes = {
-    element: PropTypes.shape(elementPropTypes).isRequired,
-    openIngridientModal: PropTypes.func
+    element: PropTypes.shape(elementPropTypes).isRequired
 }; 
 
 export default BurgerElement;
+

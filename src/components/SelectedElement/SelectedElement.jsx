@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './SelectedElement.module.css';
 import { useDrag, useDrop } from "react-dnd";
-import { DELETE_ITEM_IN_BURGER, MOVE_ITEM_IN_BURGER } from "../../services/actions/ingridients";
+import { deleteItemInBurger, moveItemInBurger } from "../../services/actions/ingridients";
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -30,7 +30,7 @@ const SelectedElement = ({element, type}) => {
     });
 
     function onDropHandler(item){        
-        dispatch({type: MOVE_ITEM_IN_BURGER, dragItem: item, dropItem: element});
+        dispatch(moveItemInBurger(item, element));
     }
 
     const [,dropTarget] = useDrop({
@@ -39,7 +39,7 @@ const SelectedElement = ({element, type}) => {
             onDropHandler(item);
         },
         hover: ((item) => {           
-            dispatch({type: MOVE_ITEM_IN_BURGER, dragItem: item, dropItem: element});
+            dispatch(moveItemInBurger(item, element));
             item.uniqueId = element.uniqueId;
         })
     });
@@ -48,7 +48,7 @@ const SelectedElement = ({element, type}) => {
     const dragDropRef = dragRef(dropTarget(ref));
 
     function deleteItem() {
-        dispatch({type: DELETE_ITEM_IN_BURGER, id: element.uniqueId});
+        dispatch(deleteItemInBurger(element.uniqueId));
     }
 
     return (
@@ -87,3 +87,4 @@ SelectedElement.propTypes = {
 }
 
 export default SelectedElement;
+

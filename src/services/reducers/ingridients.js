@@ -1,7 +1,6 @@
 import { GET_DEFAULT_INGRIDIENTS_FAILED,
         GET_DEFAULT_INGRIDIENTS_SUCCESS,
         GET_DEFAULT_INGRIDIENTS_REQUEST,
-        GET_INGRIDIENT_INFO,
         OPEN_INGRIDIENT_MODAL,
         CLOSE_INGRIDIENT_MODAL,
         GET_ORDER_NUMBER_REQUEST,
@@ -15,6 +14,8 @@ import { GET_DEFAULT_INGRIDIENTS_FAILED,
         MOVE_ITEM_IN_BURGER
 
 } from "../actions/ingridients";
+import { customAlphabet } from 'nanoid';
+const nanoid = customAlphabet('1234567890', 15);
 
 const initialState = {
     defaultIngridients: [],
@@ -44,9 +45,6 @@ export const ingridientsReducer = (state = initialState, action) => {
         case GET_DEFAULT_INGRIDIENTS_FAILED:
             return {...state, defaultIngridientsRequest: false, defaultIngridientsFailed: true};
 
-        case GET_INGRIDIENT_INFO:
-            return {...state, currentIngridient: {...state.currentIngridient, ...action.item}};
-
         case OPEN_INGRIDIENT_MODAL:
             return {...state, ingridientModalVisible: true, currentIngridient: {...state.currentIngridient, ...action.item}};
         case CLOSE_INGRIDIENT_MODAL:
@@ -60,7 +58,7 @@ export const ingridientsReducer = (state = initialState, action) => {
             return {...state, orderNumberRequest: false, orderNumberFailed: true};
 
         case OPEN_ORDER_MODAL:
-            return {...state, orderModalVisible: true};
+            return {...state, orderModalVisible: true, bunInConstructor: null, constructorIngridients: []};
         case CLOSE_ORDER_MODAL:
             return {...state, orderModalVisible: false};
         
@@ -75,7 +73,7 @@ export const ingridientsReducer = (state = initialState, action) => {
                 ...state,
                 constructorIngridients: [
                     ...state.constructorIngridients, 
-                    {...action.item, uniqueId: action.uniqueId}
+                    {...action.item, uniqueId: nanoid()}
                 ]
                 };
         }

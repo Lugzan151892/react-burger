@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css'
@@ -6,8 +6,8 @@ import { useDrop } from "react-dnd";
 import SelectedElement from "../SelectedElement/SelectedElement";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { CLOSE_ORDER_MODAL, ADD_ITEM_IN_BURGER } from "../../services/actions/ingridients";
-import { getOrderNumber } from "../../services/actions/ingridients";
+import { closeOrderModal, addItemInBurger } from "../../services/actions/ingridients";
+import { getOrderNumber, OPEN_ORDER_MODAL } from "../../services/actions/ingridients";
 
 const BurgerConstructor = () =>{
     
@@ -16,15 +16,14 @@ const BurgerConstructor = () =>{
     const visible = useSelector(store => store.ingridients.orderModalVisible);
     const dispatch = useDispatch();
 
-    const date = new Date();
     const sortItems = (a, b) => a.uniqueId > b.uniqueId ? 1 : -1;
 
     function closeModal() {
-        dispatch({type: CLOSE_ORDER_MODAL})
+        dispatch(closeOrderModal())
     }
 
-    const onDropHandler = (element) => {
-        dispatch({type: ADD_ITEM_IN_BURGER, item: element, uniqueId: date.getTime()});
+    const onDropHandler = (element) => {        
+        dispatch(addItemInBurger(element));
     }
 
     const [, dropTarget] = useDrop({
@@ -39,6 +38,7 @@ const BurgerConstructor = () =>{
         elementsInBurger.forEach(element => {
             orderList.push(element._id)
         });
+        dispatch({type: OPEN_ORDER_MODAL});
         dispatch(getOrderNumber('orders', orderList));
     }
     
@@ -62,9 +62,9 @@ const BurgerConstructor = () =>{
                     type={'top'}
                     >
                 </SelectedElement>}
-                {elementsInBurger && elementsInBurger.sort(sortItems).map((element, number) => (
+                {elementsInBurger && elementsInBurger.sort(sortItems).map((element) => (
                 <SelectedElement 
-                    key={number} 
+                    key={element.uniqueId} 
                     element={element}
                     type={element.type}
                     >
@@ -82,7 +82,7 @@ const BurgerConstructor = () =>{
                     <p className={`mr-2 mt-3 mb-3 text text_type_digits-medium`}>{summ}</p>
                     <CurrencyIcon type="primary" />
                 </div>
-                <Button htmlType={'button'} onClick={openModal} type="primary" size="large">
+                <Button disabled={bunInBurger ? false : true} htmlType={'button'} onClick={openModal} type="primary" size="large">
                     Оформить заказ
                 </Button>
             </div>
@@ -91,3 +91,4 @@ const BurgerConstructor = () =>{
 }
 
 export default BurgerConstructor;
+
