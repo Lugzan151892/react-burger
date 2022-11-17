@@ -13,24 +13,25 @@ const DefaultBurgerIngredient = ({type, title}) => {
 
     const options = {
         root: document.querySelector('#burgertabs'),
-        rootMargin: '0px',
-        threshold:  1
+        rootMargin: '0px 0px -600px 0px',
+        threshold:  0.1
     }
 
-    function callback() {
-       dispatch({type: SET_CURRENT_TAB, tab: type});
-       console.log(type);
+    function callback(entries) {
+        if(entries[0].isIntersecting && entries[0].time > 1000) {
+            dispatch({type: SET_CURRENT_TAB, tab: type});
+        }
     }
 
     const observer = new IntersectionObserver(callback, options);
     
-    useEffect(()=>{
+    useEffect(()=>{    
         const target = document.querySelector(`#${type}`);
         observer.observe(target);
-    }, [observer]);
+    }, []);
 
     return (
-        <div className={styles.typesContainer}>
+        <div id={`${type}-id`} className={styles.typesContainer}>
             <h2 id={type} className={`${styles.title} text text_type_main-medium mt-5 mb-2`}>{title}</h2> 
                 {filtredElements.map(item => ( 
                     <BurgerElement element={item} key={item._id}/>                                                  

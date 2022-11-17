@@ -10,6 +10,10 @@ import { GET_DEFAULT_INGRIDIENTS_FAILED,
         OPEN_ORDER_MODAL,
         CLOSE_ORDER_MODAL,
         SET_CURRENT_TAB,
+        ADD_ITEM_IN_BURGER,
+        DELETE_ITEM_IN_BURGER,
+        MOVE_ITEM_IN_BURGER
+
 } from "../actions/ingridients";
 
 const initialState = {
@@ -17,6 +21,7 @@ const initialState = {
     defaultIngridientsRequest: false,
     defaultIngridientsFailed: false,
 
+    bunInConstructor: null,
     constructorIngridients: [],
     currentIngridient: null,
 
@@ -61,6 +66,38 @@ export const ingridientsReducer = (state = initialState, action) => {
         
         case SET_CURRENT_TAB:
             return {...state, currentTab: action.tab};
+
+        case ADD_ITEM_IN_BURGER: {
+            if (action.item.type === 'bun') {
+                return {...state, bunInConstructor: action.item};
+            }           
+            return {
+                ...state,
+                constructorIngridients: [
+                    ...state.constructorIngridients, 
+                    {...action.item, uniqueId: action.uniqueId}
+                ]
+                };
+        }
+
+        case DELETE_ITEM_IN_BURGER: {
+            return {...state, constructorIngridients: state.constructorIngridients.filter(item => item.uniqueId !== action.id)};
+        }
+
+        case MOVE_ITEM_IN_BURGER: {            
+            let arr = [...state.constructorIngridients].map(elem => {
+                if(elem.uniqueId === action.dropItem.uniqueId) {                    
+                    return {...elem, uniqueId: action.dragItem.uniqueId}
+                }
+                if(elem.uniqueId === action.dragItem.uniqueId) {
+                    return {...elem, uniqueId: action.dropItem.uniqueId}
+                }
+                return elem;
+            })            
+            return {
+                ...state, constructorIngridients: arr
+            }
+        }
 
         default:
             return state;

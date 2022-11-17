@@ -2,6 +2,7 @@ import React from "react";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerElement.module.css'
 import PropTypes from 'prop-types';
+import { useDrag } from "react-dnd";
 import { useSelector, useDispatch } from 'react-redux';
 import { OPEN_INGRIDIENT_MODAL } from "../../services/actions/ingridients";
 const { elementPropTypes } = require('../../utils/data.js');
@@ -10,17 +11,29 @@ const { elementPropTypes } = require('../../utils/data.js');
 const BurgerElement = ({element}) => {
     
     const dispatch = useDispatch();
-    const loadedElements = useSelector(store => store.ingridients.defaultIngridients);
-    const chosenElements = loadedElements.filter(item => element._id === item._id);
+    const bunInBurger = useSelector(store => store.ingridients.bunInConstructor);
+    const chosenElements = useSelector(store => store.ingridients.constructorIngridients).filter(item => element._id === item._id); 
 
     function openModal(item) {
         dispatch({type: OPEN_INGRIDIENT_MODAL, item});
     }
 
+    function getCounter(){
+        if (element.type === 'bun') {
+            return (bunInBurger && bunInBurger._id === element._id) ? 2 : 0;
+        }
+        return chosenElements.length;
+    }
+
+    const [, dragRef] = useDrag({
+        type: "ingridient",
+        item: {...element},
+    });
+
     return (
-        <div className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={() => openModal(element)}>            
+        <div draggable ref={dragRef} className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={() => openModal(element)}>            
             {
-                chosenElements.length ? <Counter count={chosenElements.length} size="default" /> : null
+                getCounter() !== 0 ? <Counter count={getCounter()} size="default" /> : null
             }
             <img className={styles.image} alt={element.name} src={element.image} />
             <div className={styles.priceContainer}>

@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useRef } from "react";
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './SelectedElement.module.css'
+import styles from './SelectedElement.module.css';
+import { useDrag, useDrop } from "react-dnd";
+import { DELETE_ITEM_IN_BURGER, MOVE_ITEM_IN_BURGER } from "../../services/actions/ingridients";
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+
 const { elementPropTypes } = require('../../utils/data.js');
 
 const SelectedElement = ({element, type}) => {
+
+    const dispatch = useDispatch();
+    const checkDraggable = element.type !== 'bun';
 
     function checkName(type, element){
         switch (type) {
@@ -17,24 +24,60 @@ const SelectedElement = ({element, type}) => {
         }
     }
 
+    const [, dragRef] = useDrag({
+        type: "constructorIngridient",
+        item: {...element},
+    });
+
+    function onDropHandler(item){        
+        dispatch({type: MOVE_ITEM_IN_BURGER, dragItem: item, dropItem: element});
+    }
+
+    const [,dropTarget] = useDrop({
+        accept: "constructorIngridient",
+        drop(item) {
+            onDropHandler(item);
+        },
+        hover: ((item) => {           
+            dispatch({type: MOVE_ITEM_IN_BURGER, dragItem: item, dropItem: element});
+            item.uniqueId = element.uniqueId;
+        })
+    });
+
+    const ref = useRef(null);
+    const dragDropRef = dragRef(dropTarget(ref));
+
+    function deleteItem() {
+        dispatch({type: DELETE_ITEM_IN_BURGER, id: element.uniqueId});
+    }
+
     return (
-        <div 
-            className={styles.element}
-            draggable={element.type !== 'bun'}
-        >
-            {element.type === 'bun' ? null :
-            (<div className='mr-2'>
+        checkDraggable ? 
+        <div className={styles.element} ref={dragDropRef}>
+            <div className='mr-2'>
                 <DragIcon type="primary" />
-            </div>)
-            }
+            </div>            
             <ConstructorElement
+            handleClose={deleteItem}
+            type={type}
+            isLocked={element.type === 'bun'}
+            text={checkName(type, element)}               
+            price={element.price}
+            thumbnail={element.image}
+            draggable
+            />
+        </div> :
+        <div className={styles.element}>
+            <ConstructorElement
+                handleClose={deleteItem}
                 type={type}
                 isLocked={element.type === 'bun'}
                 text={checkName(type, element)}               
                 price={element.price}
                 thumbnail={element.image}
+                draggable
             />
-        </div>
+        </div>        
     );
 };
 

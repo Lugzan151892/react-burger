@@ -2,54 +2,67 @@ import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css'
+import { useDrop } from "react-dnd";
 import SelectedElement from "../SelectedElement/SelectedElement";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { CLOSE_ORDER_MODAL } from "../../services/actions/ingridients";
+import { CLOSE_ORDER_MODAL, ADD_ITEM_IN_BURGER } from "../../services/actions/ingridients";
 import { getOrderNumber } from "../../services/actions/ingridients";
 
 const BurgerConstructor = () =>{
-    const loadedElements = useSelector(store => store.ingridients.defaultIngridients);
+    
+    const elementsInBurger = useSelector(store => store.ingridients.constructorIngridients);
+    const bunInBurger = useSelector(store => store.ingridients.bunInConstructor);
     const visible = useSelector(store => store.ingridients.orderModalVisible);
     const dispatch = useDispatch();
+
+    const date = new Date();
+    const sortItems = (a, b) => a.uniqueId > b.uniqueId ? 1 : -1;
 
     function closeModal() {
         dispatch({type: CLOSE_ORDER_MODAL})
     }
 
-    let orderList = [];
-    loadedElements.forEach(element => {
-        orderList.push(element._id);
+    const onDropHandler = (element) => {
+        dispatch({type: ADD_ITEM_IN_BURGER, item: element, uniqueId: date.getTime()});
+    }
+
+    const [, dropTarget] = useDrop({
+        accept: "ingridient",
+        drop(item) {
+            onDropHandler(item);
+        },
     });
 
     function openModal() {
-        dispatch(getOrderNumber('orders', orderList))
+        const orderList = [];
+        elementsInBurger.forEach(element => {
+            orderList.push(element._id)
+        });
+        dispatch(getOrderNumber('orders', orderList));
     }
-
-    const bunList = loadedElements.filter((item) => item.type === 'bun')[0];
-    const nonBunList = loadedElements.filter((item) => item.type !== 'bun');
     
-    const price = 0;
+    const price = bunInBurger ? bunInBurger.price * 2 : 0;
 
-    const summ = loadedElements.reduce((prev, current) => {
+    const summ = elementsInBurger.reduce((prev, current) => {
         return prev + current.price
     }, price);
 
     return (
-        <section className={styles.burgerConstructor}>
+        <section ref={dropTarget} className={styles.burgerConstructor}>
             {visible &&
                 <Modal closeModal={closeModal}>                 
                     <OrderDetails />                
                 </Modal>
             }
             <div className={styles.burgerElements}>
-                {bunList && 
+                {bunInBurger && 
                 <SelectedElement                      
-                    element={bunList}
+                    element={bunInBurger}
                     type={'top'}
                     >
                 </SelectedElement>}
-                {loadedElements && nonBunList.map((element, number) => (
+                {elementsInBurger && elementsInBurger.sort(sortItems).map((element, number) => (
                 <SelectedElement 
                     key={number} 
                     element={element}
@@ -57,9 +70,9 @@ const BurgerConstructor = () =>{
                     >
                 </SelectedElement>)
                 )}
-                {bunList && 
+                {bunInBurger && 
                 <SelectedElement                      
-                    element={bunList}
+                    element={bunInBurger}
                     type={'bottom'}
                     >
                 </SelectedElement>}
