@@ -43,7 +43,10 @@ const DefaultBurgerIngredient = ({type, title, refType}) => {
 DefaultBurgerIngredient.propTypes = {   
     type: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    refType: PropTypes.element
+    refType: PropTypes.oneOfType([
+        PropTypes.func, 
+        PropTypes.shape({current: PropTypes.instanceOf(Element)})
+    ])
 }; 
 
 export default DefaultBurgerIngredient;

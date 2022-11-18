@@ -14,8 +14,6 @@ import { GET_DEFAULT_INGRIDIENTS_FAILED,
         MOVE_ITEM_IN_BURGER
 
 } from "../actions/ingridients";
-import { customAlphabet } from 'nanoid';
-const nanoid = customAlphabet('1234567890', 15);
 
 const initialState = {
     defaultIngridients: [],
@@ -73,7 +71,7 @@ export const ingridientsReducer = (state = initialState, action) => {
                 ...state,
                 constructorIngridients: [
                     ...state.constructorIngridients, 
-                    {...action.item, uniqueId: nanoid()}
+                    {...action.item}
                 ]
                 };
         }

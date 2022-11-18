@@ -1,4 +1,5 @@
 import { getIngredients, getOrderDetails } from "../../utils/burger-api";
+import { customAlphabet } from 'nanoid';
 
 export const GET_DEFAULT_INGRIDIENTS_REQUEST = 'GET_DEFAULT_INGRIDIENTS_REQUEST';
 export const GET_DEFAULT_INGRIDIENTS_SUCCESS = 'GET_DEFAULT_INGRIDIENTS_SUCCESS';
@@ -14,6 +15,8 @@ export const SET_CURRENT_TAB = 'SET_CURRENT_TAB';
 export const ADD_ITEM_IN_BURGER = 'ADD_ITEM_IN_BURGER';
 export const DELETE_ITEM_IN_BURGER = 'DELETE_ITEM_IN_BURGER';
 export const MOVE_ITEM_IN_BURGER = 'MOVE_ITEM_IN_BURGER';
+
+const nanoid = customAlphabet('1234567890', 15);
 
 export function getDefaultIngridients(url) {
     return function(dispatch) {
@@ -42,8 +45,7 @@ export function getOrderNumber(url, list) {
                     dispatch({
                         type: GET_ORDER_NUMBER_SUCCESS, 
                         number: res.order.number
-                    })
-                    // dispatch({type: OPEN_ORDER_MODAL});
+                    })                    
                 } else {
                     dispatch({type: GET_ORDER_NUMBER_FAILED});
                 }
@@ -78,11 +80,10 @@ export function setCurrentTab(tab) {
     }
 }
 
-export function addItemInBurger(item, id) {
+export function addItemInBurger(item) {
     return {
         type: ADD_ITEM_IN_BURGER,
-        item,
-        id
+        item: {...item, uniqueId: nanoid()}
     }
 }
 
