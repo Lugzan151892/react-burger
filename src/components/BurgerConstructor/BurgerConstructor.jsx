@@ -1,4 +1,3 @@
-import React, { useMemo } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css'
