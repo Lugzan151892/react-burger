@@ -2,19 +2,38 @@ import React from "react";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerElement.module.css'
 import PropTypes from 'prop-types';
-import { IngredientsContext } from "../../services/IngredientsContext";
+import { useDrag } from "react-dnd";
+import { useSelector, useDispatch } from 'react-redux';
+import { openIngridientModal } from "../../services/actions/ingridients";
 const { elementPropTypes } = require('../../utils/data.js');
 
 
-const BurgerElement = ({element, openIngridientModal}) => {
+const BurgerElement = ({element}) => {
     
-    const {loadedElements} = React.useContext(IngredientsContext);
-    const chosenElements = loadedElements.filter(item => element._id === item._id);
+    const dispatch = useDispatch();
+    const bunInBurger = useSelector(store => store.ingridients.bunInConstructor);
+    const chosenElements = useSelector(store => store.ingridients.constructorIngridients).filter(item => element._id === item._id);
+    
+    function openModal(item) {
+        dispatch(openIngridientModal(item));
+    }
+
+    function getCounter(){
+        if (element.type === 'bun') {
+            return (bunInBurger && bunInBurger._id === element._id) ? 2 : 0;
+        }
+        return chosenElements.length;
+    }
+
+    const [, dragRef] = useDrag({
+        type: "ingridient",
+        item: {...element},
+    });
 
     return (
-        <div className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={() => openIngridientModal(element)}>            
+        <div draggable ref={dragRef} className={`${styles.burgerElement} mt-2 mb-5 ml-4`} onClick={() => openModal(element)}>            
             {
-                chosenElements.length ? <Counter count={chosenElements.length} size="default" /> : null
+                getCounter() !== 0 ? <Counter count={getCounter()} size="default" /> : null
             }
             <img className={styles.image} alt={element.name} src={element.image} />
             <div className={styles.priceContainer}>
@@ -27,8 +46,8 @@ const BurgerElement = ({element, openIngridientModal}) => {
 };
 
 BurgerElement.propTypes = {
-    element: PropTypes.shape(elementPropTypes).isRequired,
-    openIngridientModal: PropTypes.func
+    element: PropTypes.shape(elementPropTypes).isRequired
 }; 
 
 export default BurgerElement;
+

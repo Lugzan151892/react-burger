@@ -1,74 +1,78 @@
-import React, {useContext, useState} from "react";
+import React, { useMemo } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css'
+import { useDrop } from "react-dnd";
 import SelectedElement from "../SelectedElement/SelectedElement";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { IngredientsContext } from "../../services/IngredientsContext";
-import { getOrderDetails, API_URL } from "../../utils/burger-api";
+import { closeOrderModal, addItemInBurger } from "../../services/actions/ingridients";
+import { getOrderNumber, OPEN_ORDER_MODAL } from "../../services/actions/ingridients";
 
 const BurgerConstructor = () =>{
-    const {loadedElements} = useContext(IngredientsContext);
-    const [visible, setVisible] = useState(false);
-    const [order, setOrder] = useState(null);
+    
+    const elementsInBurger = useSelector(store => store.ingridients.constructorIngridients);
+    const bunInBurger = useSelector(store => store.ingridients.bunInConstructor);
+    const visible = useSelector(store => store.ingridients.orderModalVisible);
+    const dispatch = useDispatch();
+
+    const sortItems = (a, b) => a.uniqueId > b.uniqueId ? 1 : -1;
 
     function closeModal() {
-        setVisible(false);
+        dispatch(closeOrderModal())
     }
 
-    function openModal() {
-        setVisible(true);
+    const onDropHandler = (element) => {        
+        dispatch(addItemInBurger(element));
     }
 
-    let orderList = [];
-    loadedElements.forEach(element => {
-        orderList.push(element._id);
+    const [, dropTarget] = useDrop({
+        accept: "ingridient",
+        drop(item) {
+            onDropHandler(item);
+        },
     });
 
-    const bunList = loadedElements.filter((item) => item.type === 'bun')[0];
-    const nonBunList = loadedElements.filter((item) => item.type !== 'bun');
+    function openModal() {
+        const orderList = [];
+        elementsInBurger.forEach(element => {
+            orderList.push(element._id)
+        });
+        dispatch({type: OPEN_ORDER_MODAL});
+        dispatch(getOrderNumber('orders', orderList));
+    }
     
-    const price = 0;
+    const price = bunInBurger ? bunInBurger.price * 2 : 0;
 
-    const summ = loadedElements.reduce((prev, current) => {
+    const summ = elementsInBurger.reduce((prev, current) => {
         return prev + current.price
     }, price);
 
-    function getOrderNumber() {
-        getOrderDetails(`${API_URL}/orders`, orderList)
-            .then(res => {
-                setOrder(res.order.number);
-            })
-            .then(() => {
-                openModal()
-            })
-    }
-
     return (
-        <section className={styles.burgerConstructor}>
+        <section ref={dropTarget} className={styles.burgerConstructor}>
             {visible &&
                 <Modal closeModal={closeModal}>                 
-                    <OrderDetails orderInfo={order} />                
+                    <OrderDetails />                
                 </Modal>
             }
             <div className={styles.burgerElements}>
-                {bunList && 
+                {bunInBurger && 
                 <SelectedElement                      
-                    element={bunList}
+                    element={bunInBurger}
                     type={'top'}
                     >
                 </SelectedElement>}
-                {loadedElements && nonBunList.map((element, number) => (
+                {elementsInBurger && elementsInBurger.sort(sortItems).map((element) => (
                 <SelectedElement 
-                    key={number} 
+                    key={element.uniqueId} 
                     element={element}
                     type={element.type}
                     >
                 </SelectedElement>)
                 )}
-                {bunList && 
+                {bunInBurger && 
                 <SelectedElement                      
-                    element={bunList}
+                    element={bunInBurger}
                     type={'bottom'}
                     >
                 </SelectedElement>}
@@ -78,7 +82,7 @@ const BurgerConstructor = () =>{
                     <p className={`mr-2 mt-3 mb-3 text text_type_digits-medium`}>{summ}</p>
                     <CurrencyIcon type="primary" />
                 </div>
-                <Button htmlType={'button'} onClick={getOrderNumber} type="primary" size="large">
+                <Button disabled={bunInBurger ? false : true} htmlType={'button'} onClick={openModal} type="primary" size="large">
                     Оформить заказ
                 </Button>
             </div>
@@ -87,3 +91,4 @@ const BurgerConstructor = () =>{
 }
 
 export default BurgerConstructor;
+

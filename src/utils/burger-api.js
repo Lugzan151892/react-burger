@@ -1,31 +1,30 @@
 const API_URL = 'https://norma.nomoreparties.space/api';
 
-async function getIngredients(url) {
-    return fetch(url)
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
+async function request(url, options) {
+    return fetch(url, options).then(checkResponse)
 }
 
-const getOrderDetails = (url, orderList) => {
-    return fetch(url, {
-        method: 'POST',        
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            ingredients: orderList
-        })        
-    })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
+function checkResponse(res) {
+    if (res.ok) {
+        return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+}
+
+async function getIngredients(url) {
+    return await request(`${API_URL}/${url}`);
+}
+
+const getOrderDetails = async (url, orderList) => {
+    return await request(`${API_URL}/${url}`, {
+            method: 'POST',        
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ingredients: orderList
+            })        
+        });
 }
 
 
