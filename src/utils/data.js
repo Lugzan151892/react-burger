@@ -14,4 +14,17 @@ const elementPropTypes = {
     __v: PropTypes.number
 }
 
-export {elementPropTypes};
+const API_URL = 'https://norma.nomoreparties.space/api';
+
+function checkResponse(res) {
+    if (res.ok) {
+        return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+}
+
+async function request(url, options) {
+    return fetch(url, options).then(checkResponse)
+}
+
+export {elementPropTypes, request, API_URL};

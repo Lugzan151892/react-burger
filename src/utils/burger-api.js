@@ -1,15 +1,4 @@
-const API_URL = 'https://norma.nomoreparties.space/api';
-
-async function request(url, options) {
-    return fetch(url, options).then(checkResponse)
-}
-
-function checkResponse(res) {
-    if (res.ok) {
-        return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-}
+import {request, API_URL} from './data.js'
 
 async function getIngredients(url) {
     return await request(`${API_URL}/${url}`);

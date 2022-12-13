@@ -1,23 +1,37 @@
 import React from 'react';
 import AppHeader from '../AppHeader/AppHeader';
-import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
-import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { LoginPage, HomePage, RegisterPage, ResetPasswordPage, ForgotPasswordPage, ProfilePage } from '../../pages';
 import styles from "./App.module.css";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
 
-  return (
-    <>
-      <AppHeader />     
-      <DndProvider backend={HTML5Backend}> 
-        <main className={styles.app}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </main>
-      </DndProvider> 
-    </>
+  return ( 
+    <Router>
+      <AppHeader />
+      <main className={styles.app}>
+        <Switch>
+          <Route path="/login" exact={true}>
+            <LoginPage />
+          </Route> 
+          <Route path="/register" exact={true}>
+            <RegisterPage />
+          </Route>
+          <Route path="/forgot-password" exact={true}>
+            <ForgotPasswordPage />
+          </Route>
+          <Route path="/reset-password" exact={true}>
+            <ResetPasswordPage />
+          </Route>    
+          <Route path="/profile" exact={true}>
+            <ProfilePage />
+          </Route>        
+          <Route path="/" exact={true}>
+            <HomePage />
+          </Route>
+        </Switch>
+      </main>
+    </Router>
   );
 }
 
