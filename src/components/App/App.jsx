@@ -7,30 +7,18 @@ import styles from "./App.module.css";
 function App() {
 
   return ( 
-    <Router>
+    <Router>    
       <AppHeader />
-      <main className={styles.app}>
+      <main className={styles.app}>        
         <Switch>
-          <Route path="/login" exact={true}>
-            <LoginPage />
-          </Route> 
-          <Route path="/register" exact={true}>
-            <RegisterPage />
-          </Route>
-          <Route path="/forgot-password" exact={true}>
-            <ForgotPasswordPage />
-          </Route>
-          <Route path="/reset-password" exact={true}>
-            <ResetPasswordPage />
-          </Route>    
-          <Route path="/profile" exact={true}>
-            <ProfilePage />
-          </Route>        
-          <Route path="/" exact={true}>
-            <HomePage />
-          </Route>
+          <Route exact path="/login" component={LoginPage}/>
+          <Route exact path="/register" component={RegisterPage}/>
+          <Route exact path="/forgot-password" component={ForgotPasswordPage}/>
+          <Route exact path="/reset-password" component={ResetPasswordPage}/>   
+          <Route exact path="/profile" component={ProfilePage}/>   
+          <Route exact path="/" component={HomePage}/>          
         </Switch>
-      </main>
+      </main>    
     </Router>
   );
 }

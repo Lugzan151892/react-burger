@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Button, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styles from './Pages.module.css'
 import { resetPassword } from '../utils/user-api';
 
 function ResetPasswordPage() {
+
+    const history = useHistory();
     
     const [passwordValue, setPasswordValue] = useState('');
     const [inputValue, setInputValue] = useState('');
@@ -18,7 +20,10 @@ function ResetPasswordPage() {
 
     const handleResetPassword = () => {
         resetPassword('password-reset/reset', passwordValue, inputValue)
-            .then(res => console.log(res))
+            .then(() => {                                    
+                alert('Пароль успешно изменен');
+                history.replace({ pathname: '/login' });
+            })
             .catch(err => console.log(err));
     }
 

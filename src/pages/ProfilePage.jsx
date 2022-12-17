@@ -1,8 +1,29 @@
 import { NavLink } from 'react-router-dom';
-import { Input, PasswordInput,  } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, PasswordInput, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Pages.module.css';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 function ProfilePage() {
+
+    const {email, name} = useSelector(store => store.user.user);
+
+    const [emailValue, setEmailValue] = useState(email);
+    const [nameValue, setNameValue] = useState(name);
+
+    const onChangeEmail = e => {
+        setEmailValue(e.target.value)
+    }
+
+    const onChangeName = e => {
+        setNameValue(e.target.value)
+    }
+
+
+    useEffect(()=> {
+        console.log(email, name)
+    }, []);
+
     return (
         <div className={styles.container}>
             <div className={styles.profile}>
@@ -33,17 +54,19 @@ function ProfilePage() {
                     <Input
                         type={'text'}
                         placeholder={'Имя'}
-                        name={'name'}                               
+                        name={'name'} 
+                        value={nameValue}
+                        onChange={onChangeName}                              
                         size={'default'}
                         autoComplete='username'
                         extraClass="mb-6"
                         icon='EditIcon'
                     />          
-                    <Input
-                        type={'text'}
+                    <EmailInput                        
+                        value={emailValue}
+                        onChange={onChangeEmail}
                         placeholder={'Логин'}
-                        name={'login'}                               
-                        size={'default'}
+                        name={'login'}
                         autoComplete='login'
                         extraClass="mb-6"
                         icon='EditIcon'

@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { restorePassword } from '../utils/user-api';
 import styles from './Pages.module.css'
 
 function ForgotPasswordPage() {
+
+    const history = useHistory();
 
     const [emailValue, setEmailValue] = useState('');   
 
@@ -14,10 +16,8 @@ function ForgotPasswordPage() {
 
     const resetPasswordHandler = () => {
         restorePassword('password-reset', emailValue)
-        .then(res => {
-            if(res && res.success) {
-                console.log(res);
-            }
+        .then(() => {
+            history.replace({ pathname: '/reset-password' });
         })
         .catch(err => console.log(err.status));
     }

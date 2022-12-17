@@ -1,13 +1,40 @@
 import {request, API_URL} from './data.js'
 
-const restorePassword = async (url, password) => {
+const registerUser = async (url, name, email, password) => {
+    return await request(`${API_URL}/${url}`, {
+        method: 'POST',               
+        headers: {
+            'Content-Type': 'application/json'
+        },        
+        body: JSON.stringify({
+            "email": email,
+            "password": password,
+            "name": name
+        })
+    });
+}
+
+const login = async (url, email, password) => {
+    return await request(`${API_URL}/${url}`, {
+        method: 'POST',           
+        headers: {
+            'Content-Type': 'application/json'
+        },        
+        body: JSON.stringify({
+            "email": email,
+            "password": password,            
+        }) 
+    });
+}
+
+const restorePassword = async (url, email) => {
     return await request(`${API_URL}/${url}`, {
             method: 'POST',        
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "email": password
+                "email": email
             })        
         });
 }
@@ -25,4 +52,4 @@ const resetPassword = async (url, password, token) => {
         });
 }
 
-export {resetPassword, restorePassword};
+export {registerUser, resetPassword, restorePassword, login};
