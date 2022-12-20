@@ -27,6 +27,16 @@ const login = async (url, email, password) => {
     });
 }
 
+const getUserData = async (url, token) => {
+    return await request(`${API_URL}/${url}`, {
+        method: 'GET',           
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token
+        },        
+    });
+}
+
 const restorePassword = async (url, email) => {
     return await request(`${API_URL}/${url}`, {
             method: 'POST',        
@@ -37,6 +47,30 @@ const restorePassword = async (url, email) => {
                 "email": email
             })        
         });
+}
+
+const getNewAuthToken = async (url, token) => {
+    return await request(`${API_URL}/${url}`, {
+        method: 'POST',           
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            "token": token
+        }) 
+    });
+}
+
+const userLogout = async (url, token) => {
+    return await request(`${API_URL}/${url}`, {
+        method: 'POST',        
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "token": token
+        }) 
+    })
 }
 
 const resetPassword = async (url, password, token) => {
@@ -52,4 +86,4 @@ const resetPassword = async (url, password, token) => {
         });
 }
 
-export {registerUser, resetPassword, restorePassword, login};
+export {registerUser, resetPassword, getNewAuthToken, getUserData, restorePassword, userLogout, login};

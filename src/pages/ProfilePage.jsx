@@ -1,15 +1,18 @@
 import { NavLink } from 'react-router-dom';
 import { Input, PasswordInput, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Pages.module.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { logout, updateAuthToken } from '../services/actions/user';
+import { getCookie, deleteCookie } from '../utils/data';
 
 function ProfilePage() {
-
     const {email, name} = useSelector(store => store.user.user);
+    const dispatch = useDispatch();
 
     const [emailValue, setEmailValue] = useState(email);
     const [nameValue, setNameValue] = useState(name);
+    const [passwordValue, setPasswordValue] = useState('Введите новый пароль');
 
     const onChangeEmail = e => {
         setEmailValue(e.target.value)
@@ -19,6 +22,11 @@ function ProfilePage() {
         setNameValue(e.target.value)
     }
 
+    const handleLogoutClick = () => {        
+        dispatch(logout('auth/logout', getCookie('token')));
+        dispatch(updateAuthToken('auth/token', getCookie('token')));
+        deleteCookie('token');
+    }
 
     useEffect(()=> {
         console.log(email, name)
@@ -30,20 +38,26 @@ function ProfilePage() {
                 <div className={'mr-15 ' + styles.nav}>
                     <nav className='mb-20'>
                         <NavLink         
-                            to='/login'               
-                            className={'text text_type_main-medium ' + styles.navLink}                            
+                            to='/profile'  
+                            exact             
+                            className={'text text_type_main-medium text_color_inactive ' + styles.navLink}      
+                            activeClassName={styles.navLink_active}                      
                         > 
                             Профиль
                         </NavLink>
                         <NavLink         
-                            to='/login'               
-                            className={'text text_type_main-medium ' + styles.navLink}                            
+                            to='/'               
+                            exact
+                            className={'text text_type_main-medium text_color_inactive ' + styles.navLink}     
+                            activeClassName={styles.navLink_active}                       
                         > 
                             История заказов
                         </NavLink>
                         <NavLink         
-                            to='/login'               
-                            className={'text text_type_main-medium ' + styles.navLink}                            
+                            to='/login'  
+                            exact             
+                            className={'text text_type_main-medium text_color_inactive ' + styles.navLink}
+                            onClick={handleLogoutClick}                       
                         > 
                             Выход
                         </NavLink>                        
@@ -56,8 +70,7 @@ function ProfilePage() {
                         placeholder={'Имя'}
                         name={'name'} 
                         value={nameValue}
-                        onChange={onChangeName}                              
-                        size={'default'}
+                        onChange={onChangeName}
                         autoComplete='username'
                         extraClass="mb-6"
                         icon='EditIcon'
@@ -74,8 +87,8 @@ function ProfilePage() {
                     <PasswordInput         
                         name={'password'}
                         extraClass="mb-6"
-                        // value={passwordValue}
-                        // onChange={onChangePassword}
+                        value={passwordValue}
+                        onChange={setPasswordValue}
                         autoComplete='password'
                         icon='EditIcon'
                     />                    

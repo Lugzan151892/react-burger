@@ -3,10 +3,11 @@ import { EmailInput, Button, PasswordInput } from '@ya.praktikum/react-developer
 import { useDispatch } from 'react-redux';
 import { userLogIn } from '../services/actions/user';
 import styles from './Pages.module.css'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function LoginPage() {
 
+    const history = useHistory();
     const dispatch = useDispatch();
     const [emailValue, setEmailValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
@@ -19,8 +20,12 @@ function LoginPage() {
         setPasswordValue(e.target.value)
     }
 
+    function redirectUser() {
+        history.replace({ pathname: '/' });
+    }
+
     const loginClickHandle = () => {
-        dispatch(userLogIn('auth/login', emailValue, passwordValue));
+        dispatch(userLogIn('auth/login', emailValue, passwordValue, redirectUser));
     }
 
     return (

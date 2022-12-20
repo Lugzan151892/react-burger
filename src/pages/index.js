@@ -4,5 +4,6 @@ import RegisterPage from "./RegisterPage";
 import ResetPasswordPage from "./ResetPasswordPage";
 import ForgotPasswordPage from "./ForgotPasswordPage";
 import ProfilePage from "./ProfilePage";
+import ProtectedRoute from "./ProtectedRoute";
 
-export {LoginPage, HomePage, RegisterPage, ResetPasswordPage, ForgotPasswordPage, ProfilePage};
+export {LoginPage, HomePage, RegisterPage, ResetPasswordPage, ForgotPasswordPage, ProfilePage, ProtectedRoute};

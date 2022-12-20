@@ -1,4 +1,5 @@
 import styles from './AppHeader.module.css'
+import { NavLink } from 'react-router-dom';
 import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 
 function AppHeader() {
@@ -10,21 +11,39 @@ function AppHeader() {
                 </div>
                 <ul className={styles.menu}>
                     <li className={styles.list}>
-                        <a href="#" className={styles.link}><BurgerIcon type="primary" />
-                            <p className='text text_type_main-default ml-2'>Конструктор</p>
-                        </a>
+                        <NavLink
+                            to='/'
+                            exact
+                            className={`text text_type_main-default text_color_inactive ml-2 ${styles.link}`}
+                            activeClassName={styles.link_active}
+                        >
+                            <BurgerIcon type="primary" />
+                            <p className='ml-1'>Конструктор</p>
+                        </NavLink>                        
                     </li>
                     <li className={styles.list}>
-                        <a href="#" className={styles.link}><ListIcon type="secondary" />
-                            <p className="text text_type_main-default text_color_inactive ml-2">Лента заказов</p>
-                        </a>
+                        <NavLink
+                                to='/'
+                                exact
+                                className={`text text_type_main-default ml-2 text_color_inactive ${styles.link}`}
+                                activeClassName={styles.link_active}
+                        >
+                            <ListIcon type="secondary" />
+                            <p className='ml-1'>Лента заказов</p>                            
+                        </NavLink>                        
                     </li>
                 </ul>
                 <ul className={styles.user}>                
                     <li className={styles.list}>
-                        <a href="#" className={styles.link}><ProfileIcon type="secondary" />
-                            <p className="text text_type_main-default text_color_inactive ml-2">Личный кабинет</p>
-                        </a>
+                        <NavLink
+                                to='/profile'
+                                exact
+                                className={`text text_type_main-default text_color_inactive ml-2 ${styles.link}`}
+                                activeClassName={styles.link_active}
+                        >
+                            <ProfileIcon type="secondary" />
+                            <p className='ml-1'>Личный кабинет</p>                            
+                        </NavLink>
                     </li>
                 </ul>            
             </nav>
