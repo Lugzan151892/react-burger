@@ -1,11 +1,10 @@
-import { useSelector, useDispatch, useStore } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { getCookie } from '../utils/data';
-import { getNewAuthToken } from '../utils/user-api';
-import { fillUserData, updateAuthToken } from '../services/actions/user';
+import { updateAuthToken } from '../services/actions/user';
 
-function ProtectedRoute ({children, path, ...rest}) {
+function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
 
     const isUserAuth = useSelector(store => store.user.userIsAuth); 
     const isMailSend = useSelector(store => store.user.wasPasswordReset); 
@@ -13,38 +12,61 @@ function ProtectedRoute ({children, path, ...rest}) {
 
     useEffect(()=> {      
         let token = getCookie('token');
-        console.log(token ? token : false);
-        if(token) {
-            
+        if(token && !isUserAuth) {
+            dispatch(updateAuthToken('auth/token', getCookie('token')));
         } else {
-        console.log('NETU COCKY')
+            console.log('NETU COCKY')
         }
-    
-    }, [])
+    }, []);
 
-    return ( 
-        path === '/reset-password' ?               
+    if(forAuthUser) return (
         <Route
             {...rest}
-            render={() =>
-                isMailSend ? (
-                children
-                ) : (
-                <Redirect to='/forgot-password'/>
-                )
-            }
-        /> :
-        <Route
-            {...rest}
-            render={() =>
+            render={({ location }) =>
                 isUserAuth ? (
                 children
                 ) : (
-                <Redirect to='/login'/>
-                )
+                    <Redirect                        
+                        to={{                            
+                            pathname: '/login',                            
+                            state: { from: location }
+                        }}
+                    />
+                    )
             }
         />
-    )   
+    )
+
+    if(!forAuthUser) {
+        return (
+            path === '/reset-password' ?               
+            <Route
+                {...rest}
+                render={() =>
+                    isMailSend ? (
+                    children
+                    ) : (
+                    <Redirect to='/forgot-password'/>
+                    )
+                }
+            /> :
+            <Route
+            {...rest}
+            render={({ location }) =>
+                !isUserAuth ? (
+                children
+                ) : (
+                    <Redirect                        
+                        to={{                            
+                            pathname: '/',                            
+                            state: { from: location }
+                        }}
+                    />
+                    )
+            }
+        />
+        )
+    }  
 }
 
 export default ProtectedRoute;

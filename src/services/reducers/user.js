@@ -12,7 +12,10 @@ import { CREATE_NEW_USER_REQUEST,
         AUTH_TOKEN_SUCCESS,
         USER_LOGOUT_FAILED,
         USER_LOGOUT_REQUEST, 
-        USER_LOGOUT_SUCCESS
+        USER_LOGOUT_SUCCESS,
+        GET_TOKEN_FOR_PASSWORD_FAILED,
+        GET_TOKEN_FOR_PASSWORD_REQUEST,
+        GET_TOKEN_FOR_PASSWORD_SUCCESS
     } from '../actions/user.js';
 
 const initialState = {
@@ -31,6 +34,9 @@ const initialState = {
 
     logoutRequest: false,
     logoutFailed: false,
+
+    getPasswordTokenRequest: false,
+    getPasswordTokenFailed: false,
 
     wasPasswordReset: false,
 
@@ -100,7 +106,7 @@ export const userReducer = (state = initialState, action) => {
                 ...state, 
                 authTokenRequest: false, 
                 authTokenFailed: false,   
-                accessToken: action.accessToken.token,   
+                accessToken: action.authToken,   
             };
         case AUTH_TOKEN_FAILED: 
             return {...state, authTokenRequest: false, authTokenFailed: true};
@@ -123,6 +129,18 @@ export const userReducer = (state = initialState, action) => {
             };
         case USER_LOGOUT_FAILED: 
             return {...state, logoutRequest: false, logoutFailed: true};
+
+        case GET_TOKEN_FOR_PASSWORD_REQUEST: 
+            return {...state, getPasswordTokenRequest: true};
+        case GET_TOKEN_FOR_PASSWORD_SUCCESS: 
+            return {
+                ...state, 
+                getPasswordTokenRequest: false, 
+                getPasswordTokenFailed: false,   
+                wasPasswordReset: true,
+            };
+        case GET_TOKEN_FOR_PASSWORD_FAILED: 
+            return {...state, getPasswordTokenRequest: false, getPasswordTokenFailed: true};
 
         default:
             return state;

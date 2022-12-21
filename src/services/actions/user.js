@@ -1,6 +1,5 @@
 import { registerUser, login, getUserData, getNewAuthToken, userLogout, resetPassword, restorePassword } from "../../utils/user-api";
 import { setCookie } from "../../utils/data";
-import { useHistory } from 'react-router-dom';
 
 export const CREATE_NEW_USER_REQUEST = 'CREATE_NEW_USER_REQUEST';
 export const CREATE_NEW_USER_SUCCESS = 'CREATE_NEW_USER_SUCCESS';
@@ -21,6 +20,10 @@ export const AUTH_TOKEN_FAILED = 'AUTH_TOKEN_FAILED';
 export const USER_LOGOUT_REQUEST = 'USER_LOGOUT_REQUEST';
 export const USER_LOGOUT_SUCCESS = 'USER_LOGOUT_SUCCESS';
 export const USER_LOGOUT_FAILED = 'USER_LOGOUT_FAILED';
+
+export const GET_TOKEN_FOR_PASSWORD_REQUEST = 'GET_TOKEN_FOR_PASSWORD_REQUEST';
+export const GET_TOKEN_FOR_PASSWORD_SUCCESS = 'GET_TOKEN_FOR_PASSWORD_SUCCESS';
+export const GET_TOKEN_FOR_PASSWORD_FAILED = 'GET_TOKEN_FOR_PASSWORD_FAILED';
 
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 export const RESTORE_PASSWORD = 'RESTORE_PASSWORD';
@@ -53,8 +56,7 @@ export function userLogIn(url, email, password, callBack) {
                         type: LOGIN_USER_SUCCESS,
                         userData: res
                     });
-                    setCookie('token', res.refreshToken);                
-                    // document.cookie = `token=${res.refreshToken}`;
+                    setCookie('token', res.refreshToken);  
                 } else {
                     dispatch({type: LOGIN_USER_FAILED});
                 }
@@ -99,18 +101,35 @@ export function logout(url, token) {
     }
 }
 
+export function getTokenForPassword(url, email, redirect) {
+    return function(dispatch) {
+        dispatch({type: GET_TOKEN_FOR_PASSWORD_REQUEST})
+        restorePassword(url, email)
+            .then(res => {
+                if(res && res.success) {
+                    dispatch({type: GET_TOKEN_FOR_PASSWORD_SUCCESS});
+                    redirect();
+                } else {
+                    dispatch({type: GET_TOKEN_FOR_PASSWORD_FAILED});
+                }
+            })
+            .catch(err => console.log('Произошла ошибка :', err));
+    }
+}
+
 export function updateAuthToken(url, token) {
     return function(dispatch) {
         dispatch({type: AUTH_TOKEN_REQUEST});
         getNewAuthToken(url, token)
-            .then(res => {
+            .then(res => {                
                 if(res && res.success) {
                     dispatch({
                         type: AUTH_TOKEN_SUCCESS,
                         authToken: res.accessToken
                     });
-                    // dispatch(fillUserData('auth/user', res.accessToken)); 
-                    console.log(res)                                    
+                    dispatch(fillUserData('auth/user', res.accessToken));
+                    setCookie('token', res.refreshToken);
+                    // console.log(res);                                    
                 } else {
                     dispatch({type: AUTH_TOKEN_FAILED});
                 }

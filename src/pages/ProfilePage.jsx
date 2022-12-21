@@ -1,19 +1,21 @@
 import { NavLink } from 'react-router-dom';
-import { Input, PasswordInput, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, PasswordInput, EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Pages.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { logout, updateAuthToken } from '../services/actions/user';
+import { useState } from 'react';
+import { logout } from '../services/actions/user';
 import { getCookie, deleteCookie } from '../utils/data';
 
 function ProfilePage() {
     const {email, name} = useSelector(store => store.user.user);
     const dispatch = useDispatch();
 
+    const [isChanged, setIsChanged] = useState(false);
+
     const [emailValue, setEmailValue] = useState(email);
     const [nameValue, setNameValue] = useState(name);
     const [passwordValue, setPasswordValue] = useState('Введите новый пароль');
-
+    
     const onChangeEmail = e => {
         setEmailValue(e.target.value)
     }
@@ -24,13 +26,8 @@ function ProfilePage() {
 
     const handleLogoutClick = () => {        
         dispatch(logout('auth/logout', getCookie('token')));
-        dispatch(updateAuthToken('auth/token', getCookie('token')));
         deleteCookie('token');
     }
-
-    useEffect(()=> {
-        console.log(email, name)
-    }, []);
 
     return (
         <div className={styles.container}>
@@ -46,7 +43,7 @@ function ProfilePage() {
                             Профиль
                         </NavLink>
                         <NavLink         
-                            to='/'               
+                            to='/order-list'               
                             exact
                             className={'text text_type_main-medium text_color_inactive ' + styles.navLink}     
                             activeClassName={styles.navLink_active}                       
@@ -91,7 +88,15 @@ function ProfilePage() {
                         onChange={setPasswordValue}
                         autoComplete='password'
                         icon='EditIcon'
-                    />                    
+                    />
+                    {
+                        !isChanged ?
+                        <div className={styles.buttons}>
+                            <Button htmlType='button'>Сохранить</Button>
+                            <Button htmlType='reset'>Отменить</Button>                           
+                        </div> :
+                        null
+                    }                   
                 </form>                
             </div>            
         </div>

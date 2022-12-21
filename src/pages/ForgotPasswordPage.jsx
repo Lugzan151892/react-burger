@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useHistory } from 'react-router-dom';
-import { restorePassword } from '../utils/user-api';
+import { getTokenForPassword } from '../services/actions/user';
 import styles from './Pages.module.css'
+import { useDispatch } from 'react-redux';
 
 function ForgotPasswordPage() {
 
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const [emailValue, setEmailValue] = useState('');   
 
@@ -14,12 +16,12 @@ function ForgotPasswordPage() {
         setEmailValue(e.target.value)
     }
 
+    function redirectToNextPage() {
+        history.replace({ pathname: '/reset-password' });
+    }
+
     const resetPasswordHandler = () => {
-        restorePassword('password-reset', emailValue)
-        .then(() => {
-            history.replace({ pathname: '/reset-password' });
-        })
-        .catch(err => console.log(err.status));
+        dispatch(getTokenForPassword('password-reset', emailValue, redirectToNextPage))
     }
 
     return (

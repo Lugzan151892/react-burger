@@ -16,6 +16,7 @@ const BurgerElement = ({element}) => {
     
     function openModal(item) {
         dispatch(openIngridientModal(item));
+        
     }
 
     function getCounter(){

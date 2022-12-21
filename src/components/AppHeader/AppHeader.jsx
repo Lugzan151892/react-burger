@@ -23,7 +23,7 @@ function AppHeader() {
                     </li>
                     <li className={styles.list}>
                         <NavLink
-                                to='/'
+                                to='/order-list'
                                 exact
                                 className={`text text_type_main-default ml-2 text_color_inactive ${styles.link}`}
                                 activeClassName={styles.link_active}
