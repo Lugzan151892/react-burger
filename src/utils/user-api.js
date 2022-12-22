@@ -37,6 +37,17 @@ const getUserData = async (url, token) => {
     });
 }
 
+const updateUserData = async (url, token, form) => {
+    return await request(`${API_URL}/${url}`, {
+        method: 'PATCH',        
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token
+        },
+        body: JSON.stringify(form)
+    })
+}
+
 const restorePassword = async (url, email) => {
     return await request(`${API_URL}/${url}`, {
             method: 'POST',        
@@ -86,4 +97,4 @@ const resetPassword = async (url, password, token) => {
         });
 }
 
-export {registerUser, resetPassword, getNewAuthToken, getUserData, restorePassword, userLogout, login};
+export {registerUser, resetPassword, getNewAuthToken, getUserData, restorePassword, userLogout, login, updateUserData};

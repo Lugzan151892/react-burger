@@ -15,7 +15,10 @@ import { CREATE_NEW_USER_REQUEST,
         USER_LOGOUT_SUCCESS,
         GET_TOKEN_FOR_PASSWORD_FAILED,
         GET_TOKEN_FOR_PASSWORD_REQUEST,
-        GET_TOKEN_FOR_PASSWORD_SUCCESS
+        GET_TOKEN_FOR_PASSWORD_SUCCESS,
+        UPDATE_USER_DATA_FAILED,
+        UPDATE_USER_DATA_REQUEST,
+        UPDATE_USER_DATA_SUCCESS
     } from '../actions/user.js';
 
 const initialState = {
@@ -28,6 +31,9 @@ const initialState = {
     
     userDataRequest: false,
     userDataFailed: false,
+
+    updateUserDataRequest: false,
+    updateUserDataFailed: false,
 
     authTokenRequest: false,
     authTokenFailed: false,
@@ -141,6 +147,22 @@ export const userReducer = (state = initialState, action) => {
             };
         case GET_TOKEN_FOR_PASSWORD_FAILED: 
             return {...state, getPasswordTokenRequest: false, getPasswordTokenFailed: true};
+
+        case UPDATE_USER_DATA_REQUEST: 
+            return {...state, updateUserDataRequest: true};
+        case UPDATE_USER_DATA_SUCCESS: 
+            return {
+                ...state, 
+                updateUserDataRequest: false, 
+                updateUserDataFailed: false,   
+                user: {
+                    ...state.user,
+                    name: action.userData.name,
+                    email: action.userData.email
+                }
+            };
+        case UPDATE_USER_DATA_FAILED: 
+            return {...state, updateUserDataRequest: false, updateUserDataFailed: true};
 
         default:
             return state;

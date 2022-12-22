@@ -27,6 +27,13 @@ async function request(url, options) {
     return fetch(url, options).then(checkResponse)
 }
 
+function checkIsChanged(arr1, arr2) {        
+  if(arr1[0] === arr2[0] && arr1[1] === arr2[1] && arr1[2] === arr2[2]){
+      return false;
+  }
+  return true;
+}
+
 function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
       "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -63,4 +70,4 @@ function deleteCookie(name) {
   })
 }
 
-export {elementPropTypes, request, getCookie, API_URL, setCookie, deleteCookie};
+export {elementPropTypes, request, getCookie, API_URL, setCookie, deleteCookie, checkIsChanged};

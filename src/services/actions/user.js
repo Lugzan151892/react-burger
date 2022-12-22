@@ -1,5 +1,5 @@
-import { registerUser, login, getUserData, getNewAuthToken, userLogout, resetPassword, restorePassword } from "../../utils/user-api";
-import { setCookie } from "../../utils/data";
+import { registerUser, login, getUserData, getNewAuthToken, userLogout, updateUserData, restorePassword } from "../../utils/user-api";
+import { getCookie, setCookie } from "../../utils/data";
 
 export const CREATE_NEW_USER_REQUEST = 'CREATE_NEW_USER_REQUEST';
 export const CREATE_NEW_USER_SUCCESS = 'CREATE_NEW_USER_SUCCESS';
@@ -24,6 +24,10 @@ export const USER_LOGOUT_FAILED = 'USER_LOGOUT_FAILED';
 export const GET_TOKEN_FOR_PASSWORD_REQUEST = 'GET_TOKEN_FOR_PASSWORD_REQUEST';
 export const GET_TOKEN_FOR_PASSWORD_SUCCESS = 'GET_TOKEN_FOR_PASSWORD_SUCCESS';
 export const GET_TOKEN_FOR_PASSWORD_FAILED = 'GET_TOKEN_FOR_PASSWORD_FAILED';
+
+export const UPDATE_USER_DATA_REQUEST = 'GET_TOKEN_FOR_PASSWORD_REQUEST';
+export const UPDATE_USER_DATA_SUCCESS = 'GET_TOKEN_FOR_PASSWORD_SUCCESS';
+export const UPDATE_USER_DATA_FAILED = 'GET_TOKEN_FOR_PASSWORD_FAILED';
 
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 export const RESTORE_PASSWORD = 'RESTORE_PASSWORD';
@@ -75,8 +79,7 @@ export function fillUserData(url, token) {
                     dispatch({
                         type: DATA_USER_SUCCESS,
                         userData: res
-                    });    
-                    console.log(res)                                    
+                    });                                       
                 } else {
                     dispatch({type: DATA_USER_FAILED});
                 }
@@ -128,12 +131,27 @@ export function updateAuthToken(url, token) {
                         authToken: res.accessToken
                     });
                     dispatch(fillUserData('auth/user', res.accessToken));
-                    setCookie('token', res.refreshToken);
-                    // console.log(res);                                    
+                    setCookie('token', res.refreshToken);                                 
                 } else {
                     dispatch({type: AUTH_TOKEN_FAILED});
                 }
             })
             .catch(err => console.log('Произошла ошибка :', err));
+    }
+}
+
+export function changeUserData(url, token, form) {
+    return function(dispatch) {
+        dispatch({type: UPDATE_USER_DATA_REQUEST});
+        updateUserData(url, token, form)
+        .then((res)=> {
+            if(res && res.success) {
+                dispatch({type: UPDATE_USER_DATA_SUCCESS, userData: res.user});   
+                dispatch(fillUserData('auth/user', token));
+            } else {
+                dispatch({type: UPDATE_USER_DATA_FAILED});
+            }
+        })
+        .catch(err => console.log('Произошла ошибка :', err));
     }
 }
