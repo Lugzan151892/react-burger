@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { EmailInput, Button, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { userLogIn } from '../services/actions/user';
-import styles from './Pages.module.css'
-import { Link, useHistory, Redirect } from 'react-router-dom';
+import styles from './Pages.module.css';
+import { Link, useHistory } from 'react-router-dom';
 
 function LoginPage() {
-
     const history = useHistory();
-    const dispatch = useDispatch();  
-    const isUserAuth = useSelector(store => store.user.isUserAuth); 
+    const dispatch = useDispatch();
     const [emailValue, setEmailValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
 

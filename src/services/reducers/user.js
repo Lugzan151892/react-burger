@@ -106,7 +106,7 @@ export const userReducer = (state = initialState, action) => {
             return {...state, userDataRequest: false, userDataFailed: true};
 
         case AUTH_TOKEN_REQUEST: 
-            return {...state, authTokenRequest: true};
+            return {...state, authTokenRequest: true, userDataRequest: true};
         case AUTH_TOKEN_SUCCESS: 
             return {
                 ...state, 
@@ -115,7 +115,7 @@ export const userReducer = (state = initialState, action) => {
                 accessToken: action.authToken,   
             };
         case AUTH_TOKEN_FAILED: 
-            return {...state, authTokenRequest: false, authTokenFailed: true};
+            return {...state, authTokenRequest: false, authTokenFailed: true, userDataRequest: false};
 
         case USER_LOGOUT_REQUEST: 
             return {...state, logoutRequest: true};

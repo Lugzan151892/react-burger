@@ -10,13 +10,12 @@ function ProfilePage() {
     const { email, name } = useSelector(store => store.user.user);
     const accessToken = useSelector(store => store.user.accessToken);
     const dispatch = useDispatch();
-
-
     const [isChanged, setIsChanged] = useState(false);
-
     const [emailValue, setEmailValue] = useState(email);
     const [nameValue, setNameValue] = useState(name);
     const [passwordValue, setPasswordValue] = useState('');
+    const defaultData = [email, name, ''];
+    const compareData = [emailValue, nameValue, passwordValue];
 
     const onSaveHandle = () => {
         dispatch(changeUserData('auth/user', accessToken, {
@@ -26,9 +25,6 @@ function ProfilePage() {
         }));
         setIsChanged(false);
     }
-
-    const defaultData = [email, name, ''];
-    const compareData = [emailValue, nameValue, passwordValue];
 
     useEffect(() => {
         setIsChanged(checkIsChanged(defaultData, compareData));

@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import styles from './DefaultBurgerIngredient.module.css'
+import styles from './DefaultBurgerIngredient.module.css';
 import BurgerElement from "../BurgerElement/BurgerElement";
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
@@ -33,8 +33,8 @@ const DefaultBurgerIngredient = ({type, title, refType}) => {
     return (
         <div id={`${type}-id`} className={styles.typesContainer}>
             <h2 ref={refType} id={type} className={`${styles.title} text text_type_main-medium mt-5 mb-2`}>{title}</h2> 
-                {filtredElements.map(item => ( 
-                    <BurgerElement element={item} key={item._id}/>                                                  
+                {filtredElements.map(item => (                    
+                    <BurgerElement element={item} key={item._id}/>                                                
                 ))}    
         </div>
     )

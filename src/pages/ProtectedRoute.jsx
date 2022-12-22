@@ -1,25 +1,32 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, useHistory } from 'react-router-dom';
 import { getCookie } from '../utils/data';
 import { updateAuthToken } from '../services/actions/user';
 
 function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
 
+    const history = useHistory();
+    const { state } = history.location;
+
     const isUserAuth = useSelector(store => store.user.userIsAuth); 
     const isMailSend = useSelector(store => store.user.wasPasswordReset); 
     const dispatch = useDispatch();
+    const isRequest = useSelector(store => store.user.userDataRequest);
+
 
     useEffect(()=> {      
         let token = getCookie('token');
         if(token && !isUserAuth) {
             dispatch(updateAuthToken('auth/token', getCookie('token')));
         } else {
-            console.log('NETU COCKY')
+            console.log('Токен не найден');
         }
     }, []);
 
-    if(forAuthUser) return (
+    if(isRequest) return null;
+
+    if(forAuthUser) return (       
         <Route
             {...rest}
             render={({ location }) =>
@@ -38,7 +45,7 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
     )
 
     if(!forAuthUser) {
-        return (
+        return (            
             path === '/reset-password' ?               
             <Route
                 {...rest}
@@ -50,19 +57,17 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
                     )
                 }
             /> :
+            
             <Route
             {...rest}
-            render={({ location }) =>
+            render={() =>
                 !isUserAuth ? (
                 children
                 ) : (
                     <Redirect                        
-                        to={{                            
-                            pathname: '/',                            
-                            state: { from: location }
-                        }}
+                        to={ state?.from || '/' }
                     />
-                    )
+                )
             }
         />
         )

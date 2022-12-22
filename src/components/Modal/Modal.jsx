@@ -1,5 +1,5 @@
 
-import React from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom'
 import styles from "./Modal.module.css";
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -20,7 +20,7 @@ function Modal({children, closeModal}) {
 
     const isLoading = useSelector(store => store.ingridients.orderNumberRequest);
 
-    React.useEffect(() => {
+    useEffect(() => {
         document.addEventListener('keydown', handleEscape);
         return () => {
             document.removeEventListener('keydown', handleEscape);
