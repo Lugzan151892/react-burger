@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import { Route, Redirect, useHistory } from 'react-router-dom';
 import { getCookie } from '../utils/data';
 import { updateAuthToken } from '../services/actions/user';
+import styles from './Pages.module.css';
+import loading from '../images/loading-gif.gif';
 
 function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
 
@@ -24,7 +26,11 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
         }
     }, []);
 
-    if(isRequest) return null;
+    if(isRequest) return (
+        <div className={styles.loading_container}>
+        <img src={loading} className={styles.loading_image} alt="loading" />
+        </div>
+    );
 
     if(forAuthUser) return (       
         <Route

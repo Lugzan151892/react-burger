@@ -10,6 +10,18 @@
     color: #4C4CFF;
 }
 
+.loading_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+
+.loading_image {
+    max-width: 300px;
+    max-height: 300px;
+}
+
 .form {
     display: flex;
     flex-direction: column;

@@ -17,7 +17,7 @@ function App() {
 
   return ( 
     <Router>    
-      <AppHeader />
+      <AppHeader/>
       <main className={styles.app}>        
         <Switch>
           <ProtectedRoute forAuthUser={false} exact path="/login">
