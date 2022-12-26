@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useRouteMatch, Route } from 'react-router-dom';
 import { Input, PasswordInput, EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Pages.module.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +17,16 @@ function ProfilePage() {
     const defaultData = [email, name, ''];
     const compareData = [emailValue, nameValue, passwordValue];
 
-    const onSaveHandle = () => {
+    const { path } = useRouteMatch();
+
+    const matchOrderList = useRouteMatch({
+        path: "/profile/orders",
+        strict: true,
+        sensitive: true
+    });
+
+    const onSaveHandle = (e) => {
+        e.preventDefault();
         dispatch(changeUserData('auth/user', accessToken, {
             'name': nameValue,
             'email': emailValue,
@@ -67,7 +76,7 @@ function ProfilePage() {
                             Профиль
                         </NavLink>
                         <NavLink         
-                            to='/order-list'               
+                            to='/profile/orders'               
                             exact
                             className={'text text_type_main-medium text_color_inactive ' + styles.navLink}     
                             activeClassName={styles.navLink_active}                       
@@ -84,44 +93,63 @@ function ProfilePage() {
                         </NavLink>                        
                     </nav>
                     <p className={'text text_type_main-default text_color_inactive ' + styles.text}>В этом разделе вы можете изменить свои персональные данные</p> 
-                </div>           
-                <form className={styles.form} action="">
-                    <Input
-                        type={'text'}
-                        placeholder={'Имя'}
-                        name={'name'} 
-                        value={nameValue}
-                        onChange={onChangeName}
-                        autoComplete='username'
-                        extraClass="mb-6"
-                        icon='EditIcon'
-                    />          
-                    <EmailInput                        
-                        value={emailValue}
-                        onChange={onChangeEmail}
-                        placeholder={'Логин'}
-                        name={'login'}
-                        autoComplete='login'
-                        extraClass="mb-6"
-                        icon='EditIcon'
-                    /> 
-                    <PasswordInput         
-                        name={'password'}
-                        extraClass="mb-6"
-                        value={passwordValue}
-                        onChange={onChangePassword}
-                        autoComplete='password'
-                        icon='EditIcon'
-                    />
-                    {
-                        isChanged ?
-                        <div className={styles.buttons}>
-                            <Button htmlType='button' onClick={onSaveHandle}>Сохранить</Button>
-                            <Button htmlType='reset' onClick={onResetHandle}>Отменить</Button>                           
-                        </div> :
-                        null
-                    }                   
-                </form>                
+                </div>
+                {matchOrderList ?
+                    <Route 
+                        path={`${path}/profile/orders`}
+                        children={() => {
+                            return (                            
+                                <div className={styles.order_list}>
+                                    <h1>В разработке</h1>
+                                </div>
+                            )
+                        }}
+                    /> : 
+                    <Route
+                    path={`${path}/`}
+                    children={()=>{
+                        return(
+                            <form className={styles.form} onSubmit={onSaveHandle}>
+                                <Input
+                                    type={'text'}
+                                    placeholder={'Имя'}
+                                    name={'name'} 
+                                    value={nameValue}
+                                    onChange={onChangeName}
+                                    autoComplete='username'
+                                    extraClass="mb-6"
+                                    icon='EditIcon'
+                                />          
+                                <EmailInput                        
+                                    value={emailValue}
+                                    onChange={onChangeEmail}
+                                    placeholder={'Логин'}
+                                    name={'login'}
+                                    autoComplete='login'
+                                    extraClass="mb-6"
+                                    icon='EditIcon'
+                                /> 
+                                <PasswordInput         
+                                    name={'password'}
+                                    extraClass="mb-6"
+                                    value={passwordValue}
+                                    onChange={onChangePassword}
+                                    autoComplete='password'
+                                    icon='EditIcon'
+                                />
+                                {
+                                    isChanged ?
+                                    <div className={styles.buttons}>
+                                        <Button htmlType='submit'>Сохранить</Button>
+                                        <Button htmlType='reset' onClick={onResetHandle}>Отменить</Button>                           
+                                    </div> :
+                                    null
+                                }                   
+                            </form> 
+                        )
+                    }}
+                />
+                }
             </div>            
         </div>
     )

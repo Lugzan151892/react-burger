@@ -32,14 +32,17 @@ export function getDefaultIngridients(url) {
                     dispatch({type: GET_DEFAULT_INGRIDIENTS_FAILED});
                 }
             })
-            .catch(err => console.log(err.status));
+            .catch(err => {
+                console.log(err.status);
+                dispatch({type: GET_DEFAULT_INGRIDIENTS_FAILED});
+            });
     }
 }
 
-export function getOrderNumber(url, list) {
+export function getOrderNumber(url, list, token) {
     return function(dispatch) {
         dispatch({type: GET_ORDER_NUMBER_REQUEST});
-        getOrderDetails(url, list)
+        getOrderDetails(url, list, token)
             .then(res => {
                 if (res && res.success) {
                     dispatch({
@@ -50,7 +53,10 @@ export function getOrderNumber(url, list) {
                     dispatch({type: GET_ORDER_NUMBER_FAILED});
                 }
             })
-            .catch(err => console.log(err.status));
+            .catch(err => {
+                console.log(err.status);
+                dispatch({type: GET_ORDER_NUMBER_FAILED});
+            });
     }
 }
 

@@ -27,11 +27,11 @@ async function request(url, options) {
     return fetch(url, options).then(checkResponse)
 }
 
-function checkIsChanged(arr1, arr2) {        
-  if(arr1[0] === arr2[0] && arr1[1] === arr2[1] && arr1[2] === arr2[2]){
-      return false;
+function checkIsChanged(arr1, arr2) { 
+  for(let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) return true;
   }
-  return true;
+  return false;
 }
 
 function getCookie(name) {

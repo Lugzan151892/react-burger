@@ -23,20 +23,22 @@ function LoginPage() {
         history.replace({ pathname: '/' });
     }
 
-    const loginClickHandle = () => {
+    const loginClickHandle = (e) => {
+        e.preventDefault();
         dispatch(userLogIn('auth/login', emailValue, passwordValue, redirectUser));
     }
 
     return (
         <div className={styles.container}>
             <h2 className="text text_type_main-medium">Вход</h2> 
-            <form className={styles.form} action="">         
+            <form className={styles.form} onSubmit={loginClickHandle}>         
                 <EmailInput
                     onChange={onChangeEmail}
                     value={emailValue}                
                     placeholder='E-mail'
                     name={'email'}
                     extraClass="mb-6 mt-6"
+                    required
                 />
                 <PasswordInput         
                     name={'password'}
@@ -44,8 +46,9 @@ function LoginPage() {
                     value={passwordValue}
                     onChange={onChangePassword}
                     autoComplete='password'
+                    required
                 />
-                <Button onClick={loginClickHandle} htmlType="button" type="primary" size="medium" extraClass="mb-20">
+                <Button htmlType="submit" type="primary" size="medium" extraClass="mb-20">
                     Войти
                 </Button>
             </form>  

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Input, Button, PasswordInput, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styles from './Pages.module.css'
 import { createNewUser } from '../services/actions/user';
 
 function RegisterPage() {
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [nameValue, setNameValue] = useState('');
     const [emailValue, setEmailValue] = useState('');
@@ -25,20 +26,24 @@ function RegisterPage() {
         setEmailValue(e.target.value)
     }
 
-    const handleClick = () => {
-        const obj = {
+    const redirectUser = () => {
+        history.replace({pathname: '/profile'});
+    }
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        const formData = {
             'email': emailValue,
             'name': nameValue,
             'password': passwordValue
-        }
-        console.log(obj);
-        dispatch(createNewUser('auth/register', nameValue, emailValue, passwordValue));
+        };
+        dispatch(createNewUser('auth/register', formData, redirectUser));
     }
 
     return (
         <div className={styles.container}>
             <h2 className="text text_type_main-medium">Регистрация</h2>  
-            <form className={styles.form} action="">
+            <form className={styles.form} onSubmit={handleClick}>
                 <Input
                     type={'text'}
                     onChange={onChangeName}
@@ -48,6 +53,7 @@ function RegisterPage() {
                     size={'default'}
                     autoComplete='username'
                     extraClass="mb-6 mt-6"
+                    required
                 />          
                 <EmailInput
                     onChange={onChangeEmail}
@@ -55,6 +61,7 @@ function RegisterPage() {
                     placeholder='E-mail'
                     name={'email'}
                     extraClass="mb-6"
+                    required
                 />
                 <PasswordInput         
                     name={'password'}
@@ -62,8 +69,9 @@ function RegisterPage() {
                     value={passwordValue}
                     onChange={onChangePassword}
                     autoComplete='password'
+                    required
                 />
-                <Button onClick={handleClick} htmlType="button" type="primary" size="medium" extraClass="mb-20">
+                <Button htmlType="submit" type="primary" size="medium" extraClass="mb-20">
                     Зарегистрироваться
                 </Button>
             </form>

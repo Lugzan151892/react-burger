@@ -20,22 +20,24 @@ function ForgotPasswordPage() {
         history.replace({ pathname: '/reset-password' });
     }
 
-    const resetPasswordHandler = () => {
+    const resetPasswordHandler = (e) => {
+        e.preventDefault();
         dispatch(getTokenForPassword('password-reset', emailValue, redirectToNextPage))
     }
 
     return (
         <div className={styles.container}>
             <h2 className="text text_type_main-medium">Восстановление пароля</h2>  
-            <form className={styles.form} action="">                        
+            <form className={styles.form} onSubmit={resetPasswordHandler}>                        
                 <EmailInput
                     onChange={onChangeEmail}
                     value={emailValue}                
                     placeholder='E-mail'
                     name={'email'}
                     extraClass="mb-6 mt-6"
+                    required
                 />                
-                <Button htmlType="button" type="primary" size="medium" extraClass="mb-20" onClick={resetPasswordHandler}>
+                <Button htmlType="submit" type="primary" size="medium" extraClass="mb-20">
                     Восстановить
                 </Button>
             </form>

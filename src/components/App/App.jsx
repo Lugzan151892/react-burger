@@ -32,7 +32,7 @@ function App() {
           <ProtectedRoute forAuthUser={false} exact path="/reset-password">
             <ResetPasswordPage/> 
           </ProtectedRoute>  
-          <ProtectedRoute forAuthUser={true} exact path="/profile"> 
+          <ProtectedRoute forAuthUser={true} path="/profile"> 
             <ProfilePage/>
           </ProtectedRoute>
           <ProtectedRoute forAuthUser={true} exact path="/order-list"> 
@@ -43,10 +43,8 @@ function App() {
             <ProtectedRoute forAuthUser={true} exact path="/ingridients/:id"> 
               <IngridientPage/>
             </ProtectedRoute>
-          }          
-          <ProtectedRoute forAuthUser={true} path="/"> 
+          }
             <HomePage/>
-          </ProtectedRoute>                  
         </Switch>
       </main>    
     </Router>

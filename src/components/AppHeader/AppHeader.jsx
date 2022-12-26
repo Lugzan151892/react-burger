@@ -9,7 +9,7 @@ function AppHeader() {
     });
 
     const matchProfile = useRouteMatch({
-        path: "/profile",
+        path: "/profile" || "/profile/orders",
     });
 
     const matchMain = useRouteMatch({
@@ -34,7 +34,7 @@ function AppHeader() {
                             <p className='ml-1'>Конструктор</p>
                         </NavLink>                        
                     </li>
-                    <li className={styles.list}>
+                    <li className={`${styles.list} ml-4`}>
                         <NavLink
                                 to='/order-list'
                                 exact
@@ -49,8 +49,7 @@ function AppHeader() {
                 <ul className={styles.user}>                
                     <li className={styles.list}>
                         <NavLink
-                                to='/profile'
-                                exact
+                                to='/profile'                                
                                 className={`text text_type_main-default text_color_inactive ml-2 ${styles.link}`}
                                 activeClassName={styles.link_active}
                         >

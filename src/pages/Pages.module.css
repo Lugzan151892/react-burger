@@ -71,7 +71,14 @@
     max-width: 520px;
     margin-bottom: 60px;
 }
+
 .ingridient_cell {
     width: 112px;
     text-align: center;
+}
+
+.order_list {
+    display: flex;
+    justify-content: center;
+    min-width: 480px;
 }

@@ -1,16 +1,20 @@
 import { useSelector, useDispatch } from 'react-redux';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './BurgerConstructor.module.css'
+import styles from './BurgerConstructor.module.css';
+import { useHistory } from 'react-router-dom';
 import { useDrop } from "react-dnd";
 import SelectedElement from "../SelectedElement/SelectedElement";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
+import { getCookie } from '../../utils/data';
 import { closeOrderModal, addItemInBurger } from "../../services/actions/ingridients";
 import { getOrderNumber, OPEN_ORDER_MODAL } from "../../services/actions/ingridients";
 
 const BurgerConstructor = () =>{
     
+    const history = useHistory();
     const elementsInBurger = useSelector(store => store.ingridients.constructorIngridients);
+    const isUserAuth = useSelector(store => store.user.userIsAuth);
     const bunInBurger = useSelector(store => store.ingridients.bunInConstructor);
     const visible = useSelector(store => store.ingridients.orderModalVisible);
     const dispatch = useDispatch();
@@ -33,12 +37,16 @@ const BurgerConstructor = () =>{
     });
 
     function openModal() {
+        if(!isUserAuth) {
+            history.replace({ pathname: '/login' });
+            return;
+        }
         const orderList = [];
         elementsInBurger.forEach(element => {
             orderList.push(element._id)
         });
         dispatch({type: OPEN_ORDER_MODAL});
-        dispatch(getOrderNumber('orders', orderList));
+        dispatch(getOrderNumber('orders', orderList, getCookie('token')));
     }
     
     const price = bunInBurger ? bunInBurger.price * 2 : 0;

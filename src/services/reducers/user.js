@@ -64,7 +64,14 @@ export const userReducer = (state = initialState, action) => {
                 ...state, 
                 createNewUserRequest: false, 
                 createNewUserFailed: false,
-                user: action.userData 
+                userIsAuth: true,
+                user: {
+                    ...state.user,
+                    email: action.userData.user.email,
+                    name: action.userData.user.name
+                },
+                accessToken: action.userData.accessToken,
+                refreshToken: action.userData.refreshToken
             };
         case CREATE_NEW_USER_FAILED: 
             return {...state, createNewUserRequest: false, createNewUserFailed: true};

@@ -12,13 +12,12 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
     const { state } = history.location;
 
     const isUserAuth = useSelector(store => store.user.userIsAuth); 
-    const isMailSend = useSelector(store => store.user.wasPasswordReset); 
     const dispatch = useDispatch();
     const isRequest = useSelector(store => store.user.userDataRequest);
 
 
     useEffect(()=> {      
-        let token = getCookie('token');
+        const token = getCookie('token');
         if(token && !isUserAuth) {
             dispatch(updateAuthToken('auth/token', getCookie('token')));
         } else {
@@ -51,19 +50,7 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
     )
 
     if(!forAuthUser) {
-        return (            
-            path === '/reset-password' ?               
-            <Route
-                {...rest}
-                render={() =>
-                    isMailSend ? (
-                    children
-                    ) : (
-                    <Redirect to='/forgot-password'/>
-                    )
-                }
-            /> :
-            
+        return (
             <Route
             {...rest}
             render={() =>

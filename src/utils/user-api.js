@@ -1,15 +1,15 @@
 import {request, API_URL} from './data.js'
 
-const registerUser = async (url, name, email, password) => {
+const registerUser = async (url, formData) => {
     return await request(`${API_URL}/${url}`, {
         method: 'POST',               
         headers: {
             'Content-Type': 'application/json'
         },        
         body: JSON.stringify({
-            "email": email,
-            "password": password,
-            "name": name
+            "email": formData.email,
+            "password": formData.password,
+            "name": formData.name
         })
     });
 }

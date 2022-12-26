@@ -1,5 +1,5 @@
 import { registerUser, login, getUserData, getNewAuthToken, userLogout, updateUserData, restorePassword } from "../../utils/user-api";
-import { getCookie, setCookie } from "../../utils/data";
+import { setCookie } from "../../utils/data";
 
 export const CREATE_NEW_USER_REQUEST = 'CREATE_NEW_USER_REQUEST';
 export const CREATE_NEW_USER_SUCCESS = 'CREATE_NEW_USER_SUCCESS';
@@ -32,21 +32,26 @@ export const UPDATE_USER_DATA_FAILED = 'GET_TOKEN_FOR_PASSWORD_FAILED';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 export const RESTORE_PASSWORD = 'RESTORE_PASSWORD';
 
-export function createNewUser(url, name, email, password) {
+export function createNewUser(url, formData, redirect) {
     return function(dispatch) {
         dispatch({type: CREATE_NEW_USER_REQUEST});
-        registerUser(url, name, email, password)
+        registerUser(url, formData)
             .then(res => {                
                 if(res && res.success) {                    
                     dispatch({
                         type: CREATE_NEW_USER_SUCCESS,
                         userData: res
-                    });
-                } else {
+                    });    
+                    setCookie('token', res.refreshToken);                
+                } else {                                       
                     dispatch({type: CREATE_NEW_USER_FAILED});
                 }
             })
-            .catch(err => console.log('Произошла ошибка :', err));
+            .then(redirect)
+            .catch(err => {
+                console.log('Произошла ошибка :', err);
+                dispatch({type: CREATE_NEW_USER_FAILED});
+            });
     }
 }
 
@@ -65,8 +70,11 @@ export function userLogIn(url, email, password, callBack) {
                     dispatch({type: LOGIN_USER_FAILED});
                 }
             })
-            .then(() => callBack())           
-            .catch(err => console.log('Произошла ошибка :', err));
+            .then(callBack)           
+            .catch(err => {
+                console.log('Произошла ошибка :', err);
+                dispatch({type: LOGIN_USER_FAILED});
+            });
     }
 }
 
@@ -84,7 +92,10 @@ export function fillUserData(url, token) {
                     dispatch({type: DATA_USER_FAILED});
                 }
             })
-            .catch(err => console.log('Произошла ошибка :', err));
+            .catch(err => {
+                console.log('Произошла ошибка :', err);
+                dispatch({type: DATA_USER_FAILED});
+            });
     }
 }
 
@@ -100,7 +111,10 @@ export function logout(url, token) {
                     dispatch({type: USER_LOGOUT_FAILED});
                 }
             })
-            .catch(err => console.log('Произошла ошибка :', err));
+            .catch(err => {
+                console.log('Произошла ошибка :', err);
+                dispatch({type: USER_LOGOUT_FAILED});
+            });
     }
 }
 
@@ -116,7 +130,10 @@ export function getTokenForPassword(url, email, redirect) {
                     dispatch({type: GET_TOKEN_FOR_PASSWORD_FAILED});
                 }
             })
-            .catch(err => console.log('Произошла ошибка :', err));
+            .catch(err => {
+                console.log('Произошла ошибка :', err);
+                dispatch({type: GET_TOKEN_FOR_PASSWORD_FAILED});
+            });
     }
 }
 
@@ -136,7 +153,10 @@ export function updateAuthToken(url, token) {
                     dispatch({type: AUTH_TOKEN_FAILED});
                 }
             })
-            .catch(err => console.log('Произошла ошибка :', err));
+            .catch(err => {
+                console.log('Произошла ошибка :', err);
+                dispatch({type: AUTH_TOKEN_FAILED});
+            });
     }
 }
 
@@ -152,6 +172,9 @@ export function changeUserData(url, token, form) {
                 dispatch({type: UPDATE_USER_DATA_FAILED});
             }
         })
-        .catch(err => console.log('Произошла ошибка :', err));
+        .catch(err => {
+            console.log('Произошла ошибка :', err);
+            dispatch({type: UPDATE_USER_DATA_FAILED});
+        });
     }
 }

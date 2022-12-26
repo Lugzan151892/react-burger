@@ -6,7 +6,7 @@ function IngridientPage () {
 
     const itemsList = useSelector(store => store.ingridients.defaultIngridients);
     const { id } = useParams();
-    const [ item ] = itemsList.filter(el => el._id === id);
+    const item = itemsList.find(el => el._id === id);
 
     return (
         <div className={styles.ingridient_container}>            
