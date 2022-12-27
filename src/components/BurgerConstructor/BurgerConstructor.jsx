@@ -6,7 +6,6 @@ import { useDrop } from "react-dnd";
 import SelectedElement from "../SelectedElement/SelectedElement";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { getCookie } from '../../utils/data';
 import { closeOrderModal, addItemInBurger } from "../../services/actions/ingridients";
 import { getOrderNumber, OPEN_ORDER_MODAL } from "../../services/actions/ingridients";
 
@@ -14,6 +13,7 @@ const BurgerConstructor = () =>{
     
     const history = useHistory();
     const elementsInBurger = useSelector(store => store.ingridients.constructorIngridients);
+    const accessToken = useSelector(store => store.user.accessToken);
     const isUserAuth = useSelector(store => store.user.userIsAuth);
     const bunInBurger = useSelector(store => store.ingridients.bunInConstructor);
     const visible = useSelector(store => store.ingridients.orderModalVisible);
@@ -46,7 +46,7 @@ const BurgerConstructor = () =>{
             orderList.push(element._id)
         });
         dispatch({type: OPEN_ORDER_MODAL});
-        dispatch(getOrderNumber('orders', orderList, getCookie('token')));
+        dispatch(getOrderNumber('orders', orderList, accessToken));
     }
     
     const price = bunInBurger ? bunInBurger.price * 2 : 0;
