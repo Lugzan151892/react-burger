@@ -1,6 +1,6 @@
 import React from "react";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './BurgerElement.module.css'
+import styles from './BurgerElement.module.css';
 import PropTypes from 'prop-types';
 import { useDrag } from "react-dnd";
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,13 +9,12 @@ const { elementPropTypes } = require('../../utils/data.js');
 
 
 const BurgerElement = ({element}) => {
-    
     const dispatch = useDispatch();
     const bunInBurger = useSelector(store => store.ingridients.bunInConstructor);
     const chosenElements = useSelector(store => store.ingridients.constructorIngridients).filter(item => element._id === item._id);
     
     function openModal(item) {
-        dispatch(openIngridientModal(item));
+        dispatch(openIngridientModal(item)); 
     }
 
     function getCounter(){

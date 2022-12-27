@@ -1,0 +1,84 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 180px;
+}
+
+.link {
+    text-decoration: none;
+    color: #4C4CFF;
+}
+
+.loading_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+
+.loading_image {
+    max-width: 300px;
+    max-height: 300px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile {
+    display: flex;   
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+}
+
+.text {
+    width: 320px;
+}
+
+.navLink {
+    display: flex;   
+    align-items: center;
+    text-decoration: none;      
+    min-height: 64px;
+}
+
+.navLink_active {    
+    color: white !important;    
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.ingridient_container {
+    margin-top: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ingridient_stats {
+    display: flex;
+    max-width: 520px;
+    margin-bottom: 60px;
+}
+
+.ingridient_cell {
+    width: 112px;
+    text-align: center;
+}
+
+.order_list {
+    display: flex;
+    justify-content: center;
+    min-width: 480px;
+}

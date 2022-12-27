@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { Route, useRouteMatch, useHistory } from 'react-router-dom';
 import styles from './BurgerIngredients.module.css'
 import DefaultBurgerIngredient from "../DefaultBurgerIngredient/DefaultBurgerIngredient";
 import UpgradedTab from "../UpgradedTab/UpgradedTab";
@@ -17,6 +18,8 @@ const tabs = {
 function BurgerIngredients() {
 
     const dispatch = useDispatch();
+    const { path } = useRouteMatch();
+    const history = useHistory();
 
     useEffect(() => {
         dispatch(getDefaultIngridients('ingredients'));
@@ -28,6 +31,7 @@ function BurgerIngredients() {
 
     function closeModal() {
         dispatch(closeIngridientModal());
+        history.replace({ pathname: `/` });
     }
 
     const bunRef = useRef(null);
@@ -43,11 +47,17 @@ function BurgerIngredients() {
 
     return (    
         <section className={styles.createSection}>
-            {elementInModal && visible &&
-                <Modal closeModal={closeModal}>
-                    <IngredientDetails item={elementInModal}/>
-                </Modal> 
-            }            
+            <Route 
+                path={`${path}/ingredients/:id`} 
+                children={() => {
+                    return (
+                        visible && elementInModal &&
+                        <Modal closeModal={closeModal}>
+                            <IngredientDetails/>
+                        </Modal>
+                    )
+                }}
+            />            
             <h2 className={`${styles.title} text text_type_main-large mb-5`}>
                 Соберите бургер
             </h2>
@@ -60,7 +70,7 @@ function BurgerIngredients() {
                 <DefaultBurgerIngredient refType={bunRef} type={tabs.BUN} title={'Булки'} />
                 <DefaultBurgerIngredient refType={sauceRef} type={tabs.SAUCE} title={'Соусы'} />
                 <DefaultBurgerIngredient refType={mainRef} type={tabs.MAIN} title={'Начинки'} />
-            </div>
+            </div>            
         </section>
     );
 }
