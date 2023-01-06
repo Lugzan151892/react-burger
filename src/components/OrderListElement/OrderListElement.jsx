@@ -1,7 +1,7 @@
 import styles from './OrderListElement.module.css';
 import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 
-function OrderListElement({ item }) {
+function OrderListElement({ item, status }) {
     const ingridientsList = item.ingridients.slice(0, 5);
     const extraItem = item.ingridients[5];
     const amountOfExtraElements = item.ingridients.slice(5, item.ingridients.length).length;
@@ -12,7 +12,11 @@ function OrderListElement({ item }) {
                 <p className='text text_type_digits-default'>{item.number}</p>
                 <p className='text text_type_main-small text_color_inactive'>{item.time}</p>
             </div>
-            <h2 className='text text_type_main-medium m-6'>{item.title}</h2>
+            <h2 className='text text_type_main-medium mt-6 ml-6'>{item.title}</h2>
+            {
+                status ? 
+                <p className='text text_type_main-default ml-6 mt-2'>{item.status}</p> : null
+            }
             <div className={`${styles.ingridients} m-6`}>
                 <div className={styles.images}>
                     {ingridientsList.map((el, index) => (                        

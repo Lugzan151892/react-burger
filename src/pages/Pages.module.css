@@ -1,84 +1,82 @@
 .container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 180px;
+    align-items: flex-start;
+    width: 80vw;
 }
-
 .link {
     text-decoration: none;
     color: #4C4CFF;
 }
-
 .loading_container{
     display: flex;
     justify-content: center;
     align-items: center;
     height: 70vh;
 }
-
 .loading_image {
     max-width: 300px;
     max-height: 300px;
 }
-
 .form {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 80px;
 }
-
 .profile {
-    display: flex;   
+    display: flex;
+    width: 100%;  
 }
-
 .nav {
     display: flex;
     flex-direction: column;
     width: 320px;
+    margin-top: 80px;
 }
-
 .text {
     width: 320px;
 }
-
 .navLink {
     display: flex;   
     align-items: center;
     text-decoration: none;      
     min-height: 64px;
 }
-
 .navLink_active {    
     color: white !important;    
 }
-
 .buttons{
     display: flex;
     justify-content: space-around;
     width: 100%;
 }
-
 .ingridient_container {
     margin-top: 120px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 .ingridient_stats {
     display: flex;
     max-width: 520px;
     margin-bottom: 60px;
 }
-
 .ingridient_cell {
     width: 112px;
     text-align: center;
 }
-
 .order_list {
     display: flex;
-    justify-content: center;
-    min-width: 480px;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 70vh;
+    width: 100%;
+}
+.order_list::-webkit-scrollbar {
+    background: #2f2f37;
+    width: 8px;
+}
+.order_list::-webkit-scrollbar-thumb{
+    background: #8585AD;
+    border: 3px solid #8585AD;
 }

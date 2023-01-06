@@ -1,10 +1,12 @@
 import { NavLink, useRouteMatch, Route } from 'react-router-dom';
 import { Input, PasswordInput, EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Pages.module.css';
+import OrderListElement from '../components/OrderListElement/OrderListElement';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { logout, changeUserData } from '../services/actions/user';
 import { getCookie, deleteCookie, checkIsChanged } from '../utils/data';
+import testObjects from '../utils/testData';
 
 function ProfilePage() {
     const { email, name } = useSelector(store => store.user.user);
@@ -100,7 +102,11 @@ function ProfilePage() {
                         children={() => {
                             return (                            
                                 <div className={styles.order_list}>
-                                    <h1>В разработке</h1>
+                                    {
+                                        testObjects.map((el, index)=>(
+                                            <OrderListElement status={true} item={el} key={index}/>
+                                        ))
+                                    }   
                                 </div>
                             )
                         }}

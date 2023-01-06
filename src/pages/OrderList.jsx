@@ -5,7 +5,7 @@ import OrderListElement from "../components/OrderListElement/OrderListElement";
 function OrderList() {
     const numbers = {
         ready: ['034533', '034532', '034534', '034537', '034539'],
-        preparing: ['034533', '034532', '034534', '034537', '034539'],
+        preparing: ['034533', '034532', '034534'],
         total: 28752,
         today: 138,
     }

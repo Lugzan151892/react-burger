@@ -3,6 +3,7 @@ const items = {
     'title': 'Death Star Starship Main бургер',
     'time': 'Сегодня, 16:20 i-GMT+3',
     'price': '480',
+    'status': 'Готовится',
     'ingridients': [
         {
             "_id":"60666c42cc7b410027a1a9b1",
