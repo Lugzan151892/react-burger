@@ -1,0 +1,40 @@
+.order_element_container {
+    background: #1C1C21;
+    border: 1px solid rgba(76, 76, 255, 0.2);
+    box-shadow: 0px 24px 32px rgb(0 0 0 / 4%), 0px 16px 24px rgb(0 0 0 / 4%), 0px 4px 8px rgb(0 0 0 / 4%), 0px 0px 1px rgb(0 0 0 / 4%);
+    border-radius: 40px;
+}
+.order_number {
+    text-align: center;
+}
+.order_ingridients_container {
+    overflow: auto;
+    max-height: 300px;
+}
+.order_ingridients_container::-webkit-scrollbar {
+    background: #2f2f37;
+    width: 8px;
+}
+.order_ingridients_container::-webkit-scrollbar-thumb{
+    background: #8585AD;
+    border: 3px solid #8585AD;
+}
+.order_ingridient {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.order_ingridient_image {
+    width: 64px;
+    height: 64px;
+}
+.order_ingridient_name {
+    display: flex;
+    align-items: center;
+}
+.order_ingridient_time,
+.order_ingridient_price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

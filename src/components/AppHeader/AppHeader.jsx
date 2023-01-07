@@ -5,7 +5,7 @@ import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-devel
 function AppHeader() {
 
     const matchOrder = useRouteMatch({
-        path: "/order-list",
+        path: "/feed",
     });
 
     const matchProfile = useRouteMatch({
@@ -27,7 +27,7 @@ function AppHeader() {
                         <NavLink
                             to='/'
                             exact
-                            className={`text text_type_main-default text_color_inactive ml-2 ${styles.link}`}
+                            className={`text text_type_main-default text_color_inactive ${styles.link}`}
                             activeClassName={styles.link_active}
                         >
                             <BurgerIcon type={matchMain.isExact ? "primary" : "secondary"} />
@@ -36,7 +36,7 @@ function AppHeader() {
                     </li>
                     <li className={`${styles.list} ml-4`}>
                         <NavLink
-                                to='/order-list'
+                                to='/feed'
                                 exact
                                 className={`text text_type_main-default ml-2 text_color_inactive ${styles.link}`}
                                 activeClassName={styles.link_active}

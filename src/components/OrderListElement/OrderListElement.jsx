@@ -1,13 +1,21 @@
+import { openOrderDetailsModal } from '../../services/actions/ingridients';
 import styles from './OrderListElement.module.css';
 import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import { useDispatch } from 'react-redux';
 
 function OrderListElement({ item, status }) {
+
+    const dispatch = useDispatch();
     const ingridientsList = item.ingridients.slice(0, 5);
     const extraItem = item.ingridients[5];
     const amountOfExtraElements = item.ingridients.slice(5, item.ingridients.length).length;
+
+    const openModal = () => {
+        dispatch(openOrderDetailsModal(item));
+    }
     
     return (
-        <div className={`${styles.order_element} mr-2 mb-4`}>
+        <div onClick={openModal} className={`${styles.order_element} mr-2 mb-4`}>
             <div className={`${styles.description} mt-6 ml-6 mr-6`}>
                 <p className='text text_type_digits-default'>{item.number}</p>
                 <p className='text text_type_main-small text_color_inactive'>{item.time}</p>

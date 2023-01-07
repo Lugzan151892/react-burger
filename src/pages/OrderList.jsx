@@ -1,6 +1,11 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, useRouteMatch, useHistory } from 'react-router-dom';
 import testObjects from "../utils/testData";
 import styles from './OrderList.module.css';
+import Modal from "../components/Modal/Modal";
+import { closeOrderDetailsModal } from '../services/actions/ingridients';
 import OrderListElement from "../components/OrderListElement/OrderListElement";
+import OrderModal from '../components/OrderModal/OrderModal';
 
 function OrderList() {
     const numbers = {
@@ -10,7 +15,30 @@ function OrderList() {
         today: 138,
     }
 
-    return (   
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const { path } = useRouteMatch();
+    
+    const orderModalVisible = useSelector(store => store.ingridients.orderDetailsModalVisible);
+
+    function closeModal() {
+        dispatch(closeOrderDetailsModal());
+        history.replace({ pathname: `/feed` });
+    }
+
+    return (
+        <>
+        <Route 
+            path={`${path}/feed/:id`} 
+            children={() => {
+                return (
+                    orderModalVisible &&
+                    <Modal closeModal={closeModal}>
+                        <OrderModal/>
+                    </Modal>
+                )
+            }}
+        />  
         <div className={styles.container}>     
             <h1>Лента заказов</h1>
             <div className={styles.orders}>
@@ -46,7 +74,8 @@ function OrderList() {
                     <p className={`${styles.numbers} text text_type_digits-large`}>{numbers.today}</p>
                 </div>
             </div>
-        </div> 
+        </div>
+        </> 
     )
 }
 

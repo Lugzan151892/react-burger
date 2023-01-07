@@ -11,8 +11,9 @@ import { GET_DEFAULT_INGRIDIENTS_FAILED,
         SET_CURRENT_TAB,
         ADD_ITEM_IN_BURGER,
         DELETE_ITEM_IN_BURGER,
-        MOVE_ITEM_IN_BURGER
-
+        MOVE_ITEM_IN_BURGER,
+        OPEN_ORDER_DETAILS_MODAL,
+        CLOSE_ORDER_DETAILS_MODAL
 } from "../actions/ingridients";
 
 const initialState = {
@@ -27,6 +28,9 @@ const initialState = {
     orderNumber: null,
     orderNumberRequest: false,
     orderNumberFailed: false,
+
+    orderDetailsModalVisible: false,
+    currentOrderInModal: null,
 
     ingridientModalVisible: false,
     orderModalVisible: false,
@@ -59,6 +63,11 @@ export const ingridientsReducer = (state = initialState, action) => {
             return {...state, orderModalVisible: true, bunInConstructor: null, constructorIngridients: []};
         case CLOSE_ORDER_MODAL:
             return {...state, orderModalVisible: false};
+
+        case OPEN_ORDER_DETAILS_MODAL:
+            return {...state, orderDetailsModalVisible: true, currentOrderInModal: action.item};
+        case CLOSE_ORDER_DETAILS_MODAL:
+            return {...state, orderDetailsModalVisible: false};
         
         case SET_CURRENT_TAB:
             return {...state, currentTab: action.tab};

@@ -1,7 +1,8 @@
 import AppHeader from '../AppHeader/AppHeader';
 import { useEffect } from "react";
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
-import { LoginPage, HomePage, RegisterPage, ResetPasswordPage, ForgotPasswordPage, ProfilePage, ProtectedRoute, OrderList, IngridientPage } from '../../pages';
+import {LoginPage, HomePage, RegisterPage, ResetPasswordPage, ForgotPasswordPage, 
+        ProfilePage, ProtectedRoute, OrderList, IngridientPage, OrderPage } from '../../pages';
 import styles from "./App.module.css";
 import { getDefaultIngridients } from '../../services/actions/ingridients';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 function App() {
 
   const modalVisisble = useSelector(store => store.ingridients.ingridientModalVisible);
+  const orderModalVisible = useSelector(store => store.ingridients.orderDetailsModalVisible);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,7 +37,13 @@ function App() {
           <ProtectedRoute forAuthUser={true} path="/profile"> 
             <ProfilePage/>
           </ProtectedRoute>
-          <ProtectedRoute forAuthUser={true} exact path="/order-list"> 
+          {orderModalVisible ?
+            null :
+            <ProtectedRoute forAuthUser={true} exact path="/feed/:id"> 
+              <OrderPage/>
+            </ProtectedRoute>
+          }
+          <ProtectedRoute forAuthUser={true} path="/feed"> 
             <OrderList/>
           </ProtectedRoute>
           {modalVisisble ?
@@ -43,7 +51,7 @@ function App() {
             <ProtectedRoute forAuthUser={true} exact path="/ingridients/:id"> 
               <IngridientPage/>
             </ProtectedRoute>
-          }
+          }          
             <HomePage/>
         </Switch>
       </main>    

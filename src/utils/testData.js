@@ -1,10 +1,11 @@
 const items = {
-    'number': '#034535',
-    'title': 'Death Star Starship Main бургер',
-    'time': 'Сегодня, 16:20 i-GMT+3',
-    'price': '480',
-    'status': 'Готовится',
-    'ingridients': [
+    number: '#034535',
+    _id:"60666c42cc7b410027a1a9b2",
+    title: 'Death Star Starship Main бургер',
+    time: 'Сегодня, 16:20 i-GMT+3',
+    price: '480',
+    status: 'Готовится',
+    ingridients: [
         {
             "_id":"60666c42cc7b410027a1a9b1",
             "name":"Краторная булка N-200i",
@@ -218,6 +219,6 @@ const items = {
     ]
 }
 
-const testObjects = [items, items, items, items, items, items, items, items, items]
+const testObjects = [items, {...items, "_id":"60666c42cc7b410027a1a9b3",}, {...items, "_id":"60666c42cc7b410027a1a9b4",}, {...items, "_id":"60666c42cc7b410027a1a9b5",}, {...items, "_id":"60666c42cc7b410027a1a9b6",}, {...items, "_id":"60666c42cc7b410027a1a9b7",}, {...items, "_id":"60666c42cc7b410027a1a9b8",}, {...items, "_id":"60666c42cc7b410027a1a9b9",}, {...items, "_id":"60666c42cc7b410027a1a910",}]
 
 export default testObjects;
