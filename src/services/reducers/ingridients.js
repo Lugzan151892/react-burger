@@ -13,7 +13,8 @@ import { GET_DEFAULT_INGRIDIENTS_FAILED,
         DELETE_ITEM_IN_BURGER,
         MOVE_ITEM_IN_BURGER,
         OPEN_ORDER_DETAILS_MODAL,
-        CLOSE_ORDER_DETAILS_MODAL
+        CLOSE_ORDER_DETAILS_MODAL,
+        DELETE_ORDER_FROM_STATE
 } from "../actions/ingridients";
 
 const initialState = {
@@ -68,6 +69,9 @@ export const ingridientsReducer = (state = initialState, action) => {
             return {...state, orderDetailsModalVisible: true, currentOrderInModal: action.item};
         case CLOSE_ORDER_DETAILS_MODAL:
             return {...state, orderDetailsModalVisible: false};
+        
+        case DELETE_ORDER_FROM_STATE:
+            return {...state, currentOrderInModal: null}
         
         case SET_CURRENT_TAB:
             return {...state, currentTab: action.tab};

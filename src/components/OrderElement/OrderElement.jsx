@@ -1,8 +1,17 @@
+import { useEffect } from 'react';
 import styles from './OrderElement.module.css';
+import { deleteOrderFromState } from '../../services/actions/ingridients';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useDispatch } from 'react-redux';
 
 function OrderElement ({item}) {
+
+    const dispatch = useDispatch();
             
+    useEffect(()=> {
+        return () => dispatch(deleteOrderFromState())
+    })
+
     return (
         <div className={styles.order_element_container}>            
             <p className={`${styles.order_number} text text_type_digits-default mb-10`}>{item.number}</p>
@@ -18,7 +27,7 @@ function OrderElement ({item}) {
                             <p className="text text_type_main-default ml-4">{el.name}</p>
                         </div>
                         <div className={`${styles.order_ingridient_price} ml-4`}>
-                            <p className="text text_type_digits-default mr-1">{el.price}</p>
+                            <p className="text text_type_digits-default mr-2">{el.price}</p>
                             <CurrencyIcon type="primary" />
                         </div>
                     </div>
@@ -28,7 +37,7 @@ function OrderElement ({item}) {
             <div className={`${styles.order_ingridient_time} mt-10`}>
                 <p className="text text_type_main-small text_color_inactive">Вчера, 13:50 i-GMT+3</p>
                 <div className={styles.order_ingridient_price}>
-                    <p className="text text_type_digits-default">3000</p>
+                    <p className="text text_type_digits-default mr-2">3000</p>
                     <CurrencyIcon type="primary" />
                 </div>
             </div>

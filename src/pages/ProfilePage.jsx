@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { logout, changeUserData } from '../services/actions/user';
 import { getCookie, deleteCookie, checkIsChanged } from '../utils/data';
 import testObjects from '../utils/testData';
+import { WS_CONNECTION_START } from '../services/actions/wsActions';
 
 function ProfilePage() {
     const { email, name } = useSelector(store => store.user.user);
@@ -41,6 +42,10 @@ function ProfilePage() {
         setIsChanged(checkIsChanged(defaultData, compareData));
     }, [emailValue, nameValue, passwordValue]);
 
+    useEffect(() => {        
+        dispatch({ type: WS_CONNECTION_START, payload: `wss://norma.nomoreparties.space/orders?token=${accessToken.split('Bearer ')[1]}` })
+    }, [])
+
     const onResetHandle = () => {
         setEmailValue(email);
         setNameValue(name);
@@ -65,6 +70,7 @@ function ProfilePage() {
     }
 
     return (
+        <>                   
         <div className={styles.container}>
             <div className={styles.profile}>
                 <div className={'mr-15 ' + styles.nav}>
@@ -99,12 +105,12 @@ function ProfilePage() {
                 {matchOrderList ?
                     <Route 
                         path={`${path}/profile/orders`}
-                        children={() => {
+                        children={() => {                            
                             return (                            
                                 <div className={styles.order_list}>
                                     {
                                         testObjects.map((el, index)=>(
-                                            <OrderListElement status={true} item={el} key={index}/>
+                                            <OrderListElement status={true} item={el} isProfile={true} key={index}/>
                                         ))
                                     }   
                                 </div>
@@ -158,6 +164,7 @@ function ProfilePage() {
                 }
             </div>            
         </div>
+    </>
     )
 }
 

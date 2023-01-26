@@ -17,6 +17,7 @@ export const DELETE_ITEM_IN_BURGER = 'DELETE_ITEM_IN_BURGER';
 export const MOVE_ITEM_IN_BURGER = 'MOVE_ITEM_IN_BURGER';
 export const OPEN_ORDER_DETAILS_MODAL = 'OPEN_ORDER_DETAILS_MODAL';
 export const CLOSE_ORDER_DETAILS_MODAL = 'CLOSE_ORDER_DETAILS_MODAL';
+export const DELETE_ORDER_FROM_STATE = 'DELETE_ORDER_FROM_STATE';
 
 const nanoid = customAlphabet('1234567890', 15);
 
@@ -120,6 +121,11 @@ export function moveItemInBurger(dragItem, dropItem) {
         type: MOVE_ITEM_IN_BURGER,
         dragItem,
         dropItem
+    }
+}
+export function deleteOrderFromState() {
+    return {
+        type: DELETE_ORDER_FROM_STATE,
     }
 }
 

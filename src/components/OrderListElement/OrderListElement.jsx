@@ -1,17 +1,22 @@
 import { openOrderDetailsModal } from '../../services/actions/ingridients';
 import styles from './OrderListElement.module.css';
+import { useHistory } from 'react-router-dom';
 import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch } from 'react-redux';
 
-function OrderListElement({ item, status }) {
 
+function OrderListElement({ item, status, isProfile }) {
     const dispatch = useDispatch();
+    const history = useHistory();   
     const ingridientsList = item.ingridients.slice(0, 5);
     const extraItem = item.ingridients[5];
     const amountOfExtraElements = item.ingridients.slice(5, item.ingridients.length).length;
 
     const openModal = () => {
         dispatch(openOrderDetailsModal(item));
+        if(isProfile) {
+            history.replace({ pathname: `orders/${item._id}` });
+        }
     }
     
     return (

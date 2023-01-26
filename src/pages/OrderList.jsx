@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, useRouteMatch, useHistory } from 'react-router-dom';
 import testObjects from "../utils/testData";
+import { useEffect } from 'react';
 import styles from './OrderList.module.css';
 import Modal from "../components/Modal/Modal";
 import { closeOrderDetailsModal } from '../services/actions/ingridients';
@@ -20,6 +21,25 @@ function OrderList() {
     const { path } = useRouteMatch();
     
     const orderModalVisible = useSelector(store => store.ingridients.orderDetailsModalVisible);
+    
+    const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
+    useEffect(() => {
+        try {
+            const ws = new WebSocket(wsUrl);
+
+            ws.onopen = (e) => {
+                console.log("[open] Соединение установлено");
+                console.log("Отправляем данные на сервер");
+            };
+            ws.onmessage = (e) => {
+                console.log("Получено сообщение");
+                console.log(e.data)
+            }
+        } catch {
+            console.error();
+        }
+        
+    })
 
     function closeModal() {
         dispatch(closeOrderDetailsModal());
