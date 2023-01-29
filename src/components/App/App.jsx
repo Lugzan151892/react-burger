@@ -7,6 +7,7 @@ import styles from "./App.module.css";
 import { WS_CONNECTION_START } from '../../services/actions/wsActions';
 import { getDefaultIngridients } from '../../services/actions/ingridients';
 import { useDispatch, useSelector } from 'react-redux';
+import { wsConnectionSuccess } from '../../services/actions/wsActions';
 
 function App() {
   const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
@@ -16,8 +17,9 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {    
-    dispatch(getDefaultIngridients('ingredients'));
+    // dispatch(getDefaultIngridients('ingredients'));
     dispatch({ type: WS_CONNECTION_START });
+    // dispatch(wsConnectionSuccess())
   }, [])
 
   return ( 
