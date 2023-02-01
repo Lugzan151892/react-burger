@@ -1,12 +1,15 @@
-import { NavLink, useRouteMatch, Route } from 'react-router-dom';
+import { NavLink, useRouteMatch, Route, useHistory } from 'react-router-dom';
 import { Input, PasswordInput, EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Pages.module.css';
 import OrderListElement from '../components/OrderListElement/OrderListElement';
+import Modal from "../components/Modal/Modal";
+import OrderModal from '../components/OrderModal/OrderModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { logout, changeUserData } from '../services/actions/user';
 import { getCookie, deleteCookie, checkIsChanged } from '../utils/data';
-import { WS_CONNECTION_START } from '../services/actions/wsActions';
+import { WS_CONNECTION_CLOSED, WS_CONNECTION_START } from '../services/actions/wsActions';
+import { closeOrderDetailsModal } from '../services/actions/ingridients';
 
 function ProfilePage() {
     const { email, name } = useSelector(store => store.user.user);
@@ -19,7 +22,8 @@ function ProfilePage() {
     const defaultData = [email, name, ''];
     const compareData = [emailValue, nameValue, passwordValue];
     const ordersList = useSelector(store => store.orders.allOrders);
-
+    const orderModalVisible = useSelector(store => store.ingridients.orderDetailsModalVisible);
+    const history = useHistory();
     const { path } = useRouteMatch();
 
     const matchOrderList = useRouteMatch({
@@ -44,6 +48,7 @@ function ProfilePage() {
 
     useEffect(() => {        
         dispatch({ type: WS_CONNECTION_START, payload: `wss://norma.nomoreparties.space/orders?token=${accessToken.split('Bearer ')[1]}` })
+        return () => dispatch({type: WS_CONNECTION_CLOSED});
     }, [])
 
     const onResetHandle = () => {
@@ -69,8 +74,24 @@ function ProfilePage() {
         deleteCookie('token');
     }
 
+    function closeModal() {
+        dispatch(closeOrderDetailsModal());
+        history.replace({ pathname: `/profile/orders` });
+    }
+
     return (
-        <>                   
+        <>   
+        <Route 
+            path={`${path}/orders/:id`} 
+            children={() => {
+                return (
+                    orderModalVisible &&
+                    <Modal closeModal={closeModal}>
+                        <OrderModal isProfile={true} />
+                    </Modal>
+                )
+            }}
+        />                          
         <div className={styles.container}>
             <div className={styles.profile}>
                 <div className={'mr-15 ' + styles.nav}>

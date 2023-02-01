@@ -1,17 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, useRouteMatch, useHistory } from 'react-router-dom';
-import { useEffect } from "react";
 import styles from './OrderList.module.css';
 import Modal from "../components/Modal/Modal";
 import { closeOrderDetailsModal } from '../services/actions/ingridients';
 import OrderListElement from "../components/OrderListElement/OrderListElement";
 import OrderModal from '../components/OrderModal/OrderModal';
-import { WS_CONNECTION_START } from '../services/actions/wsActions';
-const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
 
 function OrderList() {   
     const totalOrders = useSelector(store => store.orders.total);
     const totalToday = useSelector(store => store.orders.totalToday);
+    const isUserAuth = useSelector(store => store.user.userIsAuth);
     const allOrders = useSelector(store => store.orders.allOrders);
     const readyOrders = useSelector(store => store.orders.readyOrders);
     const preparingOrders = useSelector(store => store.orders.preparingOrders);
@@ -22,10 +20,6 @@ function OrderList() {
     
     const orderModalVisible = useSelector(store => store.ingridients.orderDetailsModalVisible);
 
-    useEffect(()=> {
-        dispatch({ type: WS_CONNECTION_START, payload: wsUrl });
-    }, [])
-
     function closeModal() {
         dispatch(closeOrderDetailsModal());
         history.replace({ pathname: `/feed` });
@@ -33,6 +27,7 @@ function OrderList() {
 
     return (
         <>
+        {orderModalVisible ?
         <Route 
             path={`${path}/feed/:id`} 
             children={() => {
@@ -43,12 +38,16 @@ function OrderList() {
                     </Modal>
                 )
             }}
-        />  
+        /> : null}
         <div className={styles.container}>     
             <h1>Лента заказов</h1>
             <div className={styles.orders}>
                 <div className={`${styles.orderlist} mr-15`}>
                     {
+                        isUserAuth ? 
+                        allOrders.reverse().map(el => (
+                            <OrderListElement isProfile={false} item={el} key={el._id}/>
+                        )) :
                         allOrders.map(el => (
                             <OrderListElement isProfile={false} item={el} key={el._id}/>
                         ))

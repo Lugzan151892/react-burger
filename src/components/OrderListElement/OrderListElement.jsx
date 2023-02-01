@@ -1,6 +1,6 @@
 import { openOrderDetailsModal } from '../../services/actions/ingridients';
 import styles from './OrderListElement.module.css';
-import { useHistory } from 'react-router-dom';
+import { useHistory} from 'react-router-dom';
 import {CurrencyIcon, FormattedDate} from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -18,7 +18,9 @@ function OrderListElement({ item, isProfile }) {
         dispatch(openOrderDetailsModal(item));
         if(isProfile) {
             history.replace({ pathname: `orders/${item._id}` });
-        } 
+        } else {
+            history.replace({ pathname: `feed/${item._id}` });
+        }
     }
 
     useEffect(() => {
@@ -53,11 +55,11 @@ function OrderListElement({ item, isProfile }) {
                 <div className={styles.images}>
                     {ingredientsInOrder ? ingredientsInOrder.slice(0, 5).map((ingredient, index) => ( 
                         ingredient &&                      
-                        <img className={styles.image} style={{ left:`-${index*48}px`, zIndex:`${5-index}`}} alt={ingredient.name} src={ingredient.image} key={index}/>
+                        <img className={styles.image} style={{ left:`-${index*20}px`, zIndex:`${5-index}`}} alt={ingredient.name} src={ingredient.image} key={index}/>
                     )) : null}
                     {
                         ingredientsInOrder && ingredientsInOrder[5] ? (
-                            <div className={styles.extra_image_container} style={{left:`-${5*48}px`, zIndex:'0'}}>
+                            <div className={styles.extra_image_container} style={{left:`-${5*20}px`, zIndex:'0'}}>
                                 <div className={styles.extra_number}>{`+${amountOfExtraElements}`}</div>
                                 <img className={styles.extra_image} src={ingredientsInOrder[5].image_mobile} alt={ingredientsInOrder[5].name}/>
                             </div>

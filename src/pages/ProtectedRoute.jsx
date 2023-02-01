@@ -14,6 +14,7 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
     const isUserAuth = useSelector(store => store.user.userIsAuth); 
     const dispatch = useDispatch();
     const isRequest = useSelector(store => store.user.userDataRequest);
+    const itIsForNotAuthOnly = (path === '/register') || (path === '/forgot-password') || (path === '/reset-password') || (path === '/login');
 
 
     useEffect(()=> {      
@@ -27,16 +28,16 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
 
     if(isRequest) return (
         <div className={styles.loading_container}>
-        <img src={loading} className={styles.loading_image} alt="loading" />
+            <img src={loading} className={styles.loading_image} alt="loading" />
         </div>
     );
 
-    if(forAuthUser) return (       
+    if(forAuthUser) {return (       
         <Route
             {...rest}
             render={({ location }) =>
                 isUserAuth ? (
-                children
+                    children
                 ) : (
                     <Redirect                        
                         to={{                            
@@ -47,19 +48,17 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
                     )
             }
         />
-    )
-
-    if(!forAuthUser) {
+    )} else {
         return (
             <Route
             {...rest}
             render={() =>
-                !isUserAuth ? (
-                children
-                ) : (
+                itIsForNotAuthOnly && isUserAuth ? (
                     <Redirect                        
                         to={ state?.from || '/' }
                     />
+                ) : (
+                    children
                 )
             }
         />

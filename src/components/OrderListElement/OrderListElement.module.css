@@ -23,6 +23,11 @@
     top: 0px;
     width: 64px;
     height: 64px;
+    box-sizing: border-box;
+    background: linear-gradient(#131316, #131316) padding-box,
+                linear-gradient(to right, darkblue, darkorchid) border-box;
+    border-radius: 100px;
+    border: 3px solid transparent;
 }
 .price {
     display: flex;
@@ -32,19 +37,32 @@
     position: inherit;
     top: 0px;
     width: 64px;
-    height: 64px;
+    height: 64px;    
 }
 .extra_image {
+    position: absolute;
+    z-index: -1;    
+    box-sizing: border-box;
     width: 64px;
     height: 64px;
+    background: linear-gradient(#131316, #131316) padding-box,
+                linear-gradient(to right, darkblue, darkorchid) border-box;
+    border-radius: 100px;
+    border: 3px solid transparent;
 }
 .extra_number {
     position: absolute;
-    width: 100%;
-    min-height: 100%;
+    width: 64px;
+    min-height: 64px;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 100px;
+    background: #1C1C21;
+    opacity: 0.6;
 }
 
 .done {

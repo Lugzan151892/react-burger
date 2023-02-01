@@ -42,7 +42,7 @@ export const wsReducer = (state = initialState, action) => {
                 error: undefined,
                 total: action.payload.total,
                 totalToday: action.payload.totalToday,
-                allOrders: [...action.payload.orders],
+                allOrders: action.payload.orders,
                 readyOrders: [...action.payload.orders.filter(el => el.status === 'done')],
                 preparingOrders: [...action.payload.orders.filter(el => el.status === 'pending')]
 

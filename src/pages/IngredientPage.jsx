@@ -1,14 +1,23 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import { useParams } from 'react-router-dom';
-import styles from './Pages.module.css'
+import styles from './Pages.module.css';
+import { getDefaultIngridients } from "../services/actions/ingridients";
 
 function IngridientPage () {
-
+    const dispatch = useDispatch();
     const itemsList = useSelector(store => store.ingridients.defaultIngridients);
     const { id } = useParams();
     const item = itemsList.find(el => el._id === id);
 
+    useEffect(()=> {
+        if(itemsList.length === 0){
+            dispatch(getDefaultIngridients('ingredients'));
+        }        
+    }, [])
+
     return (
+        item ?
         <div className={styles.ingridient_container}>            
             <h2 className='text text_type_main-large'>Детали ингредиента</h2>            
             <img src={item.image_large} alt={item.name} />
@@ -31,7 +40,7 @@ function IngridientPage () {
                     <p className="text text_type_digits-default text_color_inactive mt-2">{item.carbohydrates}</p>
                 </div>
             </div>
-        </div>
+        </div> : null
     )
 }
 

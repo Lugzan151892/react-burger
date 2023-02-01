@@ -30,6 +30,11 @@
 .order_ingridient_image {
     width: 64px;
     height: 64px;
+    box-sizing: border-box;
+    background: linear-gradient(#131316, #131316) padding-box,
+                linear-gradient(to right, darkblue, darkorchid) border-box;
+    border-radius: 100px;
+    border: 3px solid transparent;
 }
 .order_ingridient_name {
     display: flex;
@@ -40,4 +45,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+.done {
+    color: rgba(0, 204, 204, 1);
 }
