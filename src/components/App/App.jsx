@@ -4,22 +4,17 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import {LoginPage, HomePage, RegisterPage, ResetPasswordPage, ForgotPasswordPage, 
         ProfilePage, ProtectedRoute, OrderList, IngridientPage, OrderPage } from '../../pages';
 import styles from "./App.module.css";
-import { WS_CONNECTION_START } from '../../services/actions/wsActions';
 import { getDefaultIngridients } from '../../services/actions/ingridients';
 import { useDispatch, useSelector } from 'react-redux';
-import { wsConnectionSuccess } from '../../services/actions/wsActions';
 
 function App() {
-  const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
   const modalVisisble = useSelector(store => store.ingridients.ingridientModalVisible);
   const isCurrentOrder = useSelector(store => store.ingridients.currentOrderInModal);
   const orderModalVisible = useSelector(store => store.ingridients.orderDetailsModalVisible);
   const dispatch = useDispatch();
 
   useEffect(() => {    
-    // dispatch(getDefaultIngridients('ingredients'));
-    dispatch({ type: WS_CONNECTION_START });
-    // dispatch(wsConnectionSuccess())
+    dispatch(getDefaultIngridients('ingredients'));
   }, [])
 
   return ( 

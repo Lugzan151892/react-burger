@@ -42,11 +42,14 @@ const BurgerConstructor = () =>{
             return;
         }
         const orderList = [];
+        orderList.push(bunInBurger._id);
         elementsInBurger.forEach(element => {
             orderList.push(element._id)
         });
+        orderList.push(bunInBurger._id);
         dispatch({type: OPEN_ORDER_MODAL});
         dispatch(getOrderNumber('orders', orderList, accessToken));
+        console.log(orderList);
     }
     
     const price = bunInBurger ? bunInBurger.price * 2 : 0;

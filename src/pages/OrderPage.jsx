@@ -1,11 +1,13 @@
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import OrderElement from "../components/OrderElement/OrderElement";
-import testObjects from "../utils/testData";
 
 function OrderPage () {
+
+    const allOrders = useSelector(store => store.orders.allOrders)
     
     const { id } = useParams();
-    const item = testObjects.find(el => el._id === id);
+    const item = allOrders.find(el => el._id === id);
     
     return (
         <div>            

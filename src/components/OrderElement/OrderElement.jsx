@@ -1,27 +1,40 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './OrderElement.module.css';
-import { deleteOrderFromState } from '../../services/actions/ingridients';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useSelector } from 'react-redux';
 
 function OrderElement ({item}) {
 
-    const dispatch = useDispatch();
+    const ordersList = useSelector(store => store.orders.allOrders);
+    const { id } = useParams();
+    const currentOrder = item ? item : ordersList.find(el => el._id === id);
+    const allIngredients = useSelector(store => store.ingridients.defaultIngridients);
+    const [ingredientsInOrder, setIngredientsInOrder] = useState(null);
+    const [totalOrderPrice, setTotalOrderPrice] = useState(0);
             
     useEffect(()=> {
-        return () => dispatch(deleteOrderFromState())
-    })
+        let newArray = [];        
+        currentOrder.ingredients.forEach(el => {
+            newArray.push(allIngredients.find(element => element._id === el));
+        });
+        let totalPrice = newArray.reduce((acc, cur)=> acc + cur.price, 0);
+        setTotalOrderPrice(totalPrice);
+        setIngredientsInOrder(newArray);      
+    }, [ordersList]);
 
-    return (
+    if(!currentOrder) return null;
+    
+    return (        
         <div className={styles.order_element_container}>            
-            <p className={`${styles.order_number} text text_type_digits-default mb-10`}>{item.number}</p>
-            <p className="text text_type_main-medium mb-3">{item.title}</p>
-            <p className="text text_type_main-small mb-15">{item.status}</p>
+            <p className={`${styles.order_number} text text_type_digits-default mb-10`}>{currentOrder.number}</p>
+            <p className="text text_type_main-medium mb-3">{currentOrder.name}</p>
+            <p className="text text_type_main-small mb-15">{currentOrder.status}</p>
             <p className="text_type_main-medium mb-6">Состав:</p>
             <div className={styles.order_ingridients_container}>
             {
-                item.ingridients.map((el) => (
-                    <div className={`${styles.order_ingridient} mr-6`} key={el._id}>
+                ingredientsInOrder ? ingredientsInOrder.map((el, index) => (
+                    <div className={`${styles.order_ingridient} mr-6`} key={index}>
                         <div className={styles.order_ingridient_name}>
                             <img className={styles.order_ingridient_image} src={el.image_mobile} alt={el.name} />
                             <p className="text text_type_main-default ml-4">{el.name}</p>
@@ -31,13 +44,15 @@ function OrderElement ({item}) {
                             <CurrencyIcon type="primary" />
                         </div>
                     </div>
-                ))
+                )) : null
             }                
             </div>
             <div className={`${styles.order_ingridient_time} mt-10`}>
-                <p className="text text_type_main-small text_color_inactive">Вчера, 13:50 i-GMT+3</p>
+                <p className="text text_type_main-small text_color_inactive">
+                    <FormattedDate date={new Date(currentOrder.createdAt)}/>
+                </p>
                 <div className={styles.order_ingridient_price}>
-                    <p className="text text_type_digits-default mr-2">3000</p>
+                    <p className="text text_type_digits-default mr-2">{totalOrderPrice}</p>
                     <CurrencyIcon type="primary" />
                 </div>
             </div>

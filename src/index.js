@@ -2,8 +2,7 @@ import React from "react";
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import thunk from 'redux-thunk';
-import { configureStore } from "@reduxjs/toolkit";
-import { createStore, compose, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from 'react-redux';
 import { rootReducer } from "./services/reducers";
@@ -21,23 +20,11 @@ const wsActions = {
   onMessage: WS_GET_MESSAGE
 };
 
-const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
-// const composeEnhancers =
-//   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-//     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-//     : compose; 
-
-// const store = configureStore({
-//   reducer: rootReducer,
-//   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk, socketMiddleware(wsUrl)),
-// });
-
-// const enhancer = composeEnhancers(applyMiddleware(thunk, socketMiddleware(wsUrl)));
 const initialState = {};
 const store = createStore(
   rootReducer,
   initialState,
-  composeWithDevTools(applyMiddleware(thunk, socketMiddleware(wsUrl, wsActions)))
+  composeWithDevTools(applyMiddleware(thunk, socketMiddleware(wsActions)))
 );
 
 const root = ReactDOM.createRoot(

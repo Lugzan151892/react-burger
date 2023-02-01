@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { logout, changeUserData } from '../services/actions/user';
 import { getCookie, deleteCookie, checkIsChanged } from '../utils/data';
-import testObjects from '../utils/testData';
 import { WS_CONNECTION_START } from '../services/actions/wsActions';
 
 function ProfilePage() {
@@ -19,6 +18,7 @@ function ProfilePage() {
     const [passwordValue, setPasswordValue] = useState('');
     const defaultData = [email, name, ''];
     const compareData = [emailValue, nameValue, passwordValue];
+    const ordersList = useSelector(store => store.orders.allOrders);
 
     const { path } = useRouteMatch();
 
@@ -109,8 +109,8 @@ function ProfilePage() {
                             return (                            
                                 <div className={styles.order_list}>
                                     {
-                                        testObjects.map((el, index)=>(
-                                            <OrderListElement status={true} item={el} isProfile={true} key={index}/>
+                                        ordersList.reverse().map((el, index)=>(
+                                            <OrderListElement item={el} isProfile={true} key={index}/>
                                         ))
                                     }   
                                 </div>

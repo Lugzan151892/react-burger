@@ -30,6 +30,9 @@
 .orders_container {
     width: 280px;
 }
+.orders__numbersList {
+    display: flex;
+}
 .orders_numbers {
     display: flex;
 }
