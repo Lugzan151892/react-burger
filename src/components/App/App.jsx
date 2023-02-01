@@ -60,17 +60,7 @@ function App() {
           </ProtectedRoute>
           <ProtectedRoute forAuthUser={true} path="/profile/orders"> 
             <ProfilePage/>
-          </ProtectedRoute>
-
-
-          {/* {orderModalVisible ?            
-            <ProtectedRoute forAuthUser={true} path="/profile/orders/:id"> 
-              <OrderPage/>
-            </ProtectedRoute> :
-            <ProtectedRoute forAuthUser={true} path="/profile"> 
-              <ProfilePage/>
-            </ProtectedRoute>
-          } */}
+          </ProtectedRoute>          
           {orderModalVisible ?
             null :
             <ProtectedRoute forAuthUser={true} exact path="/feed/:id"> 
