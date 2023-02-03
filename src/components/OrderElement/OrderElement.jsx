@@ -2,16 +2,36 @@ import { useEffect, useState } from 'react';
 import styles from './OrderElement.module.css';
 import { useParams } from 'react-router-dom';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { wsConnectionStart, wsConnectionClosed } from '../../services/actions/wsActions';
+import { wsUrl } from '../../utils/data';
 
 function OrderElement ({item}) {
-
+    const dispatch = useDispatch();
     const ordersList = useSelector(store => store.orders.allOrders);
+    const accessToken = useSelector(store => store.user.accessToken);
     const { id } = useParams();
+    const isUserAuth = useSelector(store => store.user.userIsAuth);
+    const wsConnected = useSelector(store => store.orders.wsConnected);
     const currentOrder = item ? item : ordersList.find(el => el._id === id);
     const allIngredients = useSelector(store => store.ingridients.defaultIngridients);
     const [ingredientsInOrder, setIngredientsInOrder] = useState(null);
     const [totalOrderPrice, setTotalOrderPrice] = useState(0);
+
+    useEffect(() => {   
+        if(isUserAuth) {
+            if(wsConnected) {
+                dispatch(wsConnectionClosed());
+            }
+            dispatch(wsConnectionStart(`${wsUrl}?token=${accessToken.split('Bearer ')[1]}`));
+        } else {
+            if(wsConnected) {
+                dispatch(wsConnectionClosed());
+            }
+            dispatch(wsConnectionStart(`${wsUrl}/all`));
+        } 
+        return ()=> wsConnectionClosed();      
+    }, [isUserAuth]);
             
     useEffect(()=> {        
         if(currentOrder){   

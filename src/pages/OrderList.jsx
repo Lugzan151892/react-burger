@@ -1,10 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from "react";
 import { Route, useRouteMatch, useHistory } from 'react-router-dom';
 import styles from './OrderList.module.css';
 import Modal from "../components/Modal/Modal";
 import { closeOrderDetailsModal } from '../services/actions/ingridients';
 import OrderListElement from "../components/OrderListElement/OrderListElement";
 import OrderModal from '../components/OrderModal/OrderModal';
+import { wsConnectionStart, wsConnectionClosed } from '../services/actions/wsActions';
+import { wsUrl } from '../utils/data';
 
 function OrderList() {   
     const totalOrders = useSelector(store => store.orders.total);
@@ -13,12 +16,28 @@ function OrderList() {
     const allOrders = useSelector(store => store.orders.allOrders);
     const readyOrders = useSelector(store => store.orders.readyOrders);
     const preparingOrders = useSelector(store => store.orders.preparingOrders);
-
+    const wsConnected = useSelector(store => store.orders.wsConnected);
+    const accessToken = useSelector(store => store.user.accessToken);
     const dispatch = useDispatch();
     const history = useHistory();
     const { path } = useRouteMatch();
     
     const orderModalVisible = useSelector(store => store.ingridients.orderDetailsModalVisible);
+
+    useEffect(() => {   
+        if(isUserAuth) {
+            if(wsConnected) {
+                dispatch(wsConnectionClosed());
+            }
+            dispatch(wsConnectionStart(`${wsUrl}?token=${accessToken.split('Bearer ')[1]}`));
+        } else {
+            if(wsConnected) {
+                dispatch(wsConnectionClosed());
+            }
+            dispatch(wsConnectionStart(`${wsUrl}/all`));
+        }  
+        return ()=> wsConnectionClosed();      
+    }, [isUserAuth]);
 
     function closeModal() {
         dispatch(closeOrderDetailsModal());

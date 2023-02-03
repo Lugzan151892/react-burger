@@ -6,31 +6,15 @@ import {LoginPage, HomePage, RegisterPage, ResetPasswordPage, ForgotPasswordPage
 import styles from "./App.module.css";
 import { getDefaultIngridients } from '../../services/actions/ingridients';
 import { useDispatch, useSelector } from 'react-redux';
-import { WS_CONNECTION_START, WS_CONNECTION_CLOSED } from '../../services/actions/wsActions';
 
 function App() {
-  const wsUrl = 'wss://norma.nomoreparties.space/orders';
   const modalVisisble = useSelector(store => store.ingridients.ingridientModalVisible);
   const orderModalVisible = useSelector(store => store.ingridients.orderDetailsModalVisible);
   const dispatch = useDispatch();
-  const isUserAuth = useSelector(store => store.user.userIsAuth);
-  const accessToken = useSelector(store => store.user.accessToken);
-  const wsConnected = useSelector(store => store.orders.wsConnected);
 
-  useEffect(() => {   
-    if(isUserAuth) {
-      if(wsConnected) {
-        dispatch({type: WS_CONNECTION_CLOSED})
-      }
-      dispatch({ type: WS_CONNECTION_START, payload: `${wsUrl}?token=${accessToken.split('Bearer ')[1]}`});
-    } else {
-      if(wsConnected) {
-        dispatch({type: WS_CONNECTION_CLOSED})
-      }
-      dispatch({ type: WS_CONNECTION_START, payload: `${wsUrl}/all` });
-    }
+  useEffect(() => {
     dispatch(getDefaultIngridients('ingredients'));
-  }, [isUserAuth]);
+  }, []);
 
   return ( 
     <Router>    
@@ -48,7 +32,7 @@ function App() {
           </ProtectedRoute>
           <ProtectedRoute forAuthUser={false} exact path="/reset-password">
             <ResetPasswordPage/> 
-          </ProtectedRoute>          
+          </ProtectedRoute> 
           {orderModalVisible ? 
             null :           
             <ProtectedRoute forAuthUser={true} path="/profile/orders/:id"> 
@@ -63,7 +47,7 @@ function App() {
           </ProtectedRoute>          
           {orderModalVisible ?
             null :
-            <ProtectedRoute forAuthUser={true} exact path="/feed/:id"> 
+            <ProtectedRoute forAuthUser={false} exact path="/feed/:id"> 
               <OrderPage/>
             </ProtectedRoute>
           }

@@ -1,20 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from 'react-router-dom';
 import styles from './Pages.module.css';
-import { getDefaultIngridients } from "../services/actions/ingridients";
 
 function IngridientPage () {
-    const dispatch = useDispatch();
     const itemsList = useSelector(store => store.ingridients.defaultIngridients);
     const { id } = useParams();
     const item = itemsList.find(el => el._id === id);
-
-    useEffect(()=> {
-        if(itemsList.length === 0){
-            dispatch(getDefaultIngridients('ingredients'));
-        }        
-    }, [])
 
     return (
         item ?

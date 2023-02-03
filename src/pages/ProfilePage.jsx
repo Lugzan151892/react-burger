@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { logout, changeUserData } from '../services/actions/user';
 import { getCookie, deleteCookie, checkIsChanged } from '../utils/data';
-import { WS_CONNECTION_CLOSED, WS_CONNECTION_START } from '../services/actions/wsActions';
+import { wsConnectionStart, wsConnectionClosed } from '../services/actions/wsActions';
 import { closeOrderDetailsModal } from '../services/actions/ingridients';
 
 function ProfilePage() {
@@ -47,8 +47,8 @@ function ProfilePage() {
     }, [emailValue, nameValue, passwordValue]);
 
     useEffect(() => {        
-        dispatch({ type: WS_CONNECTION_START, payload: `wss://norma.nomoreparties.space/orders?token=${accessToken.split('Bearer ')[1]}` })
-        return () => dispatch({type: WS_CONNECTION_CLOSED});
+        dispatch(wsConnectionStart(`wss://norma.nomoreparties.space/orders?token=${accessToken.split('Bearer ')[1]}`));
+        return () => dispatch(wsConnectionClosed());
     }, [])
 
     const onResetHandle = () => {

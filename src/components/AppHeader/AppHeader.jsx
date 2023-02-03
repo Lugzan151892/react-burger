@@ -1,9 +1,9 @@
-import styles from './AppHeader.module.css'
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import styles from './AppHeader.module.css';
+import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
 import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 
 function AppHeader() {
-
+    const history = useHistory();
     const matchOrder = useRouteMatch({
         path: "/feed",
     });
@@ -19,8 +19,12 @@ function AppHeader() {
     return (
         <header className={styles.header} >
             <nav className={styles.nav}>
-                <div className={styles.logo}>
-                    <Logo />
+                <div className={styles.logo}
+                    onClick={() => {                        
+                        history.replace({ pathname: `/` })
+                    }}
+                >
+                    <Logo/>
                 </div>
                 <ul className={styles.menu}>
                     <li className={styles.list}>

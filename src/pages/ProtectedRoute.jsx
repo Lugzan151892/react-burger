@@ -5,17 +5,16 @@ import { getCookie } from '../utils/data';
 import { updateAuthToken } from '../services/actions/user';
 import styles from './Pages.module.css';
 import loading from '../images/loading-gif.gif';
+import { notForAuthUsers } from '../utils/data';
 
 function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
-
     const history = useHistory();
     const { state } = history.location;
 
     const isUserAuth = useSelector(store => store.user.userIsAuth); 
     const dispatch = useDispatch();
     const isRequest = useSelector(store => store.user.userDataRequest);
-    const itIsForNotAuthOnly = (path === '/register') || (path === '/forgot-password') || (path === '/reset-password') || (path === '/login');
-
+    const itIsForNotAuthOnly = notForAuthUsers.some((el) => el === path);
 
     useEffect(()=> {      
         const token = getCookie('token');
@@ -31,7 +30,7 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
             <img src={loading} className={styles.loading_image} alt="loading" />
         </div>
     );
-
+    
     if(forAuthUser) {return (       
         <Route
             {...rest}
@@ -48,7 +47,7 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
                     )
             }
         />
-    )} else {
+    )} else {        
         return (
             <Route
             {...rest}
@@ -62,7 +61,7 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
                 )
             }
         />
-        )
+        ) 
     }  
 }
 

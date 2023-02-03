@@ -15,6 +15,7 @@ const elementPropTypes = {
 }
 
 const API_URL = 'https://norma.nomoreparties.space/api';
+const wsUrl = 'wss://norma.nomoreparties.space/orders';
 
 function checkResponse(res) {
     if (res.ok) {
@@ -71,4 +72,6 @@ function deleteCookie(name) {
   })
 }
 
-export {elementPropTypes, request, getCookie, API_URL, setCookie, deleteCookie, checkIsChanged};
+const notForAuthUsers = ['/register', '/forgot-password', '/reset-password', '/login'];
+
+export {elementPropTypes, request, getCookie, API_URL, wsUrl, setCookie, deleteCookie, checkIsChanged, notForAuthUsers};
