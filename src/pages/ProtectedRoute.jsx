@@ -5,16 +5,16 @@ import { getCookie } from '../utils/data';
 import { updateAuthToken } from '../services/actions/user';
 import styles from './Pages.module.css';
 import loading from '../images/loading-gif.gif';
+import { notForAuthUsers } from '../utils/data';
 
 function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
-
     const history = useHistory();
     const { state } = history.location;
 
     const isUserAuth = useSelector(store => store.user.userIsAuth); 
     const dispatch = useDispatch();
     const isRequest = useSelector(store => store.user.userDataRequest);
-
+    const itIsForNotAuthOnly = notForAuthUsers.some((el) => el === path);
 
     useEffect(()=> {      
         const token = getCookie('token');
@@ -27,16 +27,16 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
 
     if(isRequest) return (
         <div className={styles.loading_container}>
-        <img src={loading} className={styles.loading_image} alt="loading" />
+            <img src={loading} className={styles.loading_image} alt="loading" />
         </div>
     );
-
-    if(forAuthUser) return (       
+    
+    if(forAuthUser) {return (       
         <Route
             {...rest}
             render={({ location }) =>
                 isUserAuth ? (
-                children
+                    children
                 ) : (
                     <Redirect                        
                         to={{                            
@@ -47,23 +47,21 @@ function ProtectedRoute ({children, path, forAuthUser, ...rest}) {
                     )
             }
         />
-    )
-
-    if(!forAuthUser) {
+    )} else {        
         return (
             <Route
             {...rest}
             render={() =>
-                !isUserAuth ? (
-                children
-                ) : (
+                itIsForNotAuthOnly && isUserAuth ? (
                     <Redirect                        
                         to={ state?.from || '/' }
                     />
+                ) : (
+                    children
                 )
             }
         />
-        )
+        ) 
     }  
 }
 

@@ -15,6 +15,7 @@ const elementPropTypes = {
 }
 
 const API_URL = 'https://norma.nomoreparties.space/api';
+const wsUrl = 'wss://norma.nomoreparties.space/orders';
 
 function checkResponse(res) {
     if (res.ok) {
@@ -36,6 +37,7 @@ function checkIsChanged(arr1, arr2) {
 
 function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
+      // eslint-disable-next-line
       "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
     ));
     return matches ? decodeURIComponent(matches[1]) : undefined;
@@ -70,4 +72,6 @@ function deleteCookie(name) {
   })
 }
 
-export {elementPropTypes, request, getCookie, API_URL, setCookie, deleteCookie, checkIsChanged};
+const notForAuthUsers = ['/register', '/forgot-password', '/reset-password', '/login'];
+
+export {elementPropTypes, request, getCookie, API_URL, wsUrl, setCookie, deleteCookie, checkIsChanged, notForAuthUsers};

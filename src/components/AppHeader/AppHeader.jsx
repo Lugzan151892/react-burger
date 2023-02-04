@@ -1,11 +1,11 @@
-import styles from './AppHeader.module.css'
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import styles from './AppHeader.module.css';
+import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
 import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 
 function AppHeader() {
-
+    const history = useHistory();
     const matchOrder = useRouteMatch({
-        path: "/order-list",
+        path: "/feed",
     });
 
     const matchProfile = useRouteMatch({
@@ -19,15 +19,19 @@ function AppHeader() {
     return (
         <header className={styles.header} >
             <nav className={styles.nav}>
-                <div className={styles.logo}>
-                    <Logo />
+                <div className={styles.logo}
+                    onClick={() => {                        
+                        history.replace({ pathname: `/` })
+                    }}
+                >
+                    <Logo/>
                 </div>
                 <ul className={styles.menu}>
                     <li className={styles.list}>
                         <NavLink
                             to='/'
                             exact
-                            className={`text text_type_main-default text_color_inactive ml-2 ${styles.link}`}
+                            className={`text text_type_main-default text_color_inactive ${styles.link}`}
                             activeClassName={styles.link_active}
                         >
                             <BurgerIcon type={matchMain.isExact ? "primary" : "secondary"} />
@@ -36,7 +40,7 @@ function AppHeader() {
                     </li>
                     <li className={`${styles.list} ml-4`}>
                         <NavLink
-                                to='/order-list'
+                                to='/feed'
                                 exact
                                 className={`text text_type_main-default ml-2 text_color_inactive ${styles.link}`}
                                 activeClassName={styles.link_active}
