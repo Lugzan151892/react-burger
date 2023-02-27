@@ -10,13 +10,12 @@ import { closeOrderModal, addItemInBurger } from "../../services/actions/ingridi
 import { getOrderNumber, OPEN_ORDER_MODAL } from "../../services/actions/ingridients";
 
 const BurgerConstructor = () =>{
-    
     const history = useHistory();
-    const elementsInBurger = useSelector(store => store.ingridients.constructorIngridients);
-    const accessToken = useSelector(store => store.user.accessToken);
-    const isUserAuth = useSelector(store => store.user.userIsAuth);
-    const bunInBurger = useSelector(store => store.ingridients.bunInConstructor);
-    const visible = useSelector(store => store.ingridients.orderModalVisible);
+    const elementsInBurger = useSelector((store) => store.ingridients.constructorIngridients);
+    const accessToken = useSelector((store) => store.user.accessToken);
+    const isUserAuth = useSelector((store) => store.user.userIsAuth);
+    const bunInBurger = useSelector((store) => store.ingridients.bunInConstructor);
+    const visible = useSelector((store) => store.ingridients.orderModalVisible);
     const dispatch = useDispatch();
 
     const sortItems = (a, b) => a.uniqueId > b.uniqueId ? 1 : -1;
@@ -43,11 +42,11 @@ const BurgerConstructor = () =>{
         }
         const orderList = [];
         orderList.push(bunInBurger._id);
-        elementsInBurger.forEach(element => {
+        elementsInBurger.forEach((element) => {
             orderList.push(element._id)
         });
         orderList.push(bunInBurger._id);
-        dispatch({type: OPEN_ORDER_MODAL});
+        dispatch({type: OPEN_ORDER_MODAL});        
         dispatch(getOrderNumber('orders', orderList, accessToken));
         console.log(orderList);
     }
