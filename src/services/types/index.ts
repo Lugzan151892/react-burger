@@ -6,7 +6,6 @@ import { TIngredientsActions } from "../actions/ingridients";
 import { TWsActions } from "../actions/wsActions";
 import { socketMiddleware } from "../middleware/wsMiddleware";
 import { rootReducer } from "../reducers";
-// import { store } from "../..";
 import { WS_SEND_MESSAGE, WS_CONNECTION_START, WS_CONNECTION_SUCCESS, WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_GET_MESSAGE } from "../actions/wsActions";
 
 const wsActions = {

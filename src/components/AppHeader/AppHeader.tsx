@@ -3,11 +3,12 @@ import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
 import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC } from 'react';
 
+interface MatchParams {
+    path: string;
+}
+
 const AppHeader: FC = () => {
 
-    interface MatchParams {
-        path: string;
-    }
     const history = useHistory();
     const matchOrder = useRouteMatch<MatchParams>({
         path: "/feed",

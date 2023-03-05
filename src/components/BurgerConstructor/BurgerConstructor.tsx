@@ -1,15 +1,18 @@
-import { useSelector, useDispatch } from 'react-redux';
+// import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/types/hooks';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
 import { useHistory } from 'react-router-dom';
+import { FC } from 'react';
 import { useDrop } from "react-dnd";
 import SelectedElement from "../SelectedElement/SelectedElement";
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import { closeOrderModal, addItemInBurger } from "../../services/actions/ingridients";
 import { getOrderNumber, OPEN_ORDER_MODAL } from "../../services/actions/ingridients";
+import { TElement } from '../../services/types/data';
 
-const BurgerConstructor = () =>{
+const BurgerConstructor: FC = () =>{
     const history = useHistory();
     const elementsInBurger = useSelector((store) => store.ingridients.constructorIngridients);
     const accessToken = useSelector((store) => store.user.accessToken);
@@ -18,42 +21,42 @@ const BurgerConstructor = () =>{
     const visible = useSelector((store) => store.ingridients.orderModalVisible);
     const dispatch = useDispatch();
 
-    const sortItems = (a, b) => a.uniqueId > b.uniqueId ? 1 : -1;
+    const sortItems = (a: {uniqueId: string}, b: {uniqueId: string} ) => a.uniqueId > b.uniqueId ? 1 : -1;
 
-    function closeModal() {
+    function closeModal(): void {
         dispatch(closeOrderModal())
     }
 
-    const onDropHandler = (element) => {        
+    const onDropHandler = (element: TElement): void => {        
         dispatch(addItemInBurger(element));
     }
 
     const [, dropTarget] = useDrop({
         accept: "ingridient",
-        drop(item) {
+        drop(item: TElement) {
             onDropHandler(item);
         },
     });
 
-    function openModal() {
+    function openModal(): void {
         if(!isUserAuth) {
             history.replace({ pathname: '/login' });
             return;
         }
         const orderList = [];
         orderList.push(bunInBurger._id);
-        elementsInBurger.forEach((element) => {
+        elementsInBurger.forEach((element: TElement) => {
+            console.log(element);
             orderList.push(element._id)
         });
         orderList.push(bunInBurger._id);
         dispatch({type: OPEN_ORDER_MODAL});        
         dispatch(getOrderNumber('orders', orderList, accessToken));
-        console.log(orderList);
     }
     
-    const price = bunInBurger ? bunInBurger.price * 2 : 0;
+    const price: number = bunInBurger ? bunInBurger.price * 2 : 0;
 
-    const summ = elementsInBurger.reduce((prev, current) => {
+    const summ: number = elementsInBurger.reduce((prev: number, current: TElement) => {
         return prev + current.price
     }, price);
 
@@ -69,22 +72,19 @@ const BurgerConstructor = () =>{
                 <SelectedElement                      
                     element={bunInBurger}
                     type={'top'}
-                    >
-                </SelectedElement>}
-                {elementsInBurger && elementsInBurger.sort(sortItems).map((element) => (
+                />}
+                {elementsInBurger && elementsInBurger.sort(sortItems).map((element: TElement) => (
                 <SelectedElement 
                     key={element.uniqueId} 
                     element={element}
                     type={element.type}
-                    >
-                </SelectedElement>)
+                />)
                 )}
                 {bunInBurger && 
                 <SelectedElement                      
                     element={bunInBurger}
                     type={'bottom'}
-                    >
-                </SelectedElement>}
+                />}
             </div>
             <div className={`${styles.burgerOrder} mt-5`}>
                 <div className={styles.priceContainer}>
@@ -96,7 +96,7 @@ const BurgerConstructor = () =>{
                 </Button>
             </div>
         </section>
-      )
+    )
 }
 
 export default BurgerConstructor;
