@@ -3,25 +3,13 @@ import styles from './DefaultBurgerIngredient.module.css';
 import BurgerElement from "../BurgerElement/BurgerElement";
 import { useSelector, useDispatch } from "../../services/types/hooks";
 import { setCurrentTab } from "../../services/actions/ingridients";
-import { TElement } from "../../services/types/data";
-
-type TDefaultBurgerIngredient = {
-    type: string;
-    title: string;
-    refType: LegacyRef<HTMLHeadingElement> | undefined;
-}
-
-type TIntersectionOptions = {
-    root: Element | null;
-    rootMargin: string;
-    threshold:  number;
-}
+import { TIngridient, TDefaultBurgerIngredient, TIntersectionOptions } from "../../services/types/data";
 
 const DefaultBurgerIngredient: FC<TDefaultBurgerIngredient> = ({ type, title, refType }) => {
     const dispatch = useDispatch();
     const loadedElements = useSelector(store => store.ingridients.defaultIngridients);
 
-    const filtredElements = loadedElements.filter((item: TElement) => item.type === type);
+    const filtredElements: Array<TIngridient> = loadedElements.filter((item: TIngridient) => item.type === type);
     
     const options: TIntersectionOptions = {
         root: document.querySelector('#burgertabs'),
@@ -45,7 +33,7 @@ const DefaultBurgerIngredient: FC<TDefaultBurgerIngredient> = ({ type, title, re
     return (
         <div id={`${type}-id`} className={styles.typesContainer}>
             <h2 ref={refType} id={type} className={`${styles.title} text text_type_main-medium mt-5 mb-2`}>{title}</h2> 
-                {filtredElements.map((item: TElement) => (                    
+                {filtredElements.map((item: TIngridient) => (                    
                     <BurgerElement element={item} key={item._id}/>                                                
                 ))}    
         </div>

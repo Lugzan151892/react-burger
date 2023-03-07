@@ -4,18 +4,13 @@ import { useHistory} from 'react-router-dom';
 import {CurrencyIcon, FormattedDate} from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from '../../services/types/hooks';
 import { FC, useEffect, useState } from 'react';
-import { TElement } from '../../services/types/data';
-
-type TOrderListElement = {
-    item: any;
-    isProfile: boolean
-}
+import { TIngridient, TOrderListElement } from '../../services/types/data';
 
 const OrderListElement: FC<TOrderListElement> = ({ item, isProfile }) => {
     const dispatch = useDispatch();
     const history = useHistory();   
     const allIngredients = useSelector(store => store.ingridients.defaultIngridients);
-    const [ingredientsInOrder, setIngredientsInOrder] = useState<any>(null);
+    const [ingredientsInOrder, setIngredientsInOrder] = useState<Array<TIngridient> | null>(null);
     const [totalOrderPrice, setTotalOrderPrice] = useState(0);
     
     const [amountOfExtraElements, setAmountOfExtraElements] = useState<number | null>(null);
@@ -29,13 +24,13 @@ const OrderListElement: FC<TOrderListElement> = ({ item, isProfile }) => {
     }
 
     useEffect(() => {
-        let newArray: any = [];        
+        let newArray: Array<TIngridient> = [];        
         let currentExtraAmount = 0;
         item.ingredients.forEach((el: string) => {
-            newArray.push(allIngredients.find((element: TElement) => element._id === el));
+            newArray.push(allIngredients.find((element: TIngridient) => element._id === el));
         })       
         currentExtraAmount = newArray.slice(5, item.ingredients.length).length;        
-        let totalPrice = newArray.filter((el: TElement) => el !== undefined).reduce((acc: number, cur: TElement)=> acc + cur.price, 0);
+        let totalPrice = newArray.filter((el: TIngridient) => el !== undefined).reduce((acc: number, cur: TIngridient)=> acc + cur.price, 0);
         setTotalOrderPrice(totalPrice);
         setIngredientsInOrder(newArray);
         setAmountOfExtraElements(currentExtraAmount);        
@@ -58,7 +53,7 @@ const OrderListElement: FC<TOrderListElement> = ({ item, isProfile }) => {
             }
             <div className={`${styles.ingridients} m-6`}>
                 <div className={styles.images}>
-                    {ingredientsInOrder ? ingredientsInOrder.slice(0, 5).map((ingredient: any, index: number) => ( 
+                    {ingredientsInOrder ? ingredientsInOrder.slice(0, 5).map((ingredient: TIngridient, index: number) => ( 
                         ingredient &&                      
                         <img className={styles.image} style={{ left:`-${index*20}px`, zIndex:`${5-index}`}} alt={ingredient.name} src={ingredient.image} key={index}/>
                     )) : null}

@@ -3,12 +3,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from "../../services/types/hooks";
 import styles from './UpgradedTab.module.css';
 import PropTypes from 'prop-types';
-
-type TUpgradedTab = {
-    type: string;
-    title: string;
-    setTab: (type: string) => void;
-}
+import { TUpgradedTab } from "../../services/types/data";
 
 const UpgradedTab: FC<TUpgradedTab> = ({type, title, setTab}) => {
     const current = useSelector(store => store.ingridients.currentTab);

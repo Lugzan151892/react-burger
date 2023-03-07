@@ -1,6 +1,7 @@
 import { getIngredients, getOrderDetails } from "../../utils/burger-api";
 import { customAlphabet } from 'nanoid';
 import { AppDispatch, AppThunk } from "../types";
+import { TIngridient, TOrderElement, TIngridientWithUID } from "../types/data";
 
 export const GET_DEFAULT_INGRIDIENTS_REQUEST: 'GET_DEFAULT_INGRIDIENTS_REQUEST' = 'GET_DEFAULT_INGRIDIENTS_REQUEST';
 export const GET_DEFAULT_INGRIDIENTS_SUCCESS: 'GET_DEFAULT_INGRIDIENTS_SUCCESS' = 'GET_DEFAULT_INGRIDIENTS_SUCCESS';
@@ -43,7 +44,7 @@ export const getDefaultIngridients: AppThunk = (url: string) => {
     }
 }
 
-export const getOrderNumber: AppThunk = (url: string, list: any, token: string) => {
+export const getOrderNumber: AppThunk = (url: string, list: Array<string>, token: string) => {
     return function(dispatch: AppDispatch) {
         dispatch({type: GET_ORDER_NUMBER_REQUEST});
         getOrderDetails(url, list, token)
@@ -70,7 +71,7 @@ export interface IGetDefaultIngredientsRequest {
 
 export interface IGetDefaultIngredientsSuccess {
     readonly type: typeof GET_DEFAULT_INGRIDIENTS_SUCCESS;
-    readonly items: any;
+    readonly items: Array<TIngridient>;
 }
 
 export interface IGetDefaultIngredientsFailed {
@@ -83,7 +84,7 @@ export interface IGetOrderNumberRequest {
 
 export interface IGetOrderNumberSuccess {
     readonly type: typeof GET_ORDER_NUMBER_SUCCESS;
-    readonly number: any;
+    readonly number: number;
 }
 
 export interface IGetOrderNumberFailed {
@@ -92,7 +93,7 @@ export interface IGetOrderNumberFailed {
 
 export interface IOpenIngridientModal {
     readonly type: typeof OPEN_INGRIDIENT_MODAL;
-    readonly item: any;
+    readonly item: TIngridient;
 }
 
 export interface ICloseIngridientModal {
@@ -109,7 +110,7 @@ export interface ICloseOrderModal {
 
 export interface IOpenOrderDetailsModal {
     readonly type: typeof OPEN_ORDER_DETAILS_MODAL;
-    readonly item: any;
+    readonly item: TOrderElement;
 }
 
 export interface ICloseOrderDetailsModal {
@@ -118,23 +119,23 @@ export interface ICloseOrderDetailsModal {
 
 export interface ISetCurrentTab {
     readonly type: typeof SET_CURRENT_TAB;
-    readonly tab: any;
+    readonly tab: string;
 }
 
 export interface IAddItemInBurger {
     readonly type: typeof ADD_ITEM_IN_BURGER;
-    readonly item: any;
+    readonly item: TIngridient;
 }
 
 export interface IDeleteItemInBurger {
     readonly type: typeof DELETE_ITEM_IN_BURGER;
-    readonly id: any;
+    readonly id: string;
 }
 
 export interface IMoveItemInBurger {
     readonly type: typeof MOVE_ITEM_IN_BURGER;
-    readonly dragItem: any;
-    readonly dropItem: any;
+    readonly dragItem: TIngridient;
+    readonly dropItem: TIngridient;
 }
 
 export interface IDeleteOrderFromState {
@@ -160,7 +161,7 @@ export type TIngredientsActions =
     IMoveItemInBurger |
     IDeleteOrderFromState;
     
-export function openIngridientModal(item: any): IOpenIngridientModal {
+export function openIngridientModal(item: TIngridient): IOpenIngridientModal {
     return {
         type: OPEN_INGRIDIENT_MODAL,
         item
@@ -179,7 +180,7 @@ export function closeOrderModal(): ICloseOrderModal {
     }
 }
 
-export function openOrderDetailsModal(item: any): IOpenOrderDetailsModal {
+export function openOrderDetailsModal(item: TOrderElement): IOpenOrderDetailsModal {
     return {
         type: OPEN_ORDER_DETAILS_MODAL,
         item
@@ -192,28 +193,28 @@ export function closeOrderDetailsModal(): ICloseOrderDetailsModal {
     }
 }
 
-export function setCurrentTab(tab: any): ISetCurrentTab {
+export function setCurrentTab(tab: string): ISetCurrentTab {
     return {
         type: SET_CURRENT_TAB,
         tab
     }
 }
 
-export function addItemInBurger(item: any): IAddItemInBurger {
+export function addItemInBurger(item: TIngridient): IAddItemInBurger {
     return {
         type: ADD_ITEM_IN_BURGER,
         item: {...item, uniqueId: nanoid()}
     }
 }
 
-export function deleteItemInBurger(id: any): IDeleteItemInBurger {
+export function deleteItemInBurger(id: string): IDeleteItemInBurger {
     return {
         type: DELETE_ITEM_IN_BURGER,
         id
     }
 }
 
-export function moveItemInBurger(dragItem: any, dropItem: any): IMoveItemInBurger {
+export function moveItemInBurger(dragItem: TIngridient, dropItem: TIngridient): IMoveItemInBurger {
     return {
         type: MOVE_ITEM_IN_BURGER,
         dragItem,

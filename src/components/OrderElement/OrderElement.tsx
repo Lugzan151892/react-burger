@@ -5,53 +5,52 @@ import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burge
 import { useDispatch, useSelector } from '../../services/types/hooks';
 import { wsConnectionStart, wsConnectionClosed, IWsConnectionClosed } from '../../services/actions/wsActions';
 import { wsUrl } from '../../utils/data';
-import { TElement } from '../../services/types/data';
+import { TIngridient, TOrderElementComponent } from '../../services/types/data';
 
-type TOrderElement = {
-    item: TElement
-}
 
-const OrderElement: FC<TOrderElement> = ({item}) => {
+const OrderElement: FC<TOrderElementComponent> = ({item}) => {
     const dispatch = useDispatch();
     const ordersList = useSelector(store => store.orders.allOrders);
     const accessToken = useSelector(store => store.user.accessToken);
     const { id } = useParams<{id: string}>();
     const isUserAuth = useSelector(store => store.user.userIsAuth);
     const wsConnected = useSelector(store => store.orders.wsConnected);
-    const currentOrder = item ? item : ordersList.find((el: TElement) => el._id === id);
+    const currentOrder = item ? item : ordersList.find((el: TIngridient) => el._id === id);
     const allIngredients = useSelector(store => store.ingridients.defaultIngridients);
-    const [ingredientsInOrder, setIngredientsInOrder] = useState<[] | any>(null);
-    const [totalOrderPrice, setTotalOrderPrice] = useState(0);
+    const [ingredientsInOrder, setIngredientsInOrder] = useState<Array<TIngridient> | null>(null);
+    const [totalOrderPrice, setTotalOrderPrice] = useState<number>(0);
 
-    useEffect((): any => {   
+    useEffect(() => {   
         if(isUserAuth) {
             if(wsConnected) {
                 dispatch(wsConnectionClosed());
             }
-            dispatch(wsConnectionStart(`${wsUrl}?token=${accessToken.split('Bearer ')[1]}`));
+            if(accessToken){
+                dispatch(wsConnectionStart(`${wsUrl}?token=${accessToken.split('Bearer ')[1]}`));
+            }            
         } else {
             if(wsConnected) {
                 dispatch(wsConnectionClosed());
             }
             dispatch(wsConnectionStart(`${wsUrl}/all`));
         } 
-        return () => wsConnectionClosed();      
+        return () => { wsConnectionClosed() };      
     }, [isUserAuth]);
             
     useEffect(()=> {        
         if(currentOrder){   
-            let ingredientsList: any = [];
-            currentOrder.ingredients.forEach((el: any) => {
-                ingredientsList.push(allIngredients.find((element: TElement) => element._id === el));
+            let ingredientsList: Array<TIngridient> = [];
+            currentOrder.ingredients.forEach((el: string) => {
+                ingredientsList.push(allIngredients.find((element: TIngridient) => element._id === el));
             });
-            let ingredientListWithAmount: any = [];
-            ingredientsList.forEach((ingredient: TElement) => {
-                let amount = ingredientsList.filter((el: TElement) => el._id === ingredient._id).length;
-                if(!ingredientListWithAmount.find((el: TElement) => el._id === ingredient._id)){
+            let ingredientListWithAmount: Array<TIngridient> = [];
+            ingredientsList.forEach((ingredient: TIngridient) => {
+                let amount = ingredientsList.filter((el: TIngridient) => el._id === ingredient._id).length;
+                if(!ingredientListWithAmount.find((el: TIngridient) => el._id === ingredient._id)){
                     ingredientListWithAmount.push({amount: amount, ...ingredient});
                 }
             });
-            let totalPrice = ingredientsList.reduce((acc: number, cur: TElement)=> acc + cur.price, 0);
+            let totalPrice = ingredientsList.reduce((acc: number, cur: TIngridient)=> acc + cur.price, 0);
             setTotalOrderPrice(totalPrice);
             setIngredientsInOrder(ingredientListWithAmount);   
         }   
@@ -68,7 +67,7 @@ const OrderElement: FC<TOrderElement> = ({item}) => {
             <p className="text_type_main-medium mb-6">Состав:</p>
             <div className={styles.order_ingridients_container}>
             {
-                ingredientsInOrder ? ingredientsInOrder.map((el: any, index: number) => (
+                ingredientsInOrder ? ingredientsInOrder.map((el: TIngridient, index: number) => (
                     <div className={`${styles.order_ingridient} mr-6`} key={index}>
                         <div className={styles.order_ingridient_name}>
                             <img className={styles.order_ingridient_image} src={el.image_mobile} alt={el.name} />

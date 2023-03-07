@@ -4,21 +4,15 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import styles from './SelectedElement.module.css';
 import { useDrag, useDrop } from "react-dnd";
 import { deleteItemInBurger, moveItemInBurger } from "../../services/actions/ingridients";
-import { TElement } from "../../services/types/data";
+import { TIngridientWithUID, TSelectedElement } from "../../services/types/data";
 
-
-type TSelectedElement = {
-    element: TElement;
-    type: string;
-}
-
-type TIngridient = 'bottom' | 'top' | undefined;
+type TIngridientType = 'bottom' | 'top' | undefined;
 
 const SelectedElement: FC<TSelectedElement> = ({element, type}) => {
     const dispatch = useDispatch();
     const checkDraggable = element.type !== 'bun';
 
-    function checkName(type: string | undefined, element: TElement){
+    function checkName(type: string | undefined, element: TIngridientWithUID){
         switch (type) {
             case 'bottom':
                 return `${element.name} низ`;
@@ -29,7 +23,7 @@ const SelectedElement: FC<TSelectedElement> = ({element, type}) => {
         }
     }
 
-    const getBunType = (): TIngridient  => {
+    const getBunType = (): TIngridientType  => {
         if(type === 'bottom' || type === 'top') {
             return type
         } else {
@@ -42,7 +36,7 @@ const SelectedElement: FC<TSelectedElement> = ({element, type}) => {
         item: {...element},
     });
 
-    function onDropHandler(item: TElement): void{        
+    function onDropHandler(item: TIngridientWithUID): void{        
         dispatch(moveItemInBurger(item, element));
     }
 
@@ -51,7 +45,7 @@ const SelectedElement: FC<TSelectedElement> = ({element, type}) => {
         drop(item) {
             onDropHandler(item);
         },
-        hover: ((item: TElement) => {      
+        hover: ((item: TIngridientWithUID) => {      
             dispatch(moveItemInBurger(item, element));
             item.uniqueId = element.uniqueId;
         })

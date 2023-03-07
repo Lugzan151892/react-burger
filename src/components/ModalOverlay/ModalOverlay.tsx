@@ -1,9 +1,6 @@
 import { FC } from 'react';
 import styles from "./ModalOverlay.module.css";
-
-type TModalOverlay = {
-    closeModal: () => void
-}
+import { TModalOverlay } from '../../services/types/data';
 
 const ModalOverlay: FC<TModalOverlay> = ({closeModal}) => {
     return (

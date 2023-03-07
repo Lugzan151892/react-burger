@@ -5,15 +5,14 @@ import App from './components/App/App';
 import reportWebVitals from './reportWebVitals';
 import { store } from "./services/types";
 
-
-const root = ReactDOM.createRoot(
-  document.getElementById('root')
-);
+const rootElement = document.getElementById('root');
+if (!rootElement) throw new Error('Failed to find the root element');
+const root = ReactDOM.createRoot(rootElement);
 
 root.render(
-    <Provider store={store}>
-      <App />
-    </Provider>
+  <Provider store={store}>
+    <App />
+  </Provider>
 );
 
 reportWebVitals();

@@ -10,7 +10,7 @@ import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import { closeOrderModal, addItemInBurger } from "../../services/actions/ingridients";
 import { getOrderNumber, OPEN_ORDER_MODAL } from "../../services/actions/ingridients";
-import { TElement } from '../../services/types/data';
+import { TIngridientWithUID } from '../../services/types/data';
 
 const BurgerConstructor: FC = () =>{
     const history = useHistory();
@@ -27,13 +27,13 @@ const BurgerConstructor: FC = () =>{
         dispatch(closeOrderModal())
     }
 
-    const onDropHandler = (element: TElement): void => {        
+    const onDropHandler = (element: TIngridientWithUID): void => {        
         dispatch(addItemInBurger(element));
     }
 
     const [, dropTarget] = useDrop({
         accept: "ingridient",
-        drop(item: TElement) {
+        drop(item: TIngridientWithUID) {
             onDropHandler(item);
         },
     });
@@ -45,7 +45,7 @@ const BurgerConstructor: FC = () =>{
         }
         const orderList = [];
         orderList.push(bunInBurger._id);
-        elementsInBurger.forEach((element: TElement) => {
+        elementsInBurger.forEach((element: TIngridientWithUID) => {
             console.log(element);
             orderList.push(element._id)
         });
@@ -56,7 +56,7 @@ const BurgerConstructor: FC = () =>{
     
     const price: number = bunInBurger ? bunInBurger.price * 2 : 0;
 
-    const summ: number = elementsInBurger.reduce((prev: number, current: TElement) => {
+    const summ: number = elementsInBurger.reduce((prev: number, current: TIngridientWithUID) => {
         return prev + current.price
     }, price);
 
@@ -73,7 +73,7 @@ const BurgerConstructor: FC = () =>{
                     element={bunInBurger}
                     type={'top'}
                 />}
-                {elementsInBurger && elementsInBurger.sort(sortItems).map((element: TElement) => (
+                {elementsInBurger && elementsInBurger.sort(sortItems).map((element: TIngridientWithUID) => (
                 <SelectedElement 
                     key={element.uniqueId} 
                     element={element}

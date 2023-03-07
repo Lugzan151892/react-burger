@@ -3,19 +3,15 @@ import { useDispatch, useSelector } from "../../services/types/hooks";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerElement.module.css';
 import { useDrag } from "react-dnd";
-import { TElement } from "../../services/types/data";
+import { TIngridient, TBurgerElement } from "../../services/types/data";
 import { openIngridientModal } from "../../services/actions/ingridients";
-
-type TBurgerElement = {
-    element: TElement;
-}
 
 const BurgerElement: FC<TBurgerElement> = ({ element }) => {
     const dispatch = useDispatch();
     const bunInBurger = useSelector(store => store.ingridients.bunInConstructor);
-    const chosenElements = useSelector(store => store.ingridients.constructorIngridients).filter((item: TElement) => element._id === item._id);
+    const chosenElements = useSelector(store => store.ingridients.constructorIngridients).filter((item: TIngridient) => element._id === item._id);
     
-    function openModal(item: TElement): void {
+    function openModal(item: TIngridient): void {
         dispatch(openIngridientModal(item)); 
     }
 

@@ -48,14 +48,14 @@ type TUserState = {
 
     userIsAuth: boolean;
     user: {
-        email: any;
-        name: any;
+        email: string;
+        name: string;
     };  
-    accessToken: any;
-    refreshToken: any;
+    accessToken: string | null;
+    refreshToken: string | null;
 }
 
-const initialState = {
+const initialState: TUserState = {
 
     createNewUserRequest: false,
     createNewUserFailed: false,
@@ -82,8 +82,8 @@ const initialState = {
 
     userIsAuth: false,
     user: {
-        email: null,
-        name: null
+        email: '',
+        name: ''
     },    
     accessToken: null,
     refreshToken: null
@@ -168,8 +168,8 @@ export const userReducer = (state = initialState, action: TUserActions): TUserSt
                 userIsAuth: false,
                 user: {
                     ...state.user,
-                    email: null,
-                    name: null
+                    email: '',
+                    name: ''
                 },
                 accessToken: null,
                 refreshToken: null 
@@ -192,16 +192,29 @@ export const userReducer = (state = initialState, action: TUserActions): TUserSt
         case UPDATE_USER_DATA_REQUEST: 
             return {...state, updateUserDataRequest: true};
         case UPDATE_USER_DATA_SUCCESS: 
-            return {
-                ...state, 
-                updateUserDataRequest: false, 
-                updateUserDataFailed: false,   
-                user: {
-                    ...state.user,
-                    name: action.userData.name,
-                    email: action.userData.email
-                }
-            };
+            if(action.userData){
+                return {
+                    ...state, 
+                    updateUserDataRequest: false, 
+                    updateUserDataFailed: false,   
+                    user: {
+                        ...state.user,
+                        name: action.userData.name,
+                        email: action.userData.email
+                    }
+                };
+            } else {
+                return {
+                    ...state, 
+                    updateUserDataRequest: false, 
+                    updateUserDataFailed: false,   
+                    user: {
+                        ...state.user,
+                        name: '',
+                        email: ''
+                    }
+                };
+            }            
         case UPDATE_USER_DATA_FAILED: 
             return {...state, updateUserDataRequest: false, updateUserDataFailed: true};
 

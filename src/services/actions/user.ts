@@ -1,6 +1,7 @@
 import { registerUser, login, getUserData, getNewAuthToken, userLogout, updateUserData, restorePassword } from "../../utils/user-api";
 import { setCookie } from "../../utils/data";
 import { AppDispatch, AppThunk } from "../types";
+import { TFormData, TUserData, TUser } from "../types/data";
 
 export const CREATE_NEW_USER_REQUEST: 'CREATE_NEW_USER_REQUEST' = 'CREATE_NEW_USER_REQUEST';
 export const CREATE_NEW_USER_SUCCESS: 'CREATE_NEW_USER_SUCCESS' = 'CREATE_NEW_USER_SUCCESS';
@@ -39,7 +40,7 @@ export interface ICreateNewUserRequest {
 
 export interface ICreateNewUserSuccess {
     readonly type: typeof CREATE_NEW_USER_SUCCESS;
-    readonly userData: any;
+    readonly userData: TUserData;
 }
 
 export interface ICreateNewUserFailed {
@@ -52,7 +53,7 @@ export interface IDataUserRequest {
 
 export interface IDataUserSuccess {
     readonly type: typeof DATA_USER_SUCCESS;
-    readonly userData: any;
+    readonly userData: TUserData;
 }
 
 export interface IDataUserFailed {
@@ -65,7 +66,7 @@ export interface ILoginUserRequest {
 
 export interface ILoginUserSuccess {
     readonly type: typeof LOGIN_USER_SUCCESS;
-    readonly userData: any;
+    readonly userData: TUserData;
 }
 
 export interface ILoginUserFailed {
@@ -78,7 +79,7 @@ export interface IAuthTokenRequest {
 
 export interface IAuthTokenSuccess {
     readonly type: typeof AUTH_TOKEN_SUCCESS;
-    readonly authToken: any;
+    readonly authToken: string;
 }
 
 export interface IAuthTokenFailed {
@@ -103,7 +104,7 @@ export interface IGetTokenForPasswordRequest {
 
 export interface IGetTokenForPasswordSuccess {
     readonly type: typeof GET_TOKEN_FOR_PASSWORD_SUCCESS;
-    readonly userData?: any;
+    readonly userData?: TUser;
 }
 
 export interface IGetTokenForPasswordFailed {
@@ -116,7 +117,7 @@ export interface IUpdateUserDataRequest {
 
 export interface IUpdateUserDataSuccess {
     readonly type: typeof UPDATE_USER_DATA_SUCCESS;
-    readonly userData: any;
+    readonly userData: TUser;
 }
 
 export interface IUpdateUserDataFailed {
@@ -136,7 +137,7 @@ export type TUserActions = ICreateNewUserRequest | ICreateNewUserSuccess | ICrea
     IUserLogoutRequest | IUserLogoutSuccess | IUserLogoutFailed | IGetTokenForPasswordRequest | IGetTokenForPasswordSuccess | IGetTokenForPasswordFailed |
     IUpdateUserDataRequest | IUpdateUserDataSuccess | IUpdateUserDataFailed | IResetPassword | IRestorePassword;
 
-export const createNewUser: AppThunk = (url: any, formData: any, redirect: any) => {
+export const createNewUser: AppThunk = (url: string, formData: TFormData, redirect: () => void) => {
     return function(dispatch: AppDispatch) {
         dispatch({type: CREATE_NEW_USER_REQUEST});
         registerUser(url, formData)
@@ -159,7 +160,7 @@ export const createNewUser: AppThunk = (url: any, formData: any, redirect: any) 
     }
 }
 
-export const userLogIn: AppThunk = (url: any, email: any, password: any, callBack: any) => {
+export const userLogIn: AppThunk = (url: string, email: string, password: string, callBack: () => void) => {
     return function(dispatch: AppDispatch) {
         dispatch({type: LOGIN_USER_REQUEST});
         login(url, email, password)
@@ -182,7 +183,7 @@ export const userLogIn: AppThunk = (url: any, email: any, password: any, callBac
     }
 }
 
-export const fillUserData: AppThunk = (url: any, token: any) => {
+export const fillUserData: AppThunk = (url: string, token: string) => {
     return function(dispatch: AppDispatch) {
         dispatch({type: DATA_USER_REQUEST});
         getUserData(url, token)
@@ -203,7 +204,7 @@ export const fillUserData: AppThunk = (url: any, token: any) => {
     }
 }
 
-export const logout: AppThunk = (url: any, token: any) => {
+export const logout: AppThunk = (url: string, token: string) => {
     return function(dispatch: AppDispatch) {
         dispatch({type: USER_LOGOUT_REQUEST});
         userLogout(url, token)
@@ -222,7 +223,7 @@ export const logout: AppThunk = (url: any, token: any) => {
     }
 }
 
-export const getTokenForPassword: AppThunk = (url: any, email: any, redirect: any) => {
+export const getTokenForPassword: AppThunk = (url: string, email: string, redirect: () => void) => {
     return function(dispatch: AppDispatch) {
         dispatch({type: GET_TOKEN_FOR_PASSWORD_REQUEST})
         restorePassword(url, email)
@@ -241,7 +242,7 @@ export const getTokenForPassword: AppThunk = (url: any, email: any, redirect: an
     }
 }
 
-export const updateAuthToken: AppThunk = (url: any, token: any) => {
+export const updateAuthToken: AppThunk = (url: string, token: string) => {
     return function(dispatch: AppDispatch | any) {
         dispatch({type: AUTH_TOKEN_REQUEST});
         getNewAuthToken(url, token)
@@ -264,11 +265,11 @@ export const updateAuthToken: AppThunk = (url: any, token: any) => {
     }
 }
 
-export const changeUserData: AppThunk = (url: any, token: any, form: any) => {
+export const changeUserData: AppThunk = (url: string, token: string, form: { email: string; password: string; name: string; }) => {
     return function(dispatch: AppDispatch | any) {
         dispatch({type: UPDATE_USER_DATA_REQUEST});
         updateUserData(url, token, form)
-        .then((res)=> {
+        .then((res: TUserData)=> {
             if(res && res.success) {
                 dispatch({type: UPDATE_USER_DATA_SUCCESS, userData: res.user});   
                 dispatch(fillUserData('auth/user', token));
