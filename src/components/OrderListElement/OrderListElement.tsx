@@ -27,13 +27,17 @@ const OrderListElement: FC<TOrderListElement> = ({ item, isProfile }) => {
         let newArray: Array<TIngridient> = [];        
         let currentExtraAmount = 0;
         item.ingredients.forEach((el: string) => {
-            newArray.push(allIngredients.find((element: TIngridient) => element._id === el));
-        })       
+            const newIngridient = allIngredients.find((element: TIngridient) => element._id === el);
+            if (newIngridient) {
+                newArray.push(newIngridient);
+            };
+        });
         currentExtraAmount = newArray.slice(5, item.ingredients.length).length;        
         let totalPrice = newArray.filter((el: TIngridient) => el !== undefined).reduce((acc: number, cur: TIngridient)=> acc + cur.price, 0);
         setTotalOrderPrice(totalPrice);
         setIngredientsInOrder(newArray);
-        setAmountOfExtraElements(currentExtraAmount);        
+        setAmountOfExtraElements(currentExtraAmount);
+        // eslint-disable-next-line     
     }, [allIngredients]);
 
     return (

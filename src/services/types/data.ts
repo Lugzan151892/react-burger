@@ -17,23 +17,6 @@ export type TIngridient = {
     amount?: number;
 }
 
-export type TIngridientWithUID = {
-    _id: string;
-    name: string;
-    type: string;
-    proteins: number;
-    fat: number;
-    carbohydrates: number;
-    calories: number;
-    price: number;
-    image: string;
-    image_mobile: string;
-    image_large: string;
-    __v: number;
-    uniqueId: string;
-    amount?: number;
-}
-
 export type TOrderElement = {
     createdAt: string;
     _id: string;
@@ -70,7 +53,7 @@ export type TModalOverlay = {
 }
 
 export type TOrderElementComponent = {
-    item: TIngridient
+    item: TOrderElement
 }
 
 export type TOrderListElement = {
@@ -79,7 +62,7 @@ export type TOrderListElement = {
 }
 
 export type TSelectedElement = {
-    element: TIngridientWithUID;
+    element: TIngridient;
     type: string;
 }
 

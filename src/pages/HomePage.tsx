@@ -6,12 +6,10 @@ import BurgerIngredients from "../components/BurgerIngredients/BurgerIngredients
 
 const HomePage: FC = () => {
     return (
-        <>
-            <DndProvider backend={HTML5Backend}>             
-                <BurgerIngredients />
-                <BurgerConstructor />
-            </DndProvider>
-        </>
+        <DndProvider backend={HTML5Backend}>             
+            <BurgerIngredients />
+            <BurgerConstructor />
+        </DndProvider>
     )
 }
 

@@ -5,14 +5,15 @@ import {
         WS_GET_MESSAGE,
         TWsActions
         } from "../actions/wsActions"
+import { TOrderElement } from "../types/data";
 
 type TWsState = {
     wsConnected: boolean;
-    allOrders: any;
-    readyOrders: any;
-    preparingOrders: any;
-    total: any;
-    totalToday: any;
+    allOrders: Array<TOrderElement>;
+    readyOrders: Array<TOrderElement>;
+    preparingOrders: Array<TOrderElement>;
+    total: number | null;
+    totalToday: number | null;
     error: any;
 }
 
@@ -26,7 +27,7 @@ const initialState = {
     error: undefined,
 }
 
-export const wsReducer = (state = initialState, action: TWsActions): TWsState => {
+export const wsReducer = (state: TWsState = initialState, action: TWsActions): TWsState => {
     switch (action.type) {
         case WS_CONNECTION_SUCCESS:
             return {

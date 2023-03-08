@@ -10,7 +10,7 @@ import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import { closeOrderModal, addItemInBurger } from "../../services/actions/ingridients";
 import { getOrderNumber, OPEN_ORDER_MODAL } from "../../services/actions/ingridients";
-import { TIngridientWithUID } from '../../services/types/data';
+import { TIngridient } from '../../services/types/data';
 
 const BurgerConstructor: FC = () =>{
     const history = useHistory();
@@ -21,19 +21,19 @@ const BurgerConstructor: FC = () =>{
     const visible = useSelector((store) => store.ingridients.orderModalVisible);
     const dispatch = useDispatch();
 
-    const sortItems = (a: {uniqueId: string}, b: {uniqueId: string} ) => a.uniqueId > b.uniqueId ? 1 : -1;
+    const sortItems = (a: any, b: any ) => a.uniqueId > b.uniqueId ? 1 : -1;
 
     function closeModal(): void {
         dispatch(closeOrderModal())
     }
 
-    const onDropHandler = (element: TIngridientWithUID): void => {        
+    const onDropHandler = (element: TIngridient): void => {        
         dispatch(addItemInBurger(element));
     }
 
     const [, dropTarget] = useDrop({
         accept: "ingridient",
-        drop(item: TIngridientWithUID) {
+        drop(item: TIngridient) {
             onDropHandler(item);
         },
     });
@@ -44,19 +44,21 @@ const BurgerConstructor: FC = () =>{
             return;
         }
         const orderList = [];
-        orderList.push(bunInBurger._id);
-        elementsInBurger.forEach((element: TIngridientWithUID) => {
-            console.log(element);
-            orderList.push(element._id)
-        });
-        orderList.push(bunInBurger._id);
-        dispatch({type: OPEN_ORDER_MODAL});        
-        dispatch(getOrderNumber('orders', orderList, accessToken));
+        if(bunInBurger) {
+            orderList.push(bunInBurger._id);
+            elementsInBurger.forEach((element: TIngridient) => {
+                console.log(element);
+                orderList.push(element._id)
+            });
+            orderList.push(bunInBurger._id);
+            dispatch({type: OPEN_ORDER_MODAL});        
+            dispatch(getOrderNumber('orders', orderList, accessToken));
+        }
     }
     
     const price: number = bunInBurger ? bunInBurger.price * 2 : 0;
 
-    const summ: number = elementsInBurger.reduce((prev: number, current: TIngridientWithUID) => {
+    const summ: number = elementsInBurger.reduce((prev: number, current: TIngridient) => {
         return prev + current.price
     }, price);
 
@@ -73,7 +75,7 @@ const BurgerConstructor: FC = () =>{
                     element={bunInBurger}
                     type={'top'}
                 />}
-                {elementsInBurger && elementsInBurger.sort(sortItems).map((element: TIngridientWithUID) => (
+                {elementsInBurger && elementsInBurger.sort(sortItems).map((element: TIngridient) => (
                 <SelectedElement 
                     key={element.uniqueId} 
                     element={element}

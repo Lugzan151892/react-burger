@@ -7,9 +7,9 @@ const OrderModal: FC = () => {
     const item = useSelector(store => store.ingridients.currentOrderInModal);
     
     return (
-        <>
-            <OrderElement item={item}/>
-        </>
+        item ?
+        <OrderElement item={item}/> : 
+        null
     )
 }
 

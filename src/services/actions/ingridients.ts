@@ -1,7 +1,7 @@
 import { getIngredients, getOrderDetails } from "../../utils/burger-api";
 import { customAlphabet } from 'nanoid';
 import { AppDispatch, AppThunk } from "../types";
-import { TIngridient, TOrderElement, TIngridientWithUID } from "../types/data";
+import { TIngridient, TOrderElement } from "../types/data";
 
 export const GET_DEFAULT_INGRIDIENTS_REQUEST: 'GET_DEFAULT_INGRIDIENTS_REQUEST' = 'GET_DEFAULT_INGRIDIENTS_REQUEST';
 export const GET_DEFAULT_INGRIDIENTS_SUCCESS: 'GET_DEFAULT_INGRIDIENTS_SUCCESS' = 'GET_DEFAULT_INGRIDIENTS_SUCCESS';

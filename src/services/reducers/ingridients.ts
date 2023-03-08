@@ -17,19 +17,20 @@ import { GET_DEFAULT_INGRIDIENTS_FAILED,
         DELETE_ORDER_FROM_STATE,
         TIngredientsActions
 } from "../actions/ingridients";
+import { TIngridient, TOrderElement } from "../types/data";
 
 type TIngredientsState = {
-    defaultIngridients: any;
+    defaultIngridients: Array<TIngridient>;
     defaultIngridientsRequest: boolean;
     defaultIngridientsFailed: boolean;
-    bunInConstructor: any;
-    constructorIngridients: any;
-    currentIngridient: any;
-    orderNumber: any;
+    bunInConstructor: TIngridient | null;
+    constructorIngridients: Array<TIngridient>;
+    currentIngridient: TIngridient | null;
+    orderNumber: number | null;
     orderNumberRequest: boolean;
     orderNumberFailed: boolean;
     orderDetailsModalVisible: boolean;
-    currentOrderInModal: any;
+    currentOrderInModal: TOrderElement | null;
     ingridientModalVisible: boolean;
     orderModalVisible: boolean;
     currentTab: string;
@@ -108,7 +109,7 @@ export const ingridientsReducer = (state = initialState, action: TIngredientsAct
         }
 
         case DELETE_ITEM_IN_BURGER: {
-            return {...state, constructorIngridients: state.constructorIngridients.filter((item: any) => item.uniqueId !== action.id)};
+            return {...state, constructorIngridients: state.constructorIngridients.filter((item: TIngridient) => item.uniqueId !== action.id)};
         }
 
         case MOVE_ITEM_IN_BURGER: {            

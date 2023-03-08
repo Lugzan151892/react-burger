@@ -5,7 +5,7 @@ import { useSelector } from '../../services/types/hooks';
 
 const OrderDetails: FC = () => {
 
-    const orderNumber: string = useSelector(store => store.ingridients.orderNumber);
+    const orderNumber: number | null = useSelector(store => store.ingridients.orderNumber);
 
     return (
         <div className={styles.orderContainer} onClick={(e) => e.stopPropagation()}>            

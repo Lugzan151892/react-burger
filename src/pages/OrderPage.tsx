@@ -6,15 +6,16 @@ import { TOrderElement } from '../services/types/data';
 
 const OrderPage: FC = () => {
 
-    const allOrders = useSelector(store => store.orders.allOrders)
+    const allOrders = useSelector(store => store.orders.allOrders);
     
     const { id } = useParams<{id: string}>();
     const item = allOrders.find((el: TOrderElement) => el._id === id);
     
     return (
+        item ?
         <div>            
             <OrderElement item={item} />
-        </div>
+        </div> : null
     )
 }
 

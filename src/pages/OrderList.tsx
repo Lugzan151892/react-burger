@@ -39,7 +39,8 @@ const OrderList: FC = () => {
             }
             dispatch(wsConnectionStart(`${wsUrl}/all`));
         }  
-        return () => { wsConnectionClosed() };      
+        return () => { wsConnectionClosed() };
+        // eslint-disable-next-line
     }, [isUserAuth]);
 
     function closeModal() {

@@ -3,19 +3,19 @@ import styles from './OrderElement.module.css';
 import { useParams } from 'react-router-dom';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from '../../services/types/hooks';
-import { wsConnectionStart, wsConnectionClosed, IWsConnectionClosed } from '../../services/actions/wsActions';
+import { wsConnectionStart, wsConnectionClosed } from '../../services/actions/wsActions';
 import { wsUrl } from '../../utils/data';
-import { TIngridient, TOrderElementComponent } from '../../services/types/data';
+import { TIngridient, TOrderElement, TOrderElementComponent } from '../../services/types/data';
 
 
-const OrderElement: FC<TOrderElementComponent> = ({item}) => {
+const OrderElement: FC<TOrderElementComponent> = ({ item }) => {
     const dispatch = useDispatch();
     const ordersList = useSelector(store => store.orders.allOrders);
     const accessToken = useSelector(store => store.user.accessToken);
     const { id } = useParams<{id: string}>();
     const isUserAuth = useSelector(store => store.user.userIsAuth);
     const wsConnected = useSelector(store => store.orders.wsConnected);
-    const currentOrder = item ? item : ordersList.find((el: TIngridient) => el._id === id);
+    const currentOrder = item ? item : ordersList.find((el: TOrderElement) => el._id === id);
     const allIngredients = useSelector(store => store.ingridients.defaultIngridients);
     const [ingredientsInOrder, setIngredientsInOrder] = useState<Array<TIngridient> | null>(null);
     const [totalOrderPrice, setTotalOrderPrice] = useState<number>(0);
@@ -34,14 +34,18 @@ const OrderElement: FC<TOrderElementComponent> = ({item}) => {
             }
             dispatch(wsConnectionStart(`${wsUrl}/all`));
         } 
-        return () => { wsConnectionClosed() };      
+        return () => { wsConnectionClosed() };   
+        // eslint-disable-next-line   
     }, [isUserAuth]);
             
     useEffect(()=> {        
         if(currentOrder){   
             let ingredientsList: Array<TIngridient> = [];
             currentOrder.ingredients.forEach((el: string) => {
-                ingredientsList.push(allIngredients.find((element: TIngridient) => element._id === el));
+                const newIngridient = allIngredients.find((element: TIngridient) => element._id === el);
+                if (newIngridient) {
+                    ingredientsList.push(newIngridient);
+                };
             });
             let ingredientListWithAmount: Array<TIngridient> = [];
             ingredientsList.forEach((ingredient: TIngridient) => {
@@ -53,7 +57,8 @@ const OrderElement: FC<TOrderElementComponent> = ({item}) => {
             let totalPrice = ingredientsList.reduce((acc: number, cur: TIngridient)=> acc + cur.price, 0);
             setTotalOrderPrice(totalPrice);
             setIngredientsInOrder(ingredientListWithAmount);   
-        }   
+        }
+        // eslint-disable-next-line
     }, [ordersList, currentOrder]);
     
     return (

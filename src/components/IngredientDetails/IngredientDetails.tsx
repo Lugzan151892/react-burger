@@ -9,10 +9,13 @@ const IngredientDetails: FC = () => {
     const history = useHistory();
 
     useEffect(() => {
-        history.replace({ pathname: `ingridients/${item._id}` });
+        if(item) {
+            history.replace({ pathname: `ingridients/${item._id}` });
+        }
+        // eslint-disable-next-line
     }, []);
 
-    return (
+    return (item &&
         <div className={styles.ingridient} onClick={(e) => e.stopPropagation()}>
             <div className={styles.title}>
                 <h2 className='text text_type_main-large'>Детали ингредиента</h2>

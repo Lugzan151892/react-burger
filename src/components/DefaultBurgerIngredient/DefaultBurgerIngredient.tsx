@@ -17,16 +17,16 @@ const DefaultBurgerIngredient: FC<TDefaultBurgerIngredient> = ({ type, title, re
         threshold:  0.1
     }
 
-    function callback(entries: any): void {
+    function callback(entries: IntersectionObserverEntry[]): void {
         if(entries[0].isIntersecting && entries[0].time > 1000) {
             dispatch(setCurrentTab(type));
         }
     }
 
-    const observer: any = new IntersectionObserver(callback, options);
+    const observer: IntersectionObserver = new IntersectionObserver(callback, options);
     
     useEffect(()=>{    
-        const target = document.querySelector(`#${type}`);
+        const target = document.querySelector(`#${type}`) as HTMLElement;
         observer.observe(target);
     }, []);
 
